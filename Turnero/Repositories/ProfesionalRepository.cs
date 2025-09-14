@@ -1,0 +1,52 @@
+﻿using Humanizer;
+using Microsoft.EntityFrameworkCore;
+using Turnero.Models;
+using Turnero.Repositories.Interfaces;
+
+namespace Turnero.Repositories
+{
+	public class ProfesionalRepository(TurneroContext context): IProfesionalRepository
+	{
+		private readonly TurneroContext _context = context;
+
+		public async Task AddProfesional(Profesional profesional)
+		{
+			await _context.Profesionals.AddAsync(profesional); //Directo a la BD
+		}
+
+		public async Task AddEspecialidades(IEnumerable<ProfesionalEspecialidad> asignaciones)
+		{
+			foreach (var asignacion in asignaciones) //Subimos las especialidades del profesional a la BD
+			{
+				await _context.ProfesionalEspecialidads.AddAsync(asignacion);
+			}
+		}
+
+		public async Task AddHorarios(IEnumerable<HorarioLaboral> asignaciones)
+		{
+			foreach (var asignacion in asignaciones) //Subimos sus horarios Laborales a la BD
+			{
+				await _context.HorarioLaborals.AddAsync(asignacion);
+			}
+		}
+
+		public async Task<bool> AnyProfesional(int idProfesional)
+		{
+			return await _context.Profesionals.AnyAsync(p => p.IdUsuario == idProfesional);
+		}
+
+		public async Task<bool> AnyProfesionalWithThatSpeciality(int idProfesional, int idEspecialidad)
+		{
+			return await _context.ProfesionalEspecialidads
+				.AnyAsync(inter =>
+					inter.IdProfesional == idProfesional &&
+					inter.IdEspecialidad == idEspecialidad);
+		}
+
+		public async Task<bool> AnyProfesionalByMatricula(int matricula)
+		{
+			return await _context.Profesionals
+				.AnyAsync(p => p.Matricula == matricula);
+		}
+	}
+}
