@@ -30,7 +30,7 @@ namespace Turnero.Controllers
         public async Task<ActionResult<IEnumerable<Profesional>>> GetProfesionals()
         {
             return await _context.Profesionals.ToListAsync();
-        }
+        }  
 
         // GET: api/Profesional/5
         [HttpGet("{id}")]

@@ -8,6 +8,7 @@
 		ITurnoRepository Turnos { get; }
 		IEspecialidadRepository Especialidades { get; }
 		IHorarioLaboralRepository HorariosLaborales { get; }
+		IAuthTokenRepository AuthTokens { get; }
 
 		// Persistencia
 		Task<int> CompleteAsync();

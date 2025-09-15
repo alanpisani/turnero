@@ -31,6 +31,7 @@ namespace Turnero.Service
 			try
 			{
 				await _unitOfWork.Usuarios.AddAsyncUsuario(usuario); //Se sube al usuario base a la BD
+				await _unitOfWork.CompleteAsync();
 
 				var profesional = ProfesionalMapper.DeProfesionalDtoAProfesional(dto, usuario.IdUsuario); //Creamos un Profesional Model
 				var especialidades = ProfesionalMapper.AsignacionesEspecialidades(dto, usuario.IdUsuario); //Creamos sus Especialidades Model
@@ -50,13 +51,13 @@ namespace Turnero.Service
 					Cuerpo = profesional
 				};
 			}
-			catch
+			catch(Exception e)
 			{
 				await _unitOfWork.RollbackAsync();
 
 				return new ServiceResponse<Profesional>
 				{
-					Mensaje = "Hubo un error al registrar profesional. Inténtelo más tarde",
+					Mensaje = $"Hubo un error al registrar profesional. Inténtelo más tarde. Error: {e}",
 				};
 
 			}

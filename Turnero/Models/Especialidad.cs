@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Turnero.Models;
+﻿namespace Turnero.Models;
 
 public partial class Especialidad
 {

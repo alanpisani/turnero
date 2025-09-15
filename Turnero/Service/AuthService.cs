@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Turnero.Dto;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -33,12 +34,31 @@ namespace Turnero.Service
 				};
 			}
 
-			var token = _jwtService.GenerateToken(usuario);
+			var tokenPrevio = await _unitOfWork.AuthTokens.GetAuthTokensByUsuarioAndActivo(usuario.IdUsuario);
+
+			foreach (var t in tokenPrevio)
+			{
+				t.Activo = false;
+			}
+
+			// 4. Generar nuevo token
+			var jwt = _jwtService.GenerateToken(usuario);
+
+			var authToken = new AuthToken
+			{
+				IdUsuario = usuario.IdUsuario,
+				Token = jwt,
+				Activo = true,
+				Expiracion = DateTime.UtcNow.AddMinutes(60)
+			};
+
+			await _unitOfWork.AuthTokens.AddAuthToken(authToken);
+			await _unitOfWork.CompleteAsync();
 
 			return new ServiceResponse<string> { 
 				Exito = true,
 				Mensaje = $"Bienvenido, {usuario.Nombre}!",
-				Cuerpo = token,
+				Cuerpo = jwt,
 			};
 		}
 	}

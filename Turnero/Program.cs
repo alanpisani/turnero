@@ -70,6 +70,7 @@ builder.Services.AddScoped<IHorarioLaboralRepository, HorarioLaboralRepository>(
 builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
 builder.Services.AddScoped<IProfesionalRepository, ProfesionalRepository>();
 builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
+builder.Services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<JwtService>();
@@ -85,7 +86,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<Turnero.Common.Middlewares.AuthTokenMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

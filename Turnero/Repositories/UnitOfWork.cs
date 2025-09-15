@@ -15,6 +15,8 @@ namespace Turnero.Repositories
 		public IEspecialidadRepository Especialidades { get; }
 		public IHorarioLaboralRepository HorariosLaborales { get; }
 
+		public IAuthTokenRepository AuthTokens { get; }
+
 
 		private IDbContextTransaction? _transaction;
 
@@ -22,7 +24,8 @@ namespace Turnero.Repositories
 			IPacienteRepository pacientes, 
 			IProfesionalRepository profesionales, 
 			ITurnoRepository turnos, 
-			IEspecialidadRepository especialidades, IHorarioLaboralRepository horariosLaborales, IUsuarioRepository usuarioRepository)
+			IEspecialidadRepository especialidades, 
+			IHorarioLaboralRepository horariosLaborales, IUsuarioRepository usuarioRepository, IAuthTokenRepository authTokenRepository)
 		{
 			_context = context;
 			Pacientes = pacientes;
@@ -31,6 +34,7 @@ namespace Turnero.Repositories
 			Especialidades = especialidades;
 			HorariosLaborales = horariosLaborales;
 			Usuarios = usuarioRepository;
+			AuthTokens = authTokenRepository;
 		}
 
 		public async Task<int> CompleteAsync()

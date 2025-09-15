@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Turnero.Models;
 
@@ -20,7 +18,7 @@ public partial class Turno
     [JsonIgnore]
     public virtual ICollection<HistorialTurno> HistorialTurnos { get; set; } = new List<HistorialTurno>();
 	[JsonIgnore]
-	public virtual EstadoTurno IdEstadoTurnoNavigation { get; set; } = null!;
+    public virtual EstadoTurno IdEstadoTurnoNavigation { get; set; } = null!;
 	[JsonIgnore]
 	public virtual Paciente IdPacienteNavigation { get; set; } = null!;
 	[JsonIgnore]
