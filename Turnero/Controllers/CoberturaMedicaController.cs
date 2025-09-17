@@ -30,14 +30,14 @@ namespace Turnero.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CoberturaMedica>> GetCoberturaMedica(int id)
         {
-            var coberturaMedica = await _context.CoberturaMedicas.FindAsync(id);
+            var response = await _service.MostrarCoberturaPorId(id);
 
-            if (coberturaMedica == null)
+            if (!response.Exito)
             {
-                return NotFound();
+                return NotFound(response.Mensaje);
             }
 
-            return coberturaMedica;
+            return response.Cuerpo!;
         }
     }
 }

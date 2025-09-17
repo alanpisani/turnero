@@ -30,6 +30,36 @@ namespace Turnero.Service
 				};
 			}
 		}
+
+		public async Task<ServiceResponse<CoberturaMedica>> MostrarCoberturaPorId(int id)
+		{
+			try
+			{
+				var cobertura = await _unitOfWork.CoberturasMedicas.GetCoberturaById(id);
+
+				if (cobertura == null)
+				{
+					return new ServiceResponse<CoberturaMedica>
+					{
+						Mensaje = "La cobertura no se encuentra registrada en el sistema"
+					};
+				}
+
+				return new ServiceResponse<CoberturaMedica>
+				{
+					Exito = true,
+					Mensaje = "Cobertura traiga con éxitazo",
+					Cuerpo = cobertura,
+				};
+			}
+			catch
+			{
+				return new ServiceResponse<CoberturaMedica>
+				{
+					Mensaje = "hubo un error desconocido al intentar mostrar la cobertura.Inténtelo más tarde"
+				};
+			}
+		}
 		
 	}
 }
