@@ -14,15 +14,6 @@ namespace Turnero.Service
 
 		public async Task<ServiceResponse<Profesional>> RegistrarProfesional(ProfesionalDto dto)
 		{
-			var result = await new ProfesionalValidator(_unitOfWork).ValidarProfesional(dto); //El validador
-
-			if (!result.EsValido) { //En caso de que hubiera algo mal registrado
-				return new ServiceResponse<Profesional>
-				{
-					Errores = result.Mensajes
-				};
-			}
-
 			var usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Pasaje a dto usuario
 			var usuario = _service.CrearUsuario(usuarioDto, 2); //Se crea un usuario base model
 

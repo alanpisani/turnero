@@ -13,14 +13,6 @@ namespace Turnero.Service
 
 		public async Task<ServiceResponse<Paciente>> RegistrarPaciente(PacienteDto dto)
 		{
-			var result = await new PacienteValidator(_unitOfWork).ValidarPaciente(dto); //Validador de lo que se ingresò en el form para registrar paciente
-
-			if (!result.EsValido) { //Si no es valido, se retornan todos los mensajes de error, para mostrarlos en el form
-				return new ServiceResponse<Paciente> { 
-					Errores = result.Mensajes
-				};
-			} 
-
 			UsuarioDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
 			var usuario = _usuarioService.CrearUsuario(usuarioDto, 1); //Se crea un Usuario model en base al UsuarioDto, para la bd
 
@@ -29,6 +21,7 @@ namespace Turnero.Service
 			try
 			{
 				await _unitOfWork.Usuarios.AddAsyncUsuario(usuario); //Se sube el Usuario model a la bd
+				await _unitOfWork.CompleteAsync();
 
 				Paciente paciente = PacienteMapper.DePacienteDtoAPaciente(dto, usuario.IdUsuario); //Se crea un Paciente model con el id del usuario recien creado (MAGIA DE EF. El modelo tiene el id)
 				var coberturas = PacienteMapper.CrearCoberturasPaciente(dto, paciente.IdUsuario); //Se crean las coberturas model del paciente
@@ -46,13 +39,13 @@ namespace Turnero.Service
 					Cuerpo = paciente //El JSON del paciente, para el front
 				};
 			}
-			catch
+			catch(Exception e)
 			{
 				await _unitOfWork.RollbackAsync();
 
 				return new ServiceResponse<Paciente> //Se envia la respuesta exitosa para el Controller 
 				{
-					Mensaje = "Error inesperado. Intente registrarse más tarde"
+					Mensaje = $"Error inesperado. Intente registrarse más tarde: {e}"
 				};
 			}
 		}

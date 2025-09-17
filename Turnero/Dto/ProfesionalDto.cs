@@ -4,14 +4,8 @@ namespace Turnero.Dto
 {
 	public class ProfesionalDto: UsuarioDto
 	{
-		[Required(ErrorMessage = "La matrícula es requerida")]
-
-		public int Matricula { get; set; } = 0;
-		[Required(ErrorMessage = "Especialidad requerida")]
-		[MinLength(1, ErrorMessage = "Debe asignarle al menos una especialidad al profesional")]
+		public int Matricula { get; set; }
 		public List<int> Especialidades { get; set; } = [];
-		[Required(ErrorMessage = "Horarios requeridos")]
-		[MinLength(1, ErrorMessage = "Debe haber al menos un horario laboral")]
 		public List<HorarioLaboralDto> HorariosLaborales { get; set; } = [];
 
 		public ProfesionalDto() {}

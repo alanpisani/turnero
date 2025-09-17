@@ -84,7 +84,7 @@ namespace Turnero.Controllers
 				return BadRequest(response);
 			}
 
-			return CreatedAtAction(nameof(PostPaciente), response);
+			return CreatedAtAction(nameof(PostPaciente), response.Mensaje);
 		}
 
         // DELETE: api/Paciente/5

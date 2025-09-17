@@ -12,16 +12,6 @@ namespace Turnero.Service
 
 		public async Task<ServiceResponse<Turno>> SolicitarTurno(TurnoDto dto)
 		{
-			var validation = await new TurnoValidator(_unitOfWork).ValidarTurno(dto);
-
-			if(!validation.EsValido)
-			{
-				return new ServiceResponse<Turno>
-				{
-					Errores = validation.Mensajes
-				};
-			}
-
 			await _unitOfWork.BeginTransactionAsync();
 
 			try

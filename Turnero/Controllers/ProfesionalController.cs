@@ -89,16 +89,15 @@ namespace Turnero.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<Profesional>>> PostProfesional(ProfesionalDto profesionalDto)
+        public async Task<IActionResult> PostProfesional(ProfesionalDto profesionalDto)
         {
-
 			var response = await _service.RegistrarProfesional(profesionalDto);
 
             if (!response.Exito)
             {
-                return BadRequest(response);
+                return BadRequest(response.Mensaje);
             }
-			return CreatedAtAction(nameof(PostProfesional), response.Cuerpo);
+			return CreatedAtAction(nameof(PostProfesional), response.Mensaje);
 			
         }
 

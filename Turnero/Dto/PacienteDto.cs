@@ -4,11 +4,8 @@ namespace Turnero.Dto
 {
 	public class PacienteDto: UsuarioDto
 	{
-		[Required]
 		public string Telefono { get; set; } = string.Empty;
-
 		public List<CoberturaPacienteDto>? CoberturasMedicas { get; set; }
-
 		public PacienteDto() { }
 
 		public PacienteDto(string Nombre, string Apellido, int Dni, string Email, string FechaNacimiento, string Contrasenia, string ContraseniaRepetida)

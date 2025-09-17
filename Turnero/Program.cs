@@ -7,6 +7,12 @@ using Turnero.Models;
 using Turnero.Service;
 using Turnero.Repositories.Interfaces;
 using Turnero.Repositories;
+using Turnero.Validators.UsuarioValidators;
+using FluentValidation;
+using Turnero.Validators.PacienteValidators;
+using Turnero.Validators.ProfesionalValidators;
+using Turnero.Validators.TurnoValidators;
+using Turnero.Validators.CoberturaMedicaValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +51,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCreateValidation>();
+builder.Services.AddValidatorsFromAssemblyContaining<PacienteCreateValidation>();
+builder.Services.AddValidatorsFromAssemblyContaining<ProfesionalCreateValidation>();
+builder.Services.AddValidatorsFromAssemblyContaining<TurnoCreateValidation>();
+builder.Services.AddValidatorsFromAssemblyContaining<CoberturaAnyValidation>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -52,17 +64,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers(options =>
 {
-	options.Filters.Add<ValidateModelStateAttribute>();
-})
-.ConfigureApiBehaviorOptions(options =>
-{
-	options.SuppressModelStateInvalidFilter = true;
+	options.Filters.Add<FluentValidationFilter>();
 });
 
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<PacienteService>();
 builder.Services.AddScoped<ProfesionalService>();
 builder.Services.AddScoped<TurnoService>();
+builder.Services.AddScoped<CoberturaMedicaService>();
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEspecialidadRepository, EspecialidadRepository>();
@@ -70,11 +81,11 @@ builder.Services.AddScoped<IHorarioLaboralRepository, HorarioLaboralRepository>(
 builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
 builder.Services.AddScoped<IProfesionalRepository, ProfesionalRepository>();
 builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
+builder.Services.AddScoped<ICoberturaMedicaRepository, CoberturaMedicaRepository>();
 builder.Services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddScoped<JwtService>();
-builder.Services.AddScoped<AuthService>();
+
 
 var app = builder.Build();
 

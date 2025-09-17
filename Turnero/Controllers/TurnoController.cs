@@ -26,7 +26,7 @@ namespace Turnero.Controllers
         }
 
 
-        [Authorize(Roles = "Paciente, Recepcionista")]
+        [Authorize(Roles = "Paciente, Recepcionista, Admin")]
         [HttpPost]
         public async Task<IActionResult> PostTurno(TurnoDto turnoDto)
         {
@@ -36,7 +36,7 @@ namespace Turnero.Controllers
 			{
 				return BadRequest(response.Errores);
 			}
-			return CreatedAtAction(nameof(PostTurno), response.Cuerpo);
+			return CreatedAtAction(nameof(PostTurno), response.Mensaje);
 		}
 
         [HttpPatch("{id}/cancelar")]

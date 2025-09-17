@@ -27,23 +27,13 @@
   },
   {
     "ContainingType": "Turnero.Controllers.CoberturaMedicaController",
-    "Method": "GetCoberturaMedicas",
+    "Method": "GetCoberturasMedicas",
     "RelativePath": "api/CoberturaMedica",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Turnero.Models.CoberturaMedica, Turnero, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Turnero.Controllers.CoberturaMedicaController",
@@ -277,17 +267,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "Turnero.Service.ServiceResponse\u00601[[Turnero.Models.Profesional, Turnero, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Turnero.Controllers.ProfesionalController",

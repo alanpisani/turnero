@@ -27,15 +27,6 @@ namespace Turnero.Service
 		//RECEPCIONISTA
 
 		public async Task<ServiceResponse<Usuario>> RegistrarRecepcionista(UsuarioDto dto) {
-			var result = await new ValidatorUsuario(_unitOfWork).ValidarUsuario(dto);
-
-			if (!result.EsValido)
-			{
-				return new ServiceResponse<Usuario>()
-				{
-					Errores = result.Mensajes 
-				};
-			}
 
 			var recepcionista = CrearUsuario(dto, 3);
 
