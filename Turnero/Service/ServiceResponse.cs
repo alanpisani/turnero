@@ -1,4 +1,6 @@
-﻿namespace Turnero.Service
+﻿using Turnero.Common.Helpers;
+
+namespace Turnero.Service
 {
 	public class ServiceResponse<T>
 	{
@@ -6,7 +8,7 @@
 		public string Mensaje { get; set; } = string.Empty;
 		public T? Cuerpo { get; set; }
 
-		public List<string>? Errores { get; set; } = [];
+		public Dictionary<string, List<string>>? Errores { get; set; } = [];
 
 		public ServiceResponse()
 		{

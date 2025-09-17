@@ -1,4 +1,6 @@
 ﻿using Turnero.Common.Helpers;
+using Turnero.Domain.PacienteDomain;
+using Turnero.Domain.ProfesionalDomain;
 using Turnero.Dto;
 using Turnero.Mappers;
 using Turnero.Models;
@@ -16,6 +18,15 @@ namespace Turnero.Service
 		{
 			var usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Pasaje a dto usuario
 			var usuario = _service.CrearUsuario(usuarioDto, 2); //Se crea un usuario base model
+			var result = new CreateProfesionalDomain(_unitOfWork).Validar(dto);
+
+			if (!result.EsValido)
+			{
+				return new ServiceResponse<Profesional>
+				{
+					Errores = result.Errores
+				};
+			}
 
 			await _unitOfWork.BeginTransactionAsync();
 

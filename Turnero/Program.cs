@@ -9,10 +9,10 @@ using Turnero.Repositories.Interfaces;
 using Turnero.Repositories;
 using Turnero.Validators.UsuarioValidators;
 using FluentValidation;
-using Turnero.Validators.PacienteValidators;
 using Turnero.Validators.ProfesionalValidators;
 using Turnero.Validators.TurnoValidators;
 using Turnero.Validators.CoberturaMedicaValidators;
+using Turnero.Validators.AuthValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,10 +52,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCreateValidation>();
-builder.Services.AddValidatorsFromAssemblyContaining<PacienteCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<ProfesionalCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<TurnoCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<CoberturaAnyValidation>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginValidation>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

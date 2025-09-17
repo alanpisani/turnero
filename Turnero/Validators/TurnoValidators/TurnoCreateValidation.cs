@@ -5,6 +5,9 @@ using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Validators.TurnoValidators
 {
+	/// <summary>
+	/// Valida datos simples a la hora de la solicitud de un turno. Todo lo que no es logica de negocio
+	/// </summary>
 	public class TurnoCreateValidation: AbstractValidator<TurnoDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
@@ -43,17 +46,7 @@ namespace Turnero.Validators.TurnoValidators
 
 			//Reglas mas complejas. Requieren de dos atributos a validar o más
 			RuleFor(x => x)
-				.Cascade(CascadeMode.Stop)
-				.MustAsync((dto, CancellationToken) => TurnoDatosValidationHelper.ProfesionalTieneEsaEspecialidad(dto, _unitOfWork))
-					.WithMessage("El profesional no posee la especialidad elegida")
-				.Must(TurnoFechaHoraValidationhelper.EshechaYHoraValida).WithMessage("La fecha y hora ingresadas no son válidas")
-				.Must(TurnoFechaHoraValidationhelper.EsFechaFutura).WithMessage("La fecha ingresada para el turno es antigua. Elija una fecha a futuro")
-				.MustAsync((dto, CancellationToken) => TurnoFechaHoraValidationhelper.EsEnHorarioLaboral(dto, _unitOfWork))
-					.WithMessage("El horario ingresado no coincide con el horario laboral del profesional")
-				.MustAsync((dto, CancellationToken) => TurnoFechaHoraValidationhelper.EsTurnoDisponible(dto, _unitOfWork))
-					.WithMessage("El turno está ocupado. Intente con otra fecha y horario")
-				.MustAsync((dto, CancellationToken) => TurnoFechaHoraValidationhelper.EncajaEnFranjaHoraria(dto, _unitOfWork))
-					.WithMessage("El profesional no trabaja en ese horario");
+				.Must(TurnoFechaHoraValidationhelper.EshechaYHoraValida).WithMessage("La fecha y hora ingresadas no son válidas");
 		}
 	}
 }

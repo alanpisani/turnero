@@ -5,6 +5,9 @@ using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Validators.UsuarioValidators
 {
+	/// <summary>
+	/// Validador de registro de usuario comun. Es solo la primera parte de un usuario. Algo general
+	/// </summary>
 	public class UsuarioCreateValidation: AbstractValidator<UsuarioDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;

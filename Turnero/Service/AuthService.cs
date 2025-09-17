@@ -16,15 +16,7 @@ namespace Turnero.Service
 		{
 			var usuario = await _unitOfWork.Usuarios.FirstOrDefaultUsuario(dto.Email);
 
-			if (usuario == null)
-			{
-				return new ServiceResponse<string>
-				{
-					Mensaje = "El correo electrónico no se encuentra registrado"
-				};
-			}
-
-			var result = _passwordHasher.VerifyHashedPassword(usuario, usuario.Contrasenia, dto.Password);
+			var result = _passwordHasher.VerifyHashedPassword(usuario!, usuario!.Contrasenia, dto.Password);
 
 			if (result == PasswordVerificationResult.Failed) {
 

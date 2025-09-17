@@ -37,32 +37,6 @@
   },
   {
     "ContainingType": "Turnero.Controllers.CoberturaMedicaController",
-    "Method": "PostCoberturaMedica",
-    "RelativePath": "api/CoberturaMedica",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "coberturaMedica",
-        "Type": "Turnero.Models.CoberturaMedica",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Turnero.Models.CoberturaMedica",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Turnero.Controllers.CoberturaMedicaController",
     "Method": "GetCoberturaMedica",
     "RelativePath": "api/CoberturaMedica/{id}",
     "HttpMethod": "GET",
@@ -86,43 +60,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Turnero.Controllers.CoberturaMedicaController",
-    "Method": "PutCoberturaMedica",
-    "RelativePath": "api/CoberturaMedica/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "coberturaMedica",
-        "Type": "Turnero.Models.CoberturaMedica",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Turnero.Controllers.CoberturaMedicaController",
-    "Method": "DeleteCoberturaMedica",
-    "RelativePath": "api/CoberturaMedica/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Turnero.Controllers.PacienteController",

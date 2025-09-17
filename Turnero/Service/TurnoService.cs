@@ -1,4 +1,5 @@
-﻿using Turnero.Dto;
+﻿using Turnero.Domain.TurnoDomain;
+using Turnero.Dto;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -12,13 +13,23 @@ namespace Turnero.Service
 
 		public async Task<ServiceResponse<Turno>> SolicitarTurno(TurnoDto dto)
 		{
+			var result = await new CreateTurnoDomain(_unitOfWork).ValidarLogicaNegocio(dto); //Validador de logica de negocio
+
+			if (!result.EsValido) //Valida a la lógica de negocio
+			{
+				return new ServiceResponse<Turno>
+				{
+					Errores = result.Errores
+				};
+			}
+
 			await _unitOfWork.BeginTransactionAsync();
 
 			try
 			{
-				Turno turnoSolicitado = TurnoMapper.DeTurnoDtoATurno(dto);
+				Turno turnoSolicitado = TurnoMapper.DeTurnoDtoATurno(dto); //Mapeo de dto a Turno model
 
-				await _unitOfWork.Turnos.AddTurno(turnoSolicitado);
+				await _unitOfWork.Turnos.AddTurno(turnoSolicitado); //Lo añado a la bd
 
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();
@@ -32,7 +43,7 @@ namespace Turnero.Service
 			}
 			catch
 			{
-				await _unitOfWork.RollbackAsync();
+				await _unitOfWork.RollbackAsync(); //Volvamos para atrás, muchachos. Algo salio mal y cancelamos los cambios a la bd
 
 				return new ServiceResponse<Turno>
 				{

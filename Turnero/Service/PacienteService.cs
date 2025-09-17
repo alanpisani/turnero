@@ -1,8 +1,8 @@
-﻿using Turnero.Dto;
+﻿using Turnero.Domain.PacienteDomain;
+using Turnero.Dto;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
-using Turnero.Validators.PacienteValidators;
 
 namespace Turnero.Service
 {
@@ -15,6 +15,16 @@ namespace Turnero.Service
 		{
 			UsuarioDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
 			var usuario = _usuarioService.CrearUsuario(usuarioDto, 1); //Se crea un Usuario model en base al UsuarioDto, para la bd
+
+			var result = await new CreatePacienteDomain(_unitOfWork).Validar(dto);
+
+			if (!result.EsValido)
+			{
+				return new ServiceResponse<Paciente>
+				{
+					Errores = result.Errores
+				};
+			}
 
 			await _unitOfWork.BeginTransactionAsync();
 

@@ -19,13 +19,5 @@ namespace Turnero.Common.Helpers.TurnoValidatorHelper
 		{
 			return await uow.Especialidades.AnyEspecialidad(idEspecialidad);
 		}
-
-		public static async Task<bool> ProfesionalTieneEsaEspecialidad(TurnoDto dto, IUnitOfWork uow)
-		{
-			return await uow.Profesionales.AnyProfesionalWithThatSpeciality(
-				idProfesional: dto.IdProfesional,
-				idEspecialidad: dto.IdEspecialidad
-				);
-		}
 	}
 }

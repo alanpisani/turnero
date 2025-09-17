@@ -95,7 +95,7 @@ namespace Turnero.Controllers
 
             if (!response.Exito)
             {
-                return BadRequest(response.Mensaje);
+                return BadRequest(response.Errores);
             }
 			return CreatedAtAction(nameof(PostProfesional), response.Mensaje);
 			

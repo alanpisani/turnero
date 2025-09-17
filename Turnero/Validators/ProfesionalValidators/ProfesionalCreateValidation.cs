@@ -26,10 +26,7 @@ namespace Turnero.Validators.ProfesionalValidators
 				.Cascade(CascadeMode.Stop)
 				.NotEmpty().WithMessage("Debe haber al menos un horario laboral")
 				.Must(ProfesionalHorariosLaboralesValidatorHelper.SinHorariosDuplicados).WithMessage("Se ingresaron dos horarios iguales en el mismo dia")
-				.Must(ProfesionalHorariosLaboralesValidatorHelper.DiasValidos).WithMessage("Se ingresó un dia inválido. Elija entre el Lunes y el Domingo")
-				.Must(ProfesionalHorariosLaboralesValidatorHelper.EsHorarioLaboral).WithMessage("No se ingresó un horario correcto")
-				.Must(ProfesionalHorariosLaboralesValidatorHelper.HorarioCoherente).WithMessage("Debe elegir un horario laboral coherente")
-				.Must(ProfesionalHorariosLaboralesValidatorHelper.DuracionTurnoCoherente).WithMessage("La duracion del turno debe estar en un rango de 15 a 30 minutos");
+				.Must(ProfesionalHorariosLaboralesValidatorHelper.EsHorarioLaboral).WithMessage("No se ingresó un horario correcto");
 		}
 	}
 }

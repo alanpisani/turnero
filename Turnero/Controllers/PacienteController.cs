@@ -81,7 +81,7 @@ namespace Turnero.Controllers
 
 			if (!response.Exito)
 			{
-				return BadRequest(response);
+				return BadRequest(response.Errores);
 			}
 
 			return CreatedAtAction(nameof(PostPaciente), response.Mensaje);
