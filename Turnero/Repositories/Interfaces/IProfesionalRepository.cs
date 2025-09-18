@@ -10,5 +10,7 @@ namespace Turnero.Repositories.Interfaces
 		Task<bool> AnyProfesional(int idProfesional);
 		Task<bool> AnyProfesionalWithThatSpeciality(int idProfesional, int idEspecialidad);
 		Task<bool> AnyProfesionalByMatricula(int matricula);
+
+		Task<List<Profesional>?> GetProfesionalesByEspecialidad(int idEspecialidad);
 	}
 }

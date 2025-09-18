@@ -9,6 +9,7 @@ namespace Turnero.Repositories
 	{
 		private readonly TurneroContext _context = context;
 
+		/**  ADD  **/
 		public async Task AddProfesional(Profesional profesional)
 		{
 			await _context.Profesionals.AddAsync(profesional); //Directo a la BD
@@ -30,6 +31,9 @@ namespace Turnero.Repositories
 			}
 		}
 
+		/*******/
+
+		/**  ANY  **/
 		public async Task<bool> AnyProfesional(int idProfesional)
 		{
 			return await _context.Profesionals.AnyAsync(p => p.IdUsuario == idProfesional);
@@ -47,6 +51,16 @@ namespace Turnero.Repositories
 		{
 			return await _context.Profesionals
 				.AnyAsync(p => p.Matricula == matricula);
+		}
+
+		/*******/
+
+		public async Task<List<Profesional>?> GetProfesionalesByEspecialidad(int idEspecialidad)
+		{
+			return await _context.Profesionals
+				.Where(p => p.ProfesionalEspecialidads
+					.Any(pe => pe.IdEspecialidad == idEspecialidad))
+				.ToListAsync();
 		}
 	}
 }

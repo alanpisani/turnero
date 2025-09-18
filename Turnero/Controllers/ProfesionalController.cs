@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Turnero.Dto;
@@ -44,6 +39,15 @@ namespace Turnero.Controllers
             }
 
             return profesional;
+        }
+        [HttpGet("especialidad/{idEspecialidad}")]
+        public async Task<IActionResult> GetProfesionalesByEspecialidad(int idEspecialidad)
+        {
+            var response = await _service.MostrarProfesionalesPorEspecialidad(idEspecialidad);
+
+            if (!response.Exito) return BadRequest(response.Mensaje);
+
+            return Ok(response.Cuerpo);
         }
 
         [HttpGet("{id}/franjas")]

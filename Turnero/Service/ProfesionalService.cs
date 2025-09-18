@@ -64,6 +64,29 @@ namespace Turnero.Service
 
 			}
 		}
+
+		public async Task<ServiceResponse<List<Profesional>>> MostrarProfesionalesPorEspecialidad(int idEspecialidad)
+		{
+			try
+			{
+				var profesionales = await _unitOfWork.Profesionales.GetProfesionalesByEspecialidad(idEspecialidad);
+
+				return new ServiceResponse<List<Profesional>>
+				{
+					Exito = true,
+					Mensaje = "Especialistas traidos con éxito",
+					Cuerpo = profesionales
+				};
+
+			}
+			catch
+			{
+				return new ServiceResponse<List<Profesional>>
+				{
+					Mensaje = "Hubo un error inesperado al intentar traer a los profesionales. Inténtelo más tarde"
+				};
+			}
+		}
 		public async Task<ServiceResponse<IEnumerable<string>>> GetFranjaHoraria(int idProfesional, string fecha)
 		{
 			var diaSemana = (int) DateTime.Parse(fecha).DayOfWeek;
