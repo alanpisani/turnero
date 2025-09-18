@@ -17,5 +17,11 @@ namespace Turnero.Repositories
 		{
 			return await _context.Especialidads.ToListAsync();
 		}
+		public async Task<Especialidad?> FirstOrDefaultEspecialidadById(int id)
+		{
+			return await _context.Especialidads.FirstOrDefaultAsync(
+				e => e.IdEspecialidad == id
+				);
+		} 
 	}
 }

@@ -6,5 +6,6 @@ namespace Turnero.Repositories.Interfaces
 	{
 		Task<bool> AnyEspecialidad(int idEspecialidad);
 		Task<List<Especialidad>> ToListAsyncEspecialidades();
+		Task<Especialidad?> FirstOrDefaultEspecialidadById(int id);
 	}
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Turnero.Models;
 using Turnero.Service;
 
@@ -10,9 +6,8 @@ namespace Turnero.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CoberturaMedicaController(CoberturaMedicaService service, TurneroContext context) : ControllerBase
+    public class CoberturaMedicaController(CoberturaMedicaService service) : ControllerBase
     {
-        private readonly TurneroContext _context = context;
         private readonly CoberturaMedicaService _service = service;
 
         // GET: api/CoberturaMedica

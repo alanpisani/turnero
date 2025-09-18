@@ -72,6 +72,7 @@ builder.Services.AddScoped<PacienteService>();
 builder.Services.AddScoped<ProfesionalService>();
 builder.Services.AddScoped<TurnoService>();
 builder.Services.AddScoped<CoberturaMedicaService>();
+builder.Services.AddScoped<EspecialidadService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<AuthService>();
 
