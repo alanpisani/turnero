@@ -51,13 +51,13 @@ namespace Turnero.Controllers
         }
 
         [HttpGet("{id}/franjas")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<string>>>> GetFranjas(int id, [FromQuery] string fecha)
+        public async Task<IActionResult> GetFranjas(int id, [FromQuery] string fecha)
         {
 			var response = await _service.GetFranjaHoraria(id, fecha);
 
-            if (!response.Exito) return NotFound(response);
+            if (!response.Exito) return NotFound(response.Mensaje);
 
-            return response;
+            return Ok(response.Cuerpo);
 		}
 
         // PUT: api/Profesional/5

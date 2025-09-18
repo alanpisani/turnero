@@ -87,7 +87,7 @@ namespace Turnero.Service
 				};
 			}
 		}
-		public async Task<ServiceResponse<IEnumerable<string>>> GetFranjaHoraria(int idProfesional, string fecha)
+		public async Task<ServiceResponse<IEnumerable<string>>> GetFranjaHoraria(int idProfesional, string fecha) //DESARROLLAR MAS
 		{
 			var diaSemana = (int) DateTime.Parse(fecha).DayOfWeek;
 
@@ -109,7 +109,15 @@ namespace Turnero.Service
 				horarioLaboral.HoraInicio, 
 				horarioLaboral.HoraFin, 
 				horarioLaboral.DuracionTurno)
-				.Select(h => h.ToString("HH:mm"));
+				.Select(h => h.ToString("HH:mm")).ToList();
+
+			var turnosEseDia = await _unitOfWork.Turnos
+				.GetTurnosByProfesionalAndFecha(idProfesional, DateOnly.Parse(fecha));
+
+			var horariosOcupados = turnosEseDia!
+				.Select(t => new TimeOnly(t.FechaTurno.Hour, t.FechaTurno.Minute).ToString("HH:mm")).ToList();
+
+			franja = franja.Except(horariosOcupados).ToList();
 
 			return new ServiceResponse<IEnumerable<string>>
 			{

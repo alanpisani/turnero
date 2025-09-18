@@ -6,7 +6,7 @@ using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Repositories
 {
-	public class TurnoRepository(TurneroContext context):ITurnoRepository
+	public class TurnoRepository(TurneroContext context): ITurnoRepository
 	{
 		private readonly TurneroContext _context = context;
 
@@ -32,6 +32,13 @@ namespace Turnero.Repositories
 		{
 			return _context.Turnos
 				.Where(t => t.IdPaciente == idPaciente)
+				.ToListAsync();
+		}
+
+		public async Task<List<Turno>?> GetTurnosByProfesionalAndFecha(int idProfesional, DateOnly fecha)
+		{
+			return await _context.Turnos
+				.Where(t => t.IdProfesional == idProfesional && t.FechaTurno.Date == fecha.ToDateTime(TimeOnly.MinValue).Date)
 				.ToListAsync();
 		}
 
