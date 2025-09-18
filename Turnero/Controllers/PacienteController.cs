@@ -10,10 +10,11 @@ namespace Turnero.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class PacienteController(TurneroContext context, PacienteService service) : ControllerBase
+    public class PacienteController(TurneroContext context, PacienteService service, TurnoService turnoService) : ControllerBase
     {
         private readonly TurneroContext _context = context;
         private readonly PacienteService _service = service;
+        private readonly TurnoService _turnoService = turnoService;
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -107,5 +108,21 @@ namespace Turnero.Controllers
         {
             return _context.Pacientes.Any(e => e.IdUsuario == id);
         }
+
+        //Mis turnos
+
+        [HttpGet("{idPaciente}/mis_turnos")]
+        public async Task<IActionResult> GetTurnosByPaciente(int idPaciente)
+        {
+            var response = await _turnoService.TraerTurnosDelPaciente(idPaciente);
+
+            if (!response.Exito)
+            {
+                return NotFound(response.Mensaje);
+            }
+            return Ok(response.Cuerpo);
+        }
+
+
     }
 }

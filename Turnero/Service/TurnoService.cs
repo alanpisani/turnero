@@ -72,7 +72,16 @@ namespace Turnero.Service
 
 		public async Task<ServiceResponse<List<Turno>>> TraerTurnosDelPaciente(int idPaciente)
 		{
+
 			var turnos = await _unitOfWork.Turnos.GetTurnosByPaciente(idPaciente);
+
+			if(turnos == null || turnos.Count == 0)
+			{
+				return new ServiceResponse<List<Turno>>
+				{
+					Mensaje = "No tenés turnos solicitados"
+				};
+			}
 
 			return new ServiceResponse<List<Turno>> { 
 				Exito=true,
