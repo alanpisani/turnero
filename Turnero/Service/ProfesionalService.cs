@@ -117,13 +117,11 @@ namespace Turnero.Service
 			var horariosOcupados = turnosEseDia!
 				.Select(t => new TimeOnly(t.FechaTurno.Hour, t.FechaTurno.Minute).ToString("HH:mm")).ToList();
 
-			franja = franja.Except(horariosOcupados).ToList();
-
 			return new ServiceResponse<IEnumerable<string>>
 			{
 				Exito = true,
 				Mensaje = "Franja horaria consultada con éxito",
-				Cuerpo = franja
+				Cuerpo = franja.Except(horariosOcupados)
 			};
 		}
 	}

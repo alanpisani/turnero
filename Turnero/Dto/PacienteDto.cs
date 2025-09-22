@@ -12,7 +12,7 @@ namespace Turnero.Dto
 			: base(Nombre, Apellido, Dni, Email, FechaNacimiento, Contrasenia, ContraseniaRepetida) { }
 
 		public PacienteDto(
-			string Nombre, 
+			string Nombre,
 			string Apellido, 
 			int Dni, 
 			string Email, 

@@ -86,7 +86,16 @@ builder.Services.AddScoped<ICoberturaMedicaRepository, CoberturaMedicaRepository
 builder.Services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("PermitirFrontend",
+		policy =>
+		{
+			policy.WithOrigins("https://turnero-z7wo.onrender.com")
+				  .AllowAnyHeader()
+				  .AllowAnyMethod();
+		});
+});
 
 var app = builder.Build();
 
@@ -96,11 +105,13 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+app.UseCors("PermitirFrontend");
 
 app.UseHttpsRedirection();
 app.UseMiddleware<Turnero.Common.Middlewares.AuthTokenMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 
