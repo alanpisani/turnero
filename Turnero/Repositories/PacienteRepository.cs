@@ -37,7 +37,15 @@ namespace Turnero.Repositories
 
 		public async Task<List<Paciente>> ToListAsyncAllPacientes()
 		{
-			return await _context.Pacientes.ToListAsync();
+			return await _context.Pacientes
+				.Include(p => p.IdUsuarioNavigation)
+				.ToListAsync();
+		}
+
+		public async Task<Paciente?> GetPacienteById(int id) {
+			return await _context.Pacientes
+				.Include(p => p.IdUsuarioNavigation)
+				.FirstOrDefaultAsync(p => p.IdUsuario == id);
 		}
 	}
 }

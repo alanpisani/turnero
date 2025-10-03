@@ -1,7 +1,4 @@
 ﻿using Turnero.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using System;
 
 namespace Turnero.Common.Middlewares
 {

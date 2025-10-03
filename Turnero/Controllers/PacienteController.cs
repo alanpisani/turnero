@@ -18,7 +18,7 @@ namespace Turnero.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Paciente>>> GetPacientes()
+        public async Task<IActionResult> GetPacientes()
         {
             var response = await _service.MostrarTodosLosPacientes();
 
@@ -27,18 +27,17 @@ namespace Turnero.Controllers
             return Ok(response.Cuerpo);
         }
 
-        // GET: api/Paciente/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Paciente>> GetPaciente(int id)
+        public async Task<IActionResult> GetPacienteById(int id)
         {
-            var paciente = await _context.Pacientes.FindAsync(id);
+            var response = await _service.MostrarPacientePorId(id);
 
-            if (paciente == null)
+            if (!response.Exito)
             {
-                return NotFound();
+                return NotFound(response.Mensaje);
             }
 
-            return paciente;
+            return Ok(response.Cuerpo);
         }
 
         // PUT: api/Paciente/5

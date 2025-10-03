@@ -1,4 +1,5 @@
 ﻿using Turnero.Dto;
+using Turnero.Dto.Paciente;
 using Turnero.Models;
 
 namespace Turnero.Mappers
@@ -12,6 +13,20 @@ namespace Turnero.Mappers
 				IdUsuario: idUsuario, //Acá iria el id del Usuario creado, subido y traido de la bd con esa intención
 				Telefono: dto.Telefono //El teléfono del paciente registrado. No tiene mucha ciencia
 			);
+		}
+
+		public static PacienteDtoGet DePacienteAPacienteDtoGet(Paciente paciente)
+		{
+			return new PacienteDtoGet
+			{
+				Id = paciente.IdUsuario,
+				Nombre = paciente.IdUsuarioNavigation.Nombre,
+				Apellido = paciente.IdUsuarioNavigation.Apellido,
+				Dni = paciente.IdUsuarioNavigation.Dni,
+				Email = paciente.IdUsuarioNavigation.Email,
+				FechaNacimiento = paciente.IdUsuarioNavigation.FechaNacimiento.ToString(),
+				Telefono = paciente.Telefono
+			};
 		}
 		public static IEnumerable<CoberturaPaciente> CrearCoberturasPaciente(PacienteDto dto, int idPaciente)
 		{

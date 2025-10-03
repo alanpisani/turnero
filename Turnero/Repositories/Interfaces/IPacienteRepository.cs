@@ -9,5 +9,6 @@ namespace Turnero.Repositories.Interfaces
 		Task<bool> AnyPaciente(int idPaciente);
 		Task<List<int>> ToListAsyncIdsObrasSociales();
         Task<List<Paciente>> ToListAsyncAllPacientes();
+		Task<Paciente?> GetPacienteById(int id);
 	}
 }

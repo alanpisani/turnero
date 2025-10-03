@@ -1,5 +1,6 @@
 ﻿using Turnero.Domain.PacienteDomain;
 using Turnero.Dto;
+using Turnero.Dto.Paciente;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -60,22 +61,48 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<ServiceResponse<List<Paciente>>> MostrarTodosLosPacientes()
+		public async Task<ServiceResponse<List<PacienteDtoGet>>> MostrarTodosLosPacientes()
 		{
 			var pacientes = await _unitOfWork.Pacientes.ToListAsyncAllPacientes();
 
 			if(pacientes.Count == 0)
 			{
-				return new ServiceResponse<List<Paciente>>
+				return new ServiceResponse<List<PacienteDtoGet>>
 				{
 					Mensaje = "No se encontraron pacientes registrados en el sistema"
 				};
 			}
 
-			return new ServiceResponse<List<Paciente>>
+			var pacientesDto = pacientes
+				.Select(p => PacienteMapper.DePacienteAPacienteDtoGet(p))
+				.ToList();
+
+			return new ServiceResponse<List<PacienteDtoGet>>
 			{
 				Exito = true,
-				Cuerpo = pacientes
+				Cuerpo = pacientesDto
+			};
+		}
+
+		public async Task<ServiceResponse<PacienteDtoGet>> MostrarPacientePorId(int idPaciente)
+		{
+			var paciente = await _unitOfWork.Pacientes.GetPacienteById(idPaciente);
+
+			if(paciente == null)
+			{
+				return new ServiceResponse<PacienteDtoGet>
+				{
+					Mensaje = "No se encontró un paciente con ese ID"
+				};
+			}
+
+			var pacienteDtoGet = PacienteMapper.DePacienteAPacienteDtoGet(paciente);
+
+			return new ServiceResponse<PacienteDtoGet>
+			{
+				Exito = true,
+				Mensaje = "Paciente traido con éxito",
+				Cuerpo = pacienteDtoGet
 			};
 		}
 	}

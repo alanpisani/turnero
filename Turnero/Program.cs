@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Turnero.Common.Helpers;
 using Turnero.Models;
 using Turnero.Service;
 using Turnero.Repositories.Interfaces;
