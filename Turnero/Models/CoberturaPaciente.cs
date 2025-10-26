@@ -1,4 +1,7 @@
-﻿namespace Turnero.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Turnero.Models;
 
 public partial class CoberturaPaciente
 {
@@ -12,5 +15,5 @@ public partial class CoberturaPaciente
 
     public virtual CoberturaMedica IdCoberturaMedicaNavigation { get; set; } = null!;
 
-    public virtual Paciente IdPacienteNavigation { get; set; } = null!;
+    public virtual Usuario IdPacienteNavigation { get; set; } = null!;
 }

@@ -12,12 +12,12 @@ namespace Turnero.Mappers
 			var hora = TimeOnly.Parse(dto.Hora);
 
 			return new Turno
-			(
-				IdPaciente: dto.IdPaciente,
-				IdProfesional: dto.IdProfesional,
-				IdEstadoTurno: (int) EnumEstadoTurno.Solicitado,
-				FechaTurno: dia.ToDateTime(hora)
-			);
+			{
+				IdPaciente= dto.IdPaciente,
+				IdProfesional= dto.IdProfesional,
+				IdEstadoTurno= (int) EnumEstadoTurno.Solicitado,
+				FechaTurno= dia.ToDateTime(hora)
+			};
 		}
 	}
 }

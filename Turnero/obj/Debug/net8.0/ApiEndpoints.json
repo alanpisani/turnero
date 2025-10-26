@@ -283,6 +283,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Turnero.Controllers.TurnoController",
+    "Method": "GetTurnosByDniPaciente",
+    "RelativePath": "api/Turno/turnos/{dniPaciente}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dniPaciente",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Turnero.Controllers.Admin_RecepcionistaController",
     "Method": "PostRecepcionista",
     "RelativePath": "registrar_recepcionista",

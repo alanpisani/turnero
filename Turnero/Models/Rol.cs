@@ -1,4 +1,7 @@
-﻿namespace Turnero.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Turnero.Models;
 
 public partial class Rol
 {

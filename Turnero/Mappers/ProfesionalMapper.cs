@@ -8,10 +8,10 @@ namespace Turnero.Mappers
 		public static Profesional DeProfesionalDtoAProfesional(ProfesionalDto dto, int id)
 		{
 			return new Profesional
-			(
-				IdUsuario: id,
-				Matricula: dto.Matricula
-			);
+			{
+				IdUsuario= id,
+				Matricula= dto.Matricula
+			};
 		}
 
 		public static IEnumerable<ProfesionalEspecialidad> AsignacionesEspecialidades(ProfesionalDto dto, int id)

@@ -9,10 +9,10 @@ namespace Turnero.Mappers
 		public static Paciente DePacienteDtoAPaciente(PacienteDto dto, int idUsuario)
 		{
 			return new Paciente //Se retorna un Paciente model con el id del usuario recien creado
-			(
-				IdUsuario: idUsuario, //Acá iria el id del Usuario creado, subido y traido de la bd con esa intención
-				Telefono: dto.Telefono //El teléfono del paciente registrado. No tiene mucha ciencia
-			);
+			{
+				IdUsuario= idUsuario, //Acá iria el id del Usuario creado, subido y traido de la bd con esa intención
+				Telefono= dto.Telefono //El teléfono del paciente registrado. No tiene mucha ciencia
+			};
 		}
 
 		public static PacienteDtoGet DePacienteAPacienteDtoGet(Paciente paciente)

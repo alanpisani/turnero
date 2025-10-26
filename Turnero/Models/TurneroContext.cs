@@ -75,7 +75,7 @@ public partial class TurneroContext : DbContext
 				.HasMaxLength(250)
 				.HasColumnName("token");
 
-			entity.HasOne(d => d.Usuario)
+			entity.HasOne(d => d.IdUsuarioNavigation)
 				.WithMany(p => p.AuthTokens)
 				.HasForeignKey(d => d.IdUsuario)
 				.OnDelete(DeleteBehavior.ClientSetNull)
@@ -120,8 +120,9 @@ public partial class TurneroContext : DbContext
 				.HasMaxLength(50)
 				.HasColumnName("numero_afiliado");
 
-			entity.HasOne(d => d.IdCoberturaMedicaNavigation).WithOne(p => p.CoberturaPaciente)
-				.HasForeignKey<CoberturaPaciente>(d => d.IdCoberturaMedica)
+			entity.HasOne(d => d.IdCoberturaMedicaNavigation)
+				.WithMany(p => p.CoberturaPacientes)
+				.HasForeignKey(d => d.IdCoberturaMedica)
 				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("cobertura_paciente_ibfk_2");
 

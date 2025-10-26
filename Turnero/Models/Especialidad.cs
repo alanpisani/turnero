@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Turnero.Models;
 
@@ -8,6 +9,5 @@ public partial class Especialidad
 
     public string NombreEspecialidad { get; set; } = null!;
 
-    [JsonIgnore]
     public virtual ICollection<ProfesionalEspecialidad> ProfesionalEspecialidads { get; set; } = new List<ProfesionalEspecialidad>();
 }

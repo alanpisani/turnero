@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Turnero.Models;
 
@@ -15,21 +16,12 @@ public partial class Turno
     public DateTime FechaCreacion { get; set; }
 
     public DateTime FechaTurno { get; set; }
-    [JsonIgnore]
+
     public virtual ICollection<HistorialTurno> HistorialTurnos { get; set; } = new List<HistorialTurno>();
-	[JsonIgnore]
+
     public virtual EstadoTurno IdEstadoTurnoNavigation { get; set; } = null!;
-	[JsonIgnore]
-	public virtual Paciente IdPacienteNavigation { get; set; } = null!;
-	[JsonIgnore]
-	public virtual Profesional IdProfesionalNavigation { get; set; } = null!;
 
-    public Turno(int IdEstadoTurno, int IdPaciente, int IdProfesional, DateTime FechaTurno) {
+    public virtual Usuario IdPacienteNavigation { get; set; } = null!;
 
-        this.IdEstadoTurno = IdEstadoTurno;
-        this.IdPaciente = IdPaciente;
-        this.IdProfesional = IdProfesional;
-        this.FechaTurno = FechaTurno;
-
-    }
+    public virtual Profesional IdProfesionalNavigation { get; set; } = null!;
 }

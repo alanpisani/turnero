@@ -20,15 +20,15 @@ namespace Turnero.Mappers
 		}
 
 		public static Usuario DeDtoAUsuario(UsuarioDto dto, int idRol) {
-			return new Usuario(
-				Nombre: dto.Nombre,
-				Apellido: dto.Apellido,
-				Dni: dto.Dni,
-				Email: dto.Email,
-				Contrasenia: "",
-				FechaNacimiento: DateOnly.Parse(dto.FechaNacimiento),
-				IdRol: idRol
-			);
+			return new Usuario {
+				Nombre= dto.Nombre,
+				Apellido= dto.Apellido,
+				Dni= dto.Dni,
+				Email= dto.Email,
+				Contrasenia= "",
+				FechaNacimiento= DateOnly.Parse(dto.FechaNacimiento),
+				IdRol= idRol
+			};
 		}
 	}
 }
