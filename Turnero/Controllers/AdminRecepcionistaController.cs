@@ -17,9 +17,7 @@ namespace Turnero.Controllers
 		{
 			var response = await _service.RegistrarRecepcionista(dto);
 
-			if(!response.Exito) return BadRequest(response.Errores);
-
-			return CreatedAtAction(nameof(PostRecepcionista), response.Mensaje);
+			return CreatedAtAction(nameof(PostRecepcionista), response);
 		}
 
 
@@ -30,9 +28,8 @@ namespace Turnero.Controllers
 		{
 			var response = await _service.MostrarTodosLosRecepcionistas();
 
-			if (!response.Exito) return NotFound(response.Mensaje);
 
-			return Ok(response.Cuerpo);
+			return Ok(response);
 		}
 	}
 }

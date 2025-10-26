@@ -2,6 +2,7 @@
 using Turnero.Domain.PacienteDomain;
 using Turnero.Domain.ProfesionalDomain;
 using Turnero.Dto;
+using Turnero.Exceptions;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -14,19 +15,15 @@ namespace Turnero.Service
 		private readonly UsuarioService _service = service;
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<ServiceResponse<Profesional>> RegistrarProfesional(ProfesionalDto dto)
+		public async Task<Profesional> RegistrarProfesional(ProfesionalDto dto)
 		{
 			var usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Pasaje a dto usuario
 			var usuario = _service.CrearUsuario(usuarioDto, 2); //Se crea un usuario base model
+
 			var result = new CreateProfesionalDomain(_unitOfWork).Validar(dto);
 
-			if (!result.EsValido)
-			{
-				return new ServiceResponse<Profesional>
-				{
-					Errores = result.Errores
-				};
-			}
+
+			if (!result.EsValido) throw new BussinessErrorContentException(result.Errores);
 
 			await _unitOfWork.BeginTransactionAsync();
 
@@ -46,49 +43,60 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync(); //Todo ok y guardamos cambios
 
-				return new ServiceResponse<Profesional>
-				{
-					Exito = true,
-					Mensaje = "Profesional registrado con éxito",
-					Cuerpo = profesional
-				};
-			}
-			catch(Exception e)
-			{
-				await _unitOfWork.RollbackAsync();
-
-				return new ServiceResponse<Profesional>
-				{
-					Mensaje = $"Hubo un error al registrar profesional. Inténtelo más tarde. Error: {e}",
-				};
-
-			}
-		}
-
-		public async Task<ServiceResponse<List<Profesional>>> MostrarProfesionalesPorEspecialidad(int idEspecialidad)
-		{
-			try
-			{
-				var profesionales = await _unitOfWork.Profesionales.GetProfesionalesByEspecialidad(idEspecialidad);
-
-				return new ServiceResponse<List<Profesional>>
-				{
-					Exito = true,
-					Mensaje = "Especialistas traidos con éxito",
-					Cuerpo = profesionales
-				};
-
+				return profesional;
 			}
 			catch
 			{
-				return new ServiceResponse<List<Profesional>>
-				{
-					Mensaje = "Hubo un error inesperado al intentar traer a los profesionales. Inténtelo más tarde"
-				};
+				await _unitOfWork.RollbackAsync();
+
+				throw new Exception("Hubo un error al registrar profesional. Inténtelo más tarde.");
+
 			}
 		}
-		public async Task<ServiceResponse<IEnumerable<string>>> GetFranjaHoraria(int idProfesional, string fecha) //DESARROLLAR MAS
+
+		public async Task<List<Profesional>> MostrarProfesionales()
 		{
+			var profesionales = await _unitOfWork.Profesionales.GetAllProfesionals();
+
+			return profesionales;
+		}
+
+		public async Task<Profesional> MostrarProfesionalPorId(int idProfesional)
+		{
+			var profesional = await _unitOfWork.Profesionales.GetProfesionalById(idProfesional);
+
+			if (profesional == null) throw new NotFoundException($"No se encontró profesional con id: {idProfesional}");
+
+			return profesional;
+		}
+
+		public async Task<List<Profesional>> MostrarProfesionalesPorEspecialidad(int idEspecialidad)
+		{
+			var hayEspecialidad = await _unitOfWork.Especialidades.AnyEspecialidad(idEspecialidad);
+
+			if (!hayEspecialidad) throw new NotFoundException("No se encontró esa especialidad en la base de datos");
+
+			try
+			{
+
+
+				var profesionales = await _unitOfWork.Profesionales.GetProfesionalesByEspecialidad(idEspecialidad);
+
+				return profesionales;
+
+			}
+			catch(Exception ex)
+			{
+				throw new Exception($"Hubo un error inesperado al intentar traer a los profesionales. Inténtelo más tarde. Error: {ex.Message}");
+			}
+		}
+		public async Task<IEnumerable<string>> GetFranjaHoraria(int idProfesional, string fecha) //DESARROLLAR MAS
+		{
+
+			var hayProfesional = await _unitOfWork.Profesionales.AnyProfesional(idProfesional);
+
+			if (!hayProfesional) throw new NotFoundException($"No se encontró profesional con id: {idProfesional}");
+
 			var diaSemana = (int) DateTime.Parse(fecha).DayOfWeek;
 
 			var horarioLaboral = await _unitOfWork.HorariosLaborales
@@ -97,13 +105,7 @@ namespace Turnero.Service
 					diaSemana: diaSemana
 				);
 
-			if (horarioLaboral == null) {
-				return new ServiceResponse<IEnumerable<string>>
-				{
-					Mensaje = "No hay horarios en esa fecha",
-					Cuerpo = []
-				};
-			}
+			if (horarioLaboral == null) throw new NotFoundException("No hay horarios en esa fecha");
 
 			var franja = FranjaHorariaHelper.FranjaHorariaProfesional(
 				horarioLaboral.HoraInicio, 
@@ -117,12 +119,8 @@ namespace Turnero.Service
 			var horariosOcupados = turnosEseDia!
 				.Select(t => new TimeOnly(t.FechaTurno.Hour, t.FechaTurno.Minute).ToString("HH:mm")).ToList();
 
-			return new ServiceResponse<IEnumerable<string>>
-			{
-				Exito = true,
-				Mensaje = "Franja horaria consultada con éxito",
-				Cuerpo = franja.Except(horariosOcupados)
-			};
+			return franja.Except(horariosOcupados);
+		
 		}
 	}
 }

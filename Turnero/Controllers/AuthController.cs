@@ -15,8 +15,6 @@ namespace Turnero.Controllers
 		{
 			var response = await _authService.Conectarse(dto);
 
-			if(!response.Exito) return Unauthorized(response.Mensaje);
-
 			return Ok(response);
 		}
 	}

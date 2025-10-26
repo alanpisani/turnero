@@ -16,9 +16,7 @@ namespace Turnero.Controllers
         {
             var response = await _service.MostrarTodasLasCoberturas();
             
-            if(!response.Exito) return BadRequest(response.Mensaje);
-
-            return Ok(response.Cuerpo);
+            return Ok(response);
         }
 
         // GET: api/CoberturaMedica/5
@@ -27,12 +25,7 @@ namespace Turnero.Controllers
         {
             var response = await _service.MostrarCoberturaPorId(id);
 
-            if (!response.Exito)
-            {
-                return NotFound(response.Mensaje);
-            }
-
-            return response.Cuerpo!;
+            return response;
         }
     }
 }

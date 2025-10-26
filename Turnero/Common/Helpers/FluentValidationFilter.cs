@@ -33,7 +33,7 @@ public class FluentValidationFilter : IAsyncActionFilter
 							g => g.Select(e => e.ErrorMessage).ToList()
 						);
 
-					context.Result = new BadRequestObjectResult(errors);
+					context.Result = new BadRequestObjectResult(new { errors = errors });
 					return;
 				}
 			}
@@ -42,3 +42,4 @@ public class FluentValidationFilter : IAsyncActionFilter
 		await next();
 	}
 }
+ 

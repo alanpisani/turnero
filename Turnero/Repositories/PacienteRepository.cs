@@ -24,7 +24,7 @@ namespace Turnero.Repositories
 
 		public async Task<bool> AnyPaciente(int idPaciente)
 		{
-			return await _context.Pacientes.AnyAsync(p => p.IdUsuario == idPaciente);
+			return await _context.Pacientes.AnyAsync(p => p.IdUsuario == idPaciente); //Existe algun paciente con ese id o no
 		}
 
 		public async Task<List<int>> ToListAsyncIdsObrasSociales()
@@ -46,6 +46,13 @@ namespace Turnero.Repositories
 			return await _context.Pacientes
 				.Include(p => p.IdUsuarioNavigation)
 				.FirstOrDefaultAsync(p => p.IdUsuario == id);
+		}
+
+		public async Task<Paciente?> GetPacienteByDni(int dniPaciente)
+		{
+			return await _context.Pacientes
+				.Include(p => p.IdUsuarioNavigation)
+				.FirstOrDefaultAsync(p => p.IdUsuarioNavigation.Dni == dniPaciente);
 		}
 	}
 }

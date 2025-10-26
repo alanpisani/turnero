@@ -56,15 +56,16 @@ builder.Services.AddValidatorsFromAssemblyContaining<TurnoCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<CoberturaAnyValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidation>();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers(options =>
 {
 	options.Filters.Add<FluentValidationFilter>();
 });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
 
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<PacienteService>();
@@ -93,7 +94,8 @@ builder.Services.AddCors(options =>
 			policy.WithOrigins(
 				"https://turnero-z7wo.onrender.com",
 				"http://127.0.0.1:5500",
-				"http://localhost:3000"
+				"http://localhost:3000",
+				"http://localhost:5173"
 			)
 			.AllowAnyHeader()
 			.AllowAnyMethod();
@@ -110,8 +112,11 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("PermitirFrontend");
 
-app.UseHttpsRedirection();
 app.UseMiddleware<Turnero.Common.Middlewares.AuthTokenMiddleware>();
+app.UseMiddleware<Turnero.Common.Middlewares.ExceptionMiddleware>();
+
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

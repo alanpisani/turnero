@@ -26,7 +26,7 @@ namespace Turnero.Service
 
 		//RECEPCIONISTA
 
-		public async Task<ServiceResponse<Usuario>> RegistrarRecepcionista(UsuarioDto dto) {
+		public async Task<Usuario> RegistrarRecepcionista(UsuarioDto dto) {
 
 			var recepcionista = CrearUsuario(dto, 3);
 
@@ -38,42 +38,23 @@ namespace Turnero.Service
 
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();
+
+				return recepcionista;
 			}
 			catch
 			{
 				await _unitOfWork.RollbackAsync();
 
-				return new ServiceResponse<Usuario>()
-				{
-					Mensaje = "Hubo un error al registrar recepcionista. Inténtelo más tarde"
-				};
+				throw new Exception("Hubo un error al registrar recepcionista. Inténtelo más tarde");
 			}
-
-			return new ServiceResponse<Usuario>()
-			{
-				Exito = true,
-				Mensaje = "Recepcionista creado con éxito",
-				Cuerpo = recepcionista
-			};
 		}
 
-		public async Task<ServiceResponse<List<Usuario>>> MostrarTodosLosRecepcionistas()
+		public async Task<List<Usuario>> MostrarTodosLosRecepcionistas()
 		{
 			var recepcionistas = await _unitOfWork.Usuarios.GetAllRecepcionistas();
 
-			if(recepcionistas.Count == 0)
-			{
-				return new ServiceResponse<List<Usuario>>
-				{
-					Mensaje = "No hay recepcionistas"
-				};
-			}
 
-			return new ServiceResponse<List<Usuario>>
-			{
-				Exito = true,
-				Cuerpo = recepcionistas
-			};
+			return recepcionistas;
 		}
 	}
 }

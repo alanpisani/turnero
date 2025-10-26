@@ -9,45 +9,34 @@ namespace Turnero.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProfesionalController : ControllerBase
+    public class ProfesionalController(ProfesionalService service) : ControllerBase
     {
-        private readonly TurneroContext _context;
-        private readonly ProfesionalService _service;
+        private readonly ProfesionalService _service = service;
 
-        public ProfesionalController(TurneroContext context, ProfesionalService service)
+		// GET: api/Profesional
+		[HttpGet]
+        public async Task<IActionResult> GetProfesionals()
         {
-            _context = context;
-            _service = service;
-        }
+            var response = await _service.MostrarProfesionales();
 
-        // GET: api/Profesional
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profesional>>> GetProfesionals()
-        {
-            return await _context.Profesionals.ToListAsync();
+            return Ok(response);
         }  
 
         // GET: api/Profesional/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Profesional>> GetProfesional(int id)
         {
-            var profesional = await _context.Profesionals.FindAsync(id);
-
-            if (profesional == null)
-            {
-                return NotFound();
-            }
+            var profesional = await _service.MostrarProfesionalPorId(id);
 
             return profesional;
         }
+
         [HttpGet("especialidad/{idEspecialidad}")]
         public async Task<IActionResult> GetProfesionalesByEspecialidad(int idEspecialidad)
         {
             var response = await _service.MostrarProfesionalesPorEspecialidad(idEspecialidad);
 
-            if (!response.Exito) return BadRequest(response.Mensaje);
-
-            return Ok(response.Cuerpo);
+            return Ok(response);
         }
 
         [HttpGet("{id}/franjas")]
@@ -55,41 +44,8 @@ namespace Turnero.Controllers
         {
 			var response = await _service.GetFranjaHoraria(id, fecha);
 
-            if (!response.Exito) return NotFound(response.Mensaje);
-
-            return Ok(response.Cuerpo);
+            return Ok(response);
 		}
-
-        // PUT: api/Profesional/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfesional(int id, Profesional profesional)
-        {
-            if (id != profesional.IdUsuario)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(profesional).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProfesionalExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -97,33 +53,8 @@ namespace Turnero.Controllers
         {
 			var response = await _service.RegistrarProfesional(profesionalDto);
 
-            if (!response.Exito)
-            {
-                return BadRequest(response.Errores);
-            }
-			return CreatedAtAction(nameof(PostProfesional), response.Mensaje);
+			return CreatedAtAction(nameof(PostProfesional), response);
 			
-        }
-
-        // DELETE: api/Profesional/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfesional(int id)
-        {
-            var profesional = await _context.Profesionals.FindAsync(id);
-            if (profesional == null)
-            {
-                return NotFound();
-            }
-
-            _context.Profesionals.Remove(profesional);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ProfesionalExists(int id)
-        {
-            return _context.Profesionals.Any(e => e.IdUsuario == id);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Turnero.Common.Middlewares
 				var authToken = await unitOfWork.AuthTokens //Busco en la bd si hay un token que coincida y que esté activo
 					.FirstOrDefaultTokenActivo(token);
 
-				if (authToken == null || authToken.Expiracion < DateTime.UtcNow) //En caso de no encontrarlo...
+				if (authToken == null || authToken.Expiracion < DateTime.UtcNow) //En caso de no encontrarlo o en caso de haber expirado...
 				{
 					context.Response.StatusCode = StatusCodes.Status401Unauthorized; //Desautorizado. Venció el token o no existe
 					await context.Response.WriteAsync("Token inválido o expirado");
@@ -26,7 +26,7 @@ namespace Turnero.Common.Middlewares
 				//context.Items["UsuarioId"] = authToken.IdUsuario;
 			}
 
-			// next. A seguir con los controllers, pa
+			// next. A seguir con el otro controller, pa
 			await _next(context);
 		}
 	}

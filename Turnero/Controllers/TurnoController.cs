@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Turnero.Dto;
-using Turnero.Models;
 using Turnero.Service;
 
 namespace Turnero.Controllers
@@ -17,12 +16,14 @@ namespace Turnero.Controllers
         {
             var response = await _service.TraerTurnosDelPaciente(idPaciente);
 
-            if (!response.Exito)
-            {
-                return NotFound();
-            }
+            return Ok(response);
+        }
+        [HttpGet("turnos/{dniPaciente}")]
+        public async Task<IActionResult> GetTurnosByDniPaciente(int dniPaciente)
+        {
+            var response = await _service.TraerTurnosDelPacientePorDni(dniPaciente);
 
-            return Ok(response.Cuerpo);
+            return Ok(response);
         }
 
 
@@ -32,11 +33,7 @@ namespace Turnero.Controllers
         {
 			var response = await _service.SolicitarTurno(turnoDto);
 
-			if (!response.Exito)
-			{
-				return BadRequest(response.Errores);
-			}
-			return CreatedAtAction(nameof(PostTurno), response.Mensaje);
+			return CreatedAtAction(nameof(PostTurno), response);
 		}
 
         [HttpPatch("{id}/cancelar")]
@@ -44,12 +41,7 @@ namespace Turnero.Controllers
         {
             var response = await _service.CancelarTurno(id);
 
-            if (!response.Exito)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response.Mensaje);
+            return Ok(response);
         }
     }
 }

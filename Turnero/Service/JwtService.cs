@@ -12,10 +12,11 @@ public class JwtService(IConfiguration configuration) //EL GENERADOR DE TOKENS P
 	{
 		var claims = new List<Claim> //Lista de datos representativos del usuario que va a loggear
 		{
-			new(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
-			new(ClaimTypes.Email, usuario.Email),
-			new(ClaimTypes.Role, ((RolesUsuario) usuario.IdRol).ToString())
-        };
+			new("id", usuario.IdUsuario.ToString()),
+			new("email", usuario.Email),
+			new(ClaimTypes.Role, ((RolesUsuario) usuario.IdRol).ToString()),
+			new("nombre", usuario.Nombre)
+		};
 
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
 		var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

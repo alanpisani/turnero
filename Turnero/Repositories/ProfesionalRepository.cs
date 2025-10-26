@@ -1,4 +1,5 @@
-﻿using Humanizer;
+﻿using System.Collections.Generic;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -55,12 +56,28 @@ namespace Turnero.Repositories
 
 		/*******/
 
-		public async Task<List<Profesional>?> GetProfesionalesByEspecialidad(int idEspecialidad)
+		/***  GET  ***/
+
+		public async Task<List<Profesional>> GetAllProfesionals()
+		{
+			return await _context.Profesionals.ToListAsync();
+		}
+
+		public async Task<Profesional?> GetProfesionalById(int id)
+		{
+			return await _context.Profesionals
+				.Where(p=> p.IdUsuario == id)
+				.FirstOrDefaultAsync();
+				
+		}
+
+		public async Task<List<Profesional>> GetProfesionalesByEspecialidad(int idEspecialidad)
 		{
 			return await _context.Profesionals
 				.Where(p => p.ProfesionalEspecialidads
 					.Any(pe => pe.IdEspecialidad == idEspecialidad))
-				.ToListAsync();
+			.ToListAsync();
+
 		}
 	}
 }

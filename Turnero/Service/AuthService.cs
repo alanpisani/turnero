@@ -12,19 +12,13 @@ namespace Turnero.Service
 		private readonly JwtService _jwtService = jwt;
 		private readonly PasswordHasher<Usuario> _passwordHasher = new();
 
-		public async Task<ServiceResponse<string>> Conectarse(LoginDto dto)
+		public async Task<Dictionary<string, string>> Conectarse(LoginDto dto)
 		{
 			var usuario = await _unitOfWork.Usuarios.FirstOrDefaultUsuario(dto.Email);
 
 			var result = _passwordHasher.VerifyHashedPassword(usuario!, usuario!.Contrasenia, dto.Password);
 
-			if (result == PasswordVerificationResult.Failed) {
-
-				return new ServiceResponse<string>
-				{
-					Mensaje = "La contraseña es incorrecta"
-				};
-			}
+			if (result == PasswordVerificationResult.Failed) throw new UnauthorizedAccessException("La contraseña es incorrecta");
 
 			var tokenPrevio = await _unitOfWork.AuthTokens.GetAuthTokensByUsuarioAndActivo(usuario.IdUsuario);
 
@@ -33,7 +27,7 @@ namespace Turnero.Service
 				t.Activo = false;
 			}
 
-			// 4. Generar nuevo token
+			// Generar nuevo token
 			var jwt = _jwtService.GenerateToken(usuario);
 
 			var authToken = new AuthToken
@@ -41,16 +35,14 @@ namespace Turnero.Service
 				IdUsuario = usuario.IdUsuario,
 				Token = jwt,
 				Activo = true,
-				Expiracion = DateTime.UtcNow.AddMinutes(60)
+				Expiracion = DateTime.UtcNow.AddMinutes(1)
 			};
 
 			await _unitOfWork.AuthTokens.AddAuthToken(authToken);
 			await _unitOfWork.CompleteAsync();
 
-			return new ServiceResponse<string> { 
-				Exito = true,
-				Mensaje = $"Bienvenido, {usuario.Nombre}!",
-				Cuerpo = jwt,
+			return new Dictionary<string, string>{
+				{ "token", jwt }
 			};
 		}
 	}

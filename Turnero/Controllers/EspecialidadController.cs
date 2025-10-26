@@ -14,9 +14,8 @@ namespace Turnero.Controllers
 		{
 			var response = await _service.MostrarTodasLasEspecialidades();
 
-			if (!response.Exito) return BadRequest(response.Mensaje);
 
-			return Ok(response.Cuerpo);
+			return Ok(response);
 		}
 
 		[HttpGet("{id}")]
@@ -24,9 +23,7 @@ namespace Turnero.Controllers
 		{
 			var response = await _service.MostrarEspecialidadPorId(id);
 
-			if (!response.Exito) return BadRequest(response.Mensaje);
-
-			return Ok(response.Cuerpo);
+			return Ok(response);
 		}
 				
 	}
