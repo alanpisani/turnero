@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
-using Turnero.Models;
 
-namespace Turnero.Data;
+namespace Turnero.Models;
 
 public partial class TurneroContext : DbContext
 {
@@ -26,8 +25,6 @@ public partial class TurneroContext : DbContext
     public virtual DbSet<Consultum> Consulta { get; set; }
 
     public virtual DbSet<Especialidad> Especialidads { get; set; }
-
-    public virtual DbSet<EstadoTurno> EstadoTurnos { get; set; }
 
     public virtual DbSet<HistorialTurno> HistorialTurnos { get; set; }
 
@@ -177,18 +174,6 @@ public partial class TurneroContext : DbContext
             entity.Property(e => e.NombreEspecialidad)
                 .HasMaxLength(25)
                 .HasColumnName("nombre_especialidad");
-        });
-
-        modelBuilder.Entity<EstadoTurno>(entity =>
-        {
-            entity.HasKey(e => e.IdEstadoTurno).HasName("PRIMARY");
-
-            entity.ToTable("estado_turno");
-
-            entity.Property(e => e.IdEstadoTurno).HasColumnName("id_estado_turno");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(15)
-                .HasColumnName("estado");
         });
 
         modelBuilder.Entity<HistorialTurno>(entity =>
@@ -350,13 +335,17 @@ public partial class TurneroContext : DbContext
 
             entity.ToTable("turno");
 
-            entity.HasIndex(e => e.IdEstadoTurno, "id_estado_turno");
+            entity.HasIndex(e => e.IdEspecialidad, "id_especialidad");
 
             entity.HasIndex(e => e.IdPaciente, "id_paciente");
 
             entity.HasIndex(e => e.IdProfesional, "id_profesional");
 
             entity.Property(e => e.IdTurno).HasColumnName("id_turno");
+            entity.Property(e => e.EstadoTurno)
+                .HasDefaultValueSql("'Solicitado'")
+                .HasColumnType("enum('Solicitado','Confirmado','Reprogramado','Cancelado','Ausente','Atendido')")
+                .HasColumnName("estado_turno");
             entity.Property(e => e.FechaCreacion)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
@@ -364,14 +353,14 @@ public partial class TurneroContext : DbContext
             entity.Property(e => e.FechaTurno)
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_turno");
-            entity.Property(e => e.IdEstadoTurno).HasColumnName("id_estado_turno");
+            entity.Property(e => e.IdEspecialidad).HasColumnName("id_especialidad");
             entity.Property(e => e.IdPaciente).HasColumnName("id_paciente");
             entity.Property(e => e.IdProfesional).HasColumnName("id_profesional");
 
-            entity.HasOne(d => d.IdEstadoTurnoNavigation).WithMany(p => p.Turnos)
-                .HasForeignKey(d => d.IdEstadoTurno)
+            entity.HasOne(d => d.IdEspecialidadNavigation).WithMany(p => p.Turnos)
+                .HasForeignKey(d => d.IdEspecialidad)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("turno_ibfk_1");
+                .HasConstraintName("turno_ibfk_4");
 
             entity.HasOne(d => d.IdPacienteNavigation).WithMany(p => p.Turnos)
                 .HasForeignKey(d => d.IdPaciente)

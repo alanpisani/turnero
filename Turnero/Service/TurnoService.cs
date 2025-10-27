@@ -1,4 +1,5 @@
-﻿using Turnero.Domain.TurnoDomain;
+﻿using Turnero.Common.Enums;
+using Turnero.Domain.TurnoDomain;
 using Turnero.Dto;
 using Turnero.Dto.TurnoDto;
 using Turnero.Exceptions;
@@ -13,7 +14,7 @@ namespace Turnero.Service
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<Turno> SolicitarTurno(TurnoRequestDto dto)
+		public async Task<ResponseDto<TurnoResponseDto>> SolicitarTurno(TurnoRequestDto dto)
 		{
 			var result = await new CreateTurnoDomain(_unitOfWork).ValidarLogicaNegocio(dto); //Validador de logica de negocio
 
@@ -31,7 +32,12 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();
 
-				return turnoSolicitado;
+				return new ResponseDto<TurnoResponseDto>
+				{
+					Success = true,
+					Message = "Turno solicitado correctamente",
+					Data = TurnoMapper.DeTurnoADto(turnoSolicitado),
+				};
 			}
 			catch
 			{
@@ -42,22 +48,28 @@ namespace Turnero.Service
 
 		}
 
-		public async Task<Turno> CancelarTurno(int idTurno) //TODO: DESARROLLAR
+		public async Task<ResponseDto<TurnoResponseDto>> CancelarTurno(int idTurno) //TODO: DESARROLLAR
 		{
 			Turno? turno = await _unitOfWork.Turnos.FindOrDefaultTurno(idTurno);
 
 			if (turno == null) throw new NotFoundException($"No se encontró el turno con el ID: {idTurno}");
 
-			turno!.IdEstadoTurno = 4;
+			turno!.EstadoTurno = EnumEstadoTurno.Cancelado.ToString();
 
 			_unitOfWork.Turnos.Actualizar(turno);
 
 			await _unitOfWork.CompleteAsync();
 
-			return turno;
+
+			return new ResponseDto<TurnoResponseDto>
+			{
+				Success = true,
+				Message = "Turno cancelado correctamente",
+				Data = TurnoMapper.DeTurnoADto(turno)
+			};
 		}
 
-		public async Task<List<Turno>> TraerTurnosDelPaciente(int idPaciente)
+		public async Task<ResponseDto<List<TurnoResponseDto>>> TraerTurnosDelPaciente(int idPaciente)
 		{
 			bool hayPaciente = await _unitOfWork.Pacientes.AnyPaciente(idPaciente);
 
@@ -67,10 +79,23 @@ namespace Turnero.Service
 
 			if(turnos == null || turnos.Count == 0) throw new NoTurnoException("No tenés turnos reservados");
 
-			return turnos;
+			var turnosDto = new List<TurnoResponseDto>();
+
+			foreach (Turno turno in turnos)
+			{
+				var turnoDto = TurnoMapper.DeTurnoADto(turno);
+				turnosDto.Add(turnoDto);
+			}
+
+			return new ResponseDto<List<TurnoResponseDto>>
+			{
+				Success = true,
+				Message = "Turnos consultados correctamente",
+				Data = turnosDto
+			};
 		}
 
-		public async Task<ResponseDto<List<Turno>>> TraerTurnosDelPacientePorDni(int dniPaciente)
+		public async Task<ResponseDto<List<TurnoResponseDto>>> TraerTurnosDelPacientePorDni(int dniPaciente)
 		{
 			var pacienteInDb = await _unitOfWork.Pacientes.GetPacienteByDni(dniPaciente);
 
@@ -80,11 +105,21 @@ namespace Turnero.Service
 
 			if (turnos == null || turnos.Count == 0) throw new NoTurnoException($"Hola, {pacienteInDb.IdUsuarioNavigation.Nombre}. No tenés turnos reservados");
 
-			return new ResponseDto<List<Turno>>
+
+			var turnosDto = new List<TurnoResponseDto>();
+
+			foreach(Turno turno in turnos)
+			{
+				var turnoDto = TurnoMapper.DeTurnoADto(turno);
+				turnosDto.Add(turnoDto);
+			}
+
+
+			return new ResponseDto<List<TurnoResponseDto>>
 			{
 				Success = true,
 				Message= $"¡Hola {pacienteInDb.IdUsuarioNavigation.Nombre}! Estos son tus próximos turnos, podés modificarlos o cancelarlos haciendo click en los botones",
-				Data = turnos
+				Data = turnosDto
 			};
 
 		}

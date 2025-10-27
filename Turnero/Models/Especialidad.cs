@@ -10,4 +10,6 @@ public partial class Especialidad
     public string NombreEspecialidad { get; set; } = null!;
 
     public virtual ICollection<ProfesionalEspecialidad> ProfesionalEspecialidads { get; set; } = new List<ProfesionalEspecialidad>();
+
+    public virtual ICollection<Turno> Turnos { get; set; } = new List<Turno>();
 }

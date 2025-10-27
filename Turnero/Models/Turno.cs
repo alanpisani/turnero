@@ -7,7 +7,7 @@ public partial class Turno
 {
     public int IdTurno { get; set; }
 
-    public int IdEstadoTurno { get; set; }
+    public string EstadoTurno { get; set; } = null!;
 
     public int IdPaciente { get; set; }
 
@@ -17,9 +17,11 @@ public partial class Turno
 
     public DateTime FechaTurno { get; set; }
 
+    public int IdEspecialidad { get; set; }
+
     public virtual ICollection<HistorialTurno> HistorialTurnos { get; set; } = new List<HistorialTurno>();
 
-    public virtual EstadoTurno IdEstadoTurnoNavigation { get; set; } = null!;
+    public virtual Especialidad IdEspecialidadNavigation { get; set; } = null!;
 
     public virtual Usuario IdPacienteNavigation { get; set; } = null!;
 

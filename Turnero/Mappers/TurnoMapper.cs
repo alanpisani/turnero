@@ -15,7 +15,8 @@ namespace Turnero.Mappers
 			{
 				IdPaciente= dto.IdPaciente,
 				IdProfesional= dto.IdProfesional,
-				IdEstadoTurno= (int) EnumEstadoTurno.Solicitado,
+				IdEspecialidad= dto.IdEspecialidad,
+				EstadoTurno= EnumEstadoTurno.Solicitado.ToString(),
 				FechaTurno= dia.ToDateTime(hora)
 			};
 		}
@@ -25,7 +26,8 @@ namespace Turnero.Mappers
 			return new TurnoResponseDto
 			{
 				IdTurno = turno.IdTurno,
-
+				Especialidad= turno.IdEspecialidadNavigation.NombreEspecialidad,
+				Fecha= turno.FechaTurno.ToString(),
 			};
 		}
 	}

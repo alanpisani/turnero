@@ -32,6 +32,9 @@ namespace Turnero.Repositories
 		{
 			return _context.Turnos
 				.Where(t => t.IdPaciente == idPaciente)
+				.Include(p=> p.IdProfesionalNavigation)
+					.ThenInclude(p=> p.ProfesionalEspecialidads)
+						.ThenInclude(pe => pe.IdEspecialidadNavigation)
 				.ToListAsync();
 		}
 
