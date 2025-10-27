@@ -14,6 +14,11 @@ namespace Turnero.Repositories
 			return await _context.Usuarios
 				.AnyAsync(u => u.Email == email);
 		}
+		public async Task<bool> AnyUsuarioByDni(int dni)
+		{
+			return await _context.Usuarios
+				.AnyAsync(U=> U.Dni == dni);
+		}
 		public async Task AddAsyncUsuario(Usuario usuario)
 		{
 			await _context.Usuarios.AddAsync(usuario);

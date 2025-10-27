@@ -1,16 +1,19 @@
-﻿namespace Turnero.Exceptions
+﻿using Turnero.Dto;
+
+namespace Turnero.Exceptions
 {
     public class NotFoundException : Exception
     {
-        public Dictionary<string, List<string>> Errors { get; }
+        public ResponseDto<object> Response { get; set; }
 
         public NotFoundException(string mensaje)
             : base(mensaje)
         {
-            Errors = new Dictionary<string, List<string>>
-                {
-                    { "Errors", new List<string> { mensaje } }
-                };
+            Response = new ResponseDto<object> {
+                Success = false,
+                Message= mensaje,
+
+            };
         }
 
     }

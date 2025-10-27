@@ -22,6 +22,14 @@ namespace Turnero.Service
 
 		}
 
+		public Usuario CrearUsuarioRapido(UsuarioRapidoDto dto, int idRol)
+		{
+			var usuario = UsuarioMapper.DtoRapidoAUsuario(dto, idRol); //Mapeamos al usuario registrado a modo Usuario BD
+
+			return usuario;
+
+		}
+
 
 
 		//RECEPCIONISTA

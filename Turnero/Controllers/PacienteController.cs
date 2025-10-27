@@ -41,6 +41,14 @@ namespace Turnero.Controllers
 			return CreatedAtAction(nameof(PostPaciente), response);
 		}
 
+        [HttpPost("rapido")]
+        public async Task<IActionResult> PostPacienteRapido(UsuarioRapidoDto dto)
+        {
+            var response = await _service.RegistrarPacienteRapido(dto);
+
+            return CreatedAtAction(nameof(PostPacienteRapido), response);
+        }
+
         //Mis turnos
 
         [HttpGet("{idPaciente}/mis_turnos")]

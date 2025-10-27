@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
+using Turnero.Dto;
 
 public class FluentValidationFilter : IAsyncActionFilter
 {
@@ -30,10 +31,15 @@ public class FluentValidationFilter : IAsyncActionFilter
 						.GroupBy(e => e.PropertyName)
 						.ToDictionary(
 							g => g.Key,
-							g => g.Select(e => e.ErrorMessage).ToList()
+							g => g.Select(e => e.ErrorMessage).ToArray()
 						);
 
-					context.Result = new BadRequestObjectResult(new { errors = errors });
+					context.Result = new OkObjectResult(new ResponseDto<object>
+					{
+						Success = false,
+						Message = "Error de validación",
+						Errors = errors
+					});
 					return;
 				}
 			}
@@ -42,4 +48,3 @@ public class FluentValidationFilter : IAsyncActionFilter
 		await next();
 	}
 }
- 

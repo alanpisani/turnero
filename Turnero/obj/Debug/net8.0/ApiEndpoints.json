@@ -146,6 +146,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Turnero.Controllers.PacienteController",
+    "Method": "PostPacienteRapido",
+    "RelativePath": "api/Paciente/rapido",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Turnero.Dto.UsuarioRapidoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Turnero.Controllers.ProfesionalController",
     "Method": "GetProfesionals",
     "RelativePath": "api/Profesional",
@@ -244,7 +260,7 @@
     "Parameters": [
       {
         "Name": "turnoDto",
-        "Type": "Turnero.Dto.TurnoDto",
+        "Type": "Turnero.Dto.TurnoDto.TurnoRequestDto",
         "IsRequired": true
       }
     ],

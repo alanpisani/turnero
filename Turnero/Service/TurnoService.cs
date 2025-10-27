@@ -1,5 +1,6 @@
 ﻿using Turnero.Domain.TurnoDomain;
 using Turnero.Dto;
+using Turnero.Dto.TurnoDto;
 using Turnero.Exceptions;
 using Turnero.Exceptions.Turno;
 using Turnero.Mappers;
@@ -8,11 +9,11 @@ using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Service
 {
-	public class TurnoService(IUnitOfWork unit)
+    public class TurnoService(IUnitOfWork unit)
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<Turno> SolicitarTurno(TurnoDto dto)
+		public async Task<Turno> SolicitarTurno(TurnoRequestDto dto)
 		{
 			var result = await new CreateTurnoDomain(_unitOfWork).ValidarLogicaNegocio(dto); //Validador de logica de negocio
 
@@ -69,7 +70,7 @@ namespace Turnero.Service
 			return turnos;
 		}
 
-		public async Task<List<Turno>> TraerTurnosDelPacientePorDni(int dniPaciente)
+		public async Task<ResponseDto<List<Turno>>> TraerTurnosDelPacientePorDni(int dniPaciente)
 		{
 			var pacienteInDb = await _unitOfWork.Pacientes.GetPacienteByDni(dniPaciente);
 
@@ -77,9 +78,14 @@ namespace Turnero.Service
 
 			var turnos = await _unitOfWork.Turnos.GetTurnosByPaciente(pacienteInDb.IdUsuario);
 
-			if (turnos == null || turnos.Count == 0) throw new NoTurnoException("No tenés turnos reservados");
+			if (turnos == null || turnos.Count == 0) throw new NoTurnoException($"Hola, {pacienteInDb.IdUsuarioNavigation.Nombre}. No tenés turnos reservados");
 
-			return turnos;
+			return new ResponseDto<List<Turno>>
+			{
+				Success = true,
+				Message= $"¡Hola {pacienteInDb.IdUsuarioNavigation.Nombre}! Estos son tus próximos turnos, podés modificarlos o cancelarlos haciendo click en los botones",
+				Data = turnos
+			};
 
 		}
 	} 

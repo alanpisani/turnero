@@ -411,11 +411,17 @@ public partial class TurneroContext : DbContext
 			entity.Property(e => e.Nombre)
 				.HasMaxLength(100)
 				.HasColumnName("nombre");
+			entity.Property(e => e.IsComplete)
+			  .HasColumnName("is_complete")
+			  .IsRequired()
+			  .HasDefaultValue(false);
 
 			entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Usuarios)
 				.HasForeignKey(d => d.IdRol)
 				.OnDelete(DeleteBehavior.ClientSetNull)
 				.HasConstraintName("usuario_ibfk_1");
+
+
 		});
 
 		OnModelCreatingPartial(modelBuilder);

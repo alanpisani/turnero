@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Turnero.Dto;
+using Turnero.Dto.TurnoDto;
 using Turnero.Service;
 
 namespace Turnero.Controllers
@@ -26,10 +26,8 @@ namespace Turnero.Controllers
             return Ok(response);
         }
 
-
-        [Authorize(Roles = "Paciente, Recepcionista, Admin")]
         [HttpPost]
-        public async Task<IActionResult> PostTurno(TurnoDto turnoDto)
+        public async Task<IActionResult> PostTurno(TurnoRequestDto turnoDto)
         {
 			var response = await _service.SolicitarTurno(turnoDto);
 

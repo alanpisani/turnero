@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using Turnero.Common.Helpers.TurnoValidatorHelper;
-using Turnero.Dto;
+using Turnero.Dto.TurnoDto;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Validators.TurnoValidators
 {
-	/// <summary>
-	/// Valida datos simples a la hora de la solicitud de un turno. Todo lo que no es logica de negocio
-	/// </summary>
-	public class TurnoCreateValidation: AbstractValidator<TurnoDto>
+    /// <summary>
+    /// Valida datos simples a la hora de la solicitud de un turno. Todo lo que no es logica de negocio
+    /// </summary>
+    public class TurnoCreateValidation: AbstractValidator<TurnoRequestDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 

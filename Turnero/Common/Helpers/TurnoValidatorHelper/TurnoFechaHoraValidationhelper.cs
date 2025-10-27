@@ -1,9 +1,9 @@
-﻿using Turnero.Dto;
+﻿using Turnero.Dto.TurnoDto;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Common.Helpers.TurnoValidatorHelper
 {
-	public static class TurnoFechaHoraValidationhelper
+    public static class TurnoFechaHoraValidationhelper
 	{
 		public static bool EsDiaValido(string dia)
 		{
@@ -15,7 +15,7 @@ namespace Turnero.Common.Helpers.TurnoValidatorHelper
 			return TimeOnly.TryParse(hora, out _);
 		}
 
-		public static bool EshechaYHoraValida(TurnoDto dto)
+		public static bool EshechaYHoraValida(TurnoRequestDto dto)
 		{
 			try
 			{

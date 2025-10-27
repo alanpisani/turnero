@@ -28,19 +28,19 @@ namespace Turnero.Common.Middlewares
 			}
 			catch (NotFoundException ex)
 			{
-				await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Errors);
+				await HandleExceptionAsync(context, HttpStatusCode.OK, ex.Response);
 			}
 			catch (BussinessErrorContentException ex)
 			{
 				
-				await HandleExceptionAsync(context, HttpStatusCode.Conflict, new
+				await HandleExceptionAsync(context, HttpStatusCode.OK, new
 				{
 					ex.Errors
 				});
 			}
 			catch (NoTurnoException ex)
 			{
-				await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Errors);
+				await HandleExceptionAsync(context, HttpStatusCode.OK, ex.Response);
 			}
 			catch (Exception ex)
 			{

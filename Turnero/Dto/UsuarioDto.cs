@@ -17,10 +17,11 @@ namespace Turnero.Dto
 
 		public string Contrasenia {  get; set; } = string.Empty;
 		public string ContraseniaRepetida {  get; set; } = string.Empty;
+		public int IsComplete { get; set; } = 0;
 
 		public UsuarioDto() { }
 
-		public UsuarioDto(string Nombre, string Apellido, int Dni, string Email, string FechaNacimiento, string Contrasenia, string ContraseniaRepetida) {
+		public UsuarioDto(string Nombre, string Apellido, int Dni, string Email, string FechaNacimiento, string Contrasenia, string ContraseniaRepetida, int isComplete) {
 		
 			this.Nombre = Nombre;
 			this.Apellido = Apellido;
@@ -29,6 +30,7 @@ namespace Turnero.Dto
 			this.FechaNacimiento = FechaNacimiento;
 			this.Contrasenia = Contrasenia;
 			this.ContraseniaRepetida = ContraseniaRepetida;
+			this.IsComplete = isComplete;
 		}
 
 	}

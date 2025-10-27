@@ -14,9 +14,19 @@ namespace Turnero.Mappers
 				Email: dto.Email,
 				FechaNacimiento: dto.FechaNacimiento,
 				Contrasenia: dto.Contrasenia,
-				ContraseniaRepetida: dto.ContraseniaRepetida
+				ContraseniaRepetida: dto.ContraseniaRepetida,
+				isComplete: dto.IsComplete
 				);
 			return usuarioDto;
+		}
+
+		public static UsuarioRapidoDto AUsuarioRapidoDto(UsuarioRapidoDto dto) {
+
+			return new UsuarioRapidoDto
+			{
+				Nombre = dto.Nombre,
+				Dni = dto.Dni,
+			};
 		}
 
 		public static Usuario DeDtoAUsuario(UsuarioDto dto, int idRol) {
@@ -28,6 +38,16 @@ namespace Turnero.Mappers
 				Contrasenia= "",
 				FechaNacimiento= DateOnly.Parse(dto.FechaNacimiento),
 				IdRol= idRol
+			};
+		}
+
+		public static Usuario DtoRapidoAUsuario(UsuarioRapidoDto dto, int idRol)
+		{
+			return new Usuario
+			{
+				Nombre = dto.Nombre,
+				Dni = dto.Dni,
+				IdRol = idRol
 			};
 		}
 	}

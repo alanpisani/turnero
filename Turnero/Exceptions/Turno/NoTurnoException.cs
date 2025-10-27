@@ -1,16 +1,21 @@
-﻿namespace Turnero.Exceptions.Turno
+﻿using Turnero.Dto;
+using Turnero.Dto.TurnoDto;
+
+namespace Turnero.Exceptions.Turno
 {
-	public class NoTurnoException: Exception
+    public class NoTurnoException: Exception
 	{
-		public Dictionary<string, List<string>> Errors { get; }
+		public ResponseDto<List<TurnoRequestDto>> Response { get; set; }
 
 		public NoTurnoException(string mensaje)
 		: base(mensaje)
 			{
-				Errors = new Dictionary<string, List<string>>
-					{
-						{ "Errors", new List<string> { mensaje } }
-					};
+				Response= new ResponseDto<List<TurnoRequestDto>>
+				{
+					Success=true,
+					Message= mensaje,
+					Data= new List<TurnoRequestDto>()
+				};
 			}
 	}
 }

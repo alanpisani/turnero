@@ -1,14 +1,14 @@
 ﻿using Turnero.Common.Helpers;
-using Turnero.Dto;
+using Turnero.Dto.TurnoDto;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Domain.TurnoDomain
 {
-	public class CreateTurnoDomain(IUnitOfWork unit)
+    public class CreateTurnoDomain(IUnitOfWork unit)
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<DomainValidationResult> ValidarLogicaNegocio(TurnoDto dto)
+		public async Task<DomainValidationResult> ValidarLogicaNegocio(TurnoRequestDto dto)
 		{
 			var result = new DomainValidationResult();
 
@@ -41,7 +41,7 @@ namespace Turnero.Domain.TurnoDomain
 			return result;
 		}
 
-		private async Task<bool> ProfesionalTieneEsaEspecialidad(TurnoDto dto)
+		private async Task<bool> ProfesionalTieneEsaEspecialidad(TurnoRequestDto dto)
 		{
 			return await _unitOfWork.Profesionales.AnyProfesionalWithThatSpeciality(
 				idProfesional: dto.IdProfesional,
@@ -49,7 +49,7 @@ namespace Turnero.Domain.TurnoDomain
 				);
 		}
 
-		private static bool EsFechaFutura(TurnoDto dto)
+		private static bool EsFechaFutura(TurnoRequestDto dto)
 		{
 			var fecha = DateOnly.Parse(dto.Dia);
 			var hora = TimeOnly.Parse(dto.Hora);
@@ -59,7 +59,7 @@ namespace Turnero.Domain.TurnoDomain
 
 		}
 
-		private async Task<bool> EsEnHorarioLaboral(TurnoDto dto)
+		private async Task<bool> EsEnHorarioLaboral(TurnoRequestDto dto)
 		{
 			var hora = TimeOnly.Parse(dto.Hora);
 
@@ -72,7 +72,7 @@ namespace Turnero.Domain.TurnoDomain
 
 		}
 
-		private async Task<bool> EsTurnoDisponible(TurnoDto dto)
+		private async Task<bool> EsTurnoDisponible(TurnoRequestDto dto)
 		{
 			var fecha = DateOnly.Parse(dto.Dia);
 			var hora = TimeOnly.Parse(dto.Hora);
@@ -86,7 +86,7 @@ namespace Turnero.Domain.TurnoDomain
 			return !ocupado;
 		}
 
-		private async Task<bool> EncajaEnFranjaHoraria(TurnoDto dto)
+		private async Task<bool> EncajaEnFranjaHoraria(TurnoRequestDto dto)
 		{
 			var fecha = DateOnly.Parse(dto.Dia);
 			var hora = TimeOnly.Parse(dto.Hora);

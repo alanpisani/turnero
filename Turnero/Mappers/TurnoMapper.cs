@@ -1,12 +1,12 @@
 ﻿using Turnero.Common.Enums;
-using Turnero.Dto;
+using Turnero.Dto.TurnoDto;
 using Turnero.Models;
 
 namespace Turnero.Mappers
 {
-	public class TurnoMapper
+    public class TurnoMapper
 	{
-		public static Turno DeTurnoDtoATurno(TurnoDto dto)
+		public static Turno DeTurnoDtoATurno(TurnoRequestDto dto)
 		{
 			var dia = DateOnly.Parse(dto.Dia);
 			var hora = TimeOnly.Parse(dto.Hora);
@@ -17,6 +17,15 @@ namespace Turnero.Mappers
 				IdProfesional= dto.IdProfesional,
 				IdEstadoTurno= (int) EnumEstadoTurno.Solicitado,
 				FechaTurno= dia.ToDateTime(hora)
+			};
+		}
+
+		public static TurnoResponseDto DeTurnoADto(Turno turno)
+		{
+			return new TurnoResponseDto
+			{
+				IdTurno = turno.IdTurno,
+
 			};
 		}
 	}

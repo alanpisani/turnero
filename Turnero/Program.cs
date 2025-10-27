@@ -51,6 +51,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCreateValidation>();
+builder.Services.AddValidatorsFromAssemblyContaining<UsuarioRapidoValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<ProfesionalCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<TurnoCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<CoberturaAnyValidation>();

@@ -1,4 +1,5 @@
-﻿using Turnero.Domain.PacienteDomain;
+﻿using Humanizer;
+using Turnero.Domain.PacienteDomain;
 using Turnero.Dto;
 using Turnero.Dto.Paciente;
 using Turnero.Exceptions;
@@ -40,12 +41,44 @@ namespace Turnero.Service
 
 				return paciente;
 			}
-			catch (Exception) {
+			catch (Exception e) {
 
-				throw new Exception("Hubo un error al registrar paciente. Inténtelo más tarde.");
+				throw new Exception($"Hubo un error al registrar paciente. Inténtelo más tarde. Error: {e}");
 			}
 
 
+		}
+
+		public async Task<Usuario> RegistrarPacienteRapido(UsuarioRapidoDto dto)
+		{
+			//validacion simple:
+
+			var usuarioInDb = await _unitOfWork.Usuarios.AnyUsuarioByDni(dto.Dni);
+
+			if (usuarioInDb) throw new Exception("El dni ingresado ya se encuentra registrado en el sistema");
+
+			var usuario = _usuarioService.CrearUsuarioRapido(dto, 1); //Se crea un Usuario model en base al UsuarioRapidoDto, para la bd
+
+			await _unitOfWork.BeginTransactionAsync();
+
+			try
+			{
+				await _unitOfWork.Usuarios.AddAsyncUsuario(usuario); //Se sube el Usuario model a la bd
+				await _unitOfWork.CompleteAsync();
+
+				Paciente paciente = new Paciente { IdUsuario= usuario.IdUsuario };
+				await _unitOfWork.Pacientes.AddPaciente(paciente); //Se sube al paciente a la bd
+				
+				await _unitOfWork.CompleteAsync();
+				await _unitOfWork.CommitAsync();
+
+				return usuario;
+			}
+			catch (Exception e)
+			{
+
+				throw new Exception($"Hubo un error al registrar paciente. Inténtelo más tarde. \nError: {e}");
+			}
 		}
 
 		public async Task<List<PacienteDtoGet>> MostrarTodosLosPacientes()
