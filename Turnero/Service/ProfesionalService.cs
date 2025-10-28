@@ -1,7 +1,7 @@
 ﻿using Turnero.Common.Helpers;
 using Turnero.Domain.PacienteDomain;
 using Turnero.Domain.ProfesionalDomain;
-using Turnero.Dto;
+using Turnero.Dto.Profesional;
 using Turnero.Exceptions;
 using Turnero.Mappers;
 using Turnero.Models;
@@ -10,12 +10,12 @@ using Turnero.Validators.ProfesionalValidators;
 
 namespace Turnero.Service
 {
-	public class ProfesionalService(UsuarioService service, IUnitOfWork unit)
+    public class ProfesionalService(UsuarioService service, IUnitOfWork unit)
 	{ 
 		private readonly UsuarioService _service = service;
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<Profesional> RegistrarProfesional(ProfesionalDto dto)
+		public async Task<Profesional> RegistrarProfesional(ProfesionalRequestDto dto)
 		{
 			var usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Pasaje a dto usuario
 			var usuario = _service.CrearUsuario(usuarioDto, 2); //Se crea un usuario base model

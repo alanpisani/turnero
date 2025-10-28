@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Turnero.Dto;
+using Turnero.Dto.Profesional;
 using Turnero.Models;
 using Turnero.Service;
 
@@ -49,7 +49,7 @@ namespace Turnero.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> PostProfesional(ProfesionalDto profesionalDto)
+        public async Task<IActionResult> PostProfesional(ProfesionalRequestDto profesionalDto)
         {
 			var response = await _service.RegistrarProfesional(profesionalDto);
 

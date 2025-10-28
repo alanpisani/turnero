@@ -1,11 +1,11 @@
-﻿using Turnero.Dto;
+﻿using Turnero.Dto.Profesional;
 using Turnero.Models;
 
 namespace Turnero.Mappers
 {
-	public class ProfesionalMapper
+    public class ProfesionalMapper
 	{
-		public static Profesional DeProfesionalDtoAProfesional(ProfesionalDto dto, int id)
+		public static Profesional DeProfesionalDtoAProfesional(ProfesionalRequestDto dto, int id)
 		{
 			return new Profesional
 			{
@@ -14,7 +14,7 @@ namespace Turnero.Mappers
 			};
 		}
 
-		public static IEnumerable<ProfesionalEspecialidad> AsignacionesEspecialidades(ProfesionalDto dto, int id)
+		public static IEnumerable<ProfesionalEspecialidad> AsignacionesEspecialidades(ProfesionalRequestDto dto, int id)
 		{
 			foreach (var especialidad in dto.Especialidades)
 			{
@@ -30,7 +30,7 @@ namespace Turnero.Mappers
 			}
 		}
 
-		public static IEnumerable<HorarioLaboral> AsignacionesHorariosLaborales(ProfesionalDto dto, int id)
+		public static IEnumerable<HorarioLaboral> AsignacionesHorariosLaborales(ProfesionalRequestDto dto, int id)
 		{
 			foreach (var horario in dto.HorariosLaborales)
 			{

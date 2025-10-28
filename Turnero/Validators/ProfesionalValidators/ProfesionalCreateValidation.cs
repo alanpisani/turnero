@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using Turnero.Common.Helpers.ProfesionalValidatorHelper;
-using Turnero.Dto;
+using Turnero.Dto.Profesional;
 using Turnero.Repositories.Interfaces;
 using Turnero.Validators.UsuarioValidators;
 
 namespace Turnero.Validators.ProfesionalValidators
 {
-	public class ProfesionalCreateValidation: AbstractValidator<ProfesionalDto>
+    public class ProfesionalCreateValidation: AbstractValidator<ProfesionalRequestDto>
 	{
 		public ProfesionalCreateValidation(IUnitOfWork unit) {
 

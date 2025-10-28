@@ -1,15 +1,16 @@
 ﻿using Turnero.Common.Enums;
 using Turnero.Common.Helpers;
 using Turnero.Dto;
+using Turnero.Dto.Profesional;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Domain.ProfesionalDomain
 {
-	public class CreateProfesionalDomain(IUnitOfWork unit)
+    public class CreateProfesionalDomain(IUnitOfWork unit)
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public DomainValidationResult Validar(ProfesionalDto dto)
+		public DomainValidationResult Validar(ProfesionalRequestDto dto)
 		{
 			var result = new DomainValidationResult();
 
