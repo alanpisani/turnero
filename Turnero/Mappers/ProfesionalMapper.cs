@@ -14,6 +14,15 @@ namespace Turnero.Mappers
 			};
 		}
 
+		public static ProfesionalResponseDto ToResponseDto(Profesional profesional) {
+			return new ProfesionalResponseDto { 
+				IdUsuario= profesional.IdUsuario,
+				NombreProfesional= profesional.IdUsuarioNavigation.Nombre,
+				Matricula= profesional.Matricula
+			};
+		
+		}
+
 		public static IEnumerable<ProfesionalEspecialidad> AsignacionesEspecialidades(ProfesionalRequestDto dto, int id)
 		{
 			foreach (var especialidad in dto.Especialidades)
