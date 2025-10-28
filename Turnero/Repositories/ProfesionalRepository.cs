@@ -60,13 +60,16 @@ namespace Turnero.Repositories
 
 		public async Task<List<Profesional>> GetAllProfesionals()
 		{
-			return await _context.Profesionals.ToListAsync();
+			return await _context.Profesionals
+				.Include(p=> p.IdUsuarioNavigation)
+				.ToListAsync();
 		}
 
 		public async Task<Profesional?> GetProfesionalById(int id)
 		{
 			return await _context.Profesionals
 				.Where(p=> p.IdUsuario == id)
+				.Include(p => p.IdUsuarioNavigation)
 				.FirstOrDefaultAsync();
 				
 		}
