@@ -32,18 +32,23 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();
 
+
+				//Para que traiga los datos de la especialidad y del profesional
+
+				var turnoRenovado= await _unitOfWork.Turnos.FindOrDefaultTurno(turnoSolicitado.IdTurno);
+
 				return new ResponseDto<TurnoResponseDto>
 				{
 					Success = true,
 					Message = "Turno solicitado correctamente",
-					Data = TurnoMapper.DeTurnoADto(turnoSolicitado),
+					Data = TurnoMapper.DeTurnoADto(turnoRenovado!),
 				};
 			}
-			catch
+			catch(Exception e)
 			{
 				await _unitOfWork.RollbackAsync(); //Volvamos para atrás, muchachos. Algo salio mal y cancelamos los cambios a la bd
 
-				throw new Exception("Error al solicitar turno. Inténtelo más tarde.");
+				throw new Exception($"Error al solicitar turno. Inténtelo más tarde. Error: {e}");
 			}
 
 		}

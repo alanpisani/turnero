@@ -18,6 +18,10 @@ namespace Turnero.Repositories
 		public async Task<Turno?> FindOrDefaultTurno(int idTurno)
 		{
 			return await _context.Turnos
+				.Include(t => t.IdEspecialidadNavigation)
+				.Include(p => p.IdProfesionalNavigation)
+					.ThenInclude(p => p.ProfesionalEspecialidads)
+						.ThenInclude(pe => pe.IdEspecialidadNavigation)
 				.FirstOrDefaultAsync(t => t.IdTurno == idTurno);
 		}
 
@@ -32,6 +36,7 @@ namespace Turnero.Repositories
 		{
 			return _context.Turnos
 				.Where(t => t.IdPaciente == idPaciente)
+				.Include(t => t.IdEspecialidadNavigation)
 				.Include(p=> p.IdProfesionalNavigation)
 					.ThenInclude(p=> p.ProfesionalEspecialidads)
 						.ThenInclude(pe => pe.IdEspecialidadNavigation)
