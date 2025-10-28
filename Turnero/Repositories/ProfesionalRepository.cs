@@ -77,6 +77,7 @@ namespace Turnero.Repositories
 		public async Task<List<Profesional>> GetProfesionalesByEspecialidad(int idEspecialidad)
 		{
 			return await _context.Profesionals
+				.Include(p => p.IdUsuarioNavigation)
 				.Where(p => p.ProfesionalEspecialidads
 					.Any(pe => pe.IdEspecialidad == idEspecialidad))
 			.ToListAsync();

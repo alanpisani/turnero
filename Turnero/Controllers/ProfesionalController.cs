@@ -24,11 +24,11 @@ namespace Turnero.Controllers
 
         // GET: api/Profesional/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profesional>> GetProfesional(int id)
+        public async Task<IActionResult> GetProfesional(int id)
         {
             var profesional = await _service.MostrarProfesionalPorId(id);
 
-            return profesional;
+            return Ok(profesional);
         }
 
         [HttpGet("especialidad/{idEspecialidad}")]

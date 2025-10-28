@@ -1,6 +1,7 @@
 ﻿using Turnero.Common.Helpers;
 using Turnero.Domain.PacienteDomain;
 using Turnero.Domain.ProfesionalDomain;
+using Turnero.Dto;
 using Turnero.Dto.Profesional;
 using Turnero.Exceptions;
 using Turnero.Mappers;
@@ -54,23 +55,32 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<List<Profesional>> MostrarProfesionales()
+		public async Task<ResponseDto<List<ProfesionalResponseDto>>> MostrarProfesionales()
 		{
 			var profesionales = await _unitOfWork.Profesionales.GetAllProfesionals();
 
-			return profesionales;
+			return new ResponseDto<List<ProfesionalResponseDto>> { 
+				Success = true,
+				Message = "Profesionales consultados con éxito",
+				Data = profesionales.Select(p => ProfesionalMapper.ToResponseDto(p)).ToList()
+
+			};
 		}
 
-		public async Task<Profesional> MostrarProfesionalPorId(int idProfesional)
+		public async Task<ResponseDto<ProfesionalResponseDto>> MostrarProfesionalPorId(int idProfesional)
 		{
 			var profesional = await _unitOfWork.Profesionales.GetProfesionalById(idProfesional);
 
 			if (profesional == null) throw new NotFoundException($"No se encontró profesional con id: {idProfesional}");
 
-			return profesional;
+			return new ResponseDto<ProfesionalResponseDto> { 
+				Success = true,
+				Message = "Profesional traido con éxito",
+				Data= ProfesionalMapper.ToResponseDto(profesional)
+			};
 		}
 
-		public async Task<List<Profesional>> MostrarProfesionalesPorEspecialidad(int idEspecialidad)
+		public async Task<ResponseDto<List<ProfesionalResponseDto>>> MostrarProfesionalesPorEspecialidad(int idEspecialidad)
 		{
 			var hayEspecialidad = await _unitOfWork.Especialidades.AnyEspecialidad(idEspecialidad);
 
@@ -79,10 +89,15 @@ namespace Turnero.Service
 			try
 			{
 
-
 				var profesionales = await _unitOfWork.Profesionales.GetProfesionalesByEspecialidad(idEspecialidad);
 
-				return profesionales;
+				return new ResponseDto<List<ProfesionalResponseDto>>
+				{
+					Success = true,
+					Message = "Profesionales consultados con éxito",
+					Data = profesionales.Select(p => ProfesionalMapper.ToResponseDto(p)).ToList()
+
+				};
 
 			}
 			catch(Exception ex)
