@@ -1,4 +1,7 @@
-﻿using Turnero.Exceptions;
+﻿using Turnero.Dto;
+using Turnero.Dto.Especialidad;
+using Turnero.Exceptions;
+using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
 
@@ -8,36 +11,31 @@ namespace Turnero.Service
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
 		
-		public async Task<List<Especialidad>> MostrarTodasLasEspecialidades()
+		public async Task<ResponseDto<List<EspecialidadResponseDto>>> MostrarTodasLasEspecialidades()
 		{
-			try
-			{
-				var especialidades = await _unitOfWork.Especialidades.ToListAsyncEspecialidades();
+		
+			var especialidades = await _unitOfWork.Especialidades.ToListAsyncEspecialidades();
 
-				return especialidades;
-			}
-			catch
-			{
-				throw new Exception("Hubo un error desconocido al traer la lista de especialidades. Inténtelo más tarde.");
-			}
+			return new ResponseDto<List<EspecialidadResponseDto>> { 
+				Success = true,
+				Message = "Especialidades traidas con éxito",
+				Data= especialidades.Select(e => EspecialidadMapper.toResponseDto(e)).ToList()
+			};
+			
 		}
-		public async Task<Especialidad> MostrarEspecialidadPorId(int id)
+		public async Task<ResponseDto<EspecialidadResponseDto>> MostrarEspecialidadPorId(int id)
 		{
-			try
-			{
-				var especialidad = await _unitOfWork.Especialidades
-					.FirstOrDefaultEspecialidadById(id);
 
-				if (especialidad == null) throw new NotFoundException("La especialidad ingresada no se encuentra en el sistema");
+			var especialidad = await _unitOfWork.Especialidades
+				.FirstOrDefaultEspecialidadById(id);
 
-				return especialidad;
+			if (especialidad == null) throw new NotFoundException("La especialidad ingresada no se encuentra en el sistema");
 
-			}
-
-			catch
-			{
-				throw new Exception("hubo un error inesperado al intentar traer una especialidad. Inténtelo más tarde");
-			}
+			return new ResponseDto<EspecialidadResponseDto> { 
+				Success = true,
+				Message = "Especialidad traida con éxito",
+				Data= EspecialidadMapper.toResponseDto(especialidad)
+			};
 		}
 	}
 }
