@@ -10,6 +10,12 @@ namespace Turnero.Repositories
 	{
 		private readonly TurneroContext _context = context;
 
+		public async Task<List<HorarioLaboral>> GetAllByProfesional(int idProfesional)
+		{
+			return await _context.HorarioLaborals
+				.Where(h=> h.IdProfesional == idProfesional)
+				.ToListAsync();
+		}
 		public async Task<HorarioLaboral?> FirstOrDefaultHorarioLaboral(int idProfesional, int diaSemana)
 		{
 			return await _context.HorarioLaborals

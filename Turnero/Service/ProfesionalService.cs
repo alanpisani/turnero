@@ -137,5 +137,37 @@ namespace Turnero.Service
 			return franja.Except(horariosOcupados);
 		
 		}
+
+		public async Task<ResponseDto<List<string>>> GetDiasDisponiblesProfesional(int idProfesional) {
+
+			var hayProfesional = await _unitOfWork.Profesionales.AnyProfesional(idProfesional);
+
+			if (!hayProfesional) throw new NotFoundException($"No se encontró profesional con id: {idProfesional}");
+
+			//Lógica de negocio más íntima. Desarrollar mejor a futuro
+
+			var hoy = DateOnly.FromDateTime(DateTime.UtcNow);
+			var hasta = hoy.AddDays(30);
+
+			var horariosProfesional = await _unitOfWork.HorariosLaborales.GetAllByProfesional(idProfesional);
+
+			List<sbyte> diasSemanales = horariosProfesional.Select(h=> h.DiaSemana).ToList();
+
+			var diasDisponibles = new List<string>();
+
+			while (hoy < hasta) { 
+				if(diasSemanales.Contains((sbyte)hoy.DayOfWeek))
+				{
+					diasDisponibles.Add(hoy.ToString());
+				}
+				hoy = hoy.AddDays(1);
+			}
+
+			return new ResponseDto<List<string>> { 
+				Success = true,
+				Message = $"Dias disponibles del profesional con id: {idProfesional} consultados con éxito",
+				Data = diasDisponibles
+			}; 
+		}
 	}
 }

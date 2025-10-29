@@ -39,6 +39,14 @@ namespace Turnero.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{idProfesional}/disponibilidad")]
+        public async Task<IActionResult> GetDiasDisponibles(int idProfesional)
+        {
+            var response = await _service.GetDiasDisponiblesProfesional(idProfesional);
+
+            return Ok(response);
+        }
+
         [HttpGet("{id}/franjas")]
         public async Task<IActionResult> GetFranjas(int id, [FromQuery] string fecha)
         {
