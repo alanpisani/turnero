@@ -7,6 +7,7 @@ namespace Turnero.Repositories.Interfaces
 		Task AddPaciente(Paciente paciente);
 		Task AddCoberturas(IEnumerable<CoberturaPaciente> coberturas);
 		Task<bool> AnyPaciente(int idPaciente);
+		Task<Paciente?> GetPacienteWithDni(int dni);
 		Task<Paciente?> GetPacienteByDni(int dni);
 		Task<List<int>> ToListAsyncIdsObrasSociales();
         Task<List<Paciente>> ToListAsyncAllPacientes();

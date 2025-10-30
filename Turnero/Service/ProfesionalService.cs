@@ -105,7 +105,7 @@ namespace Turnero.Service
 				throw new Exception($"Hubo un error inesperado al intentar traer a los profesionales. Inténtelo más tarde. Error: {ex.Message}");
 			}
 		}
-		public async Task<IEnumerable<string>> GetFranjaHoraria(int idProfesional, string fecha) //DESARROLLAR MAS
+		public async Task<ResponseDto<IEnumerable<string>>> GetFranjaHoraria(int idProfesional, string fecha) //DESARROLLAR MAS
 		{
 
 			var hayProfesional = await _unitOfWork.Profesionales.AnyProfesional(idProfesional);
@@ -134,7 +134,11 @@ namespace Turnero.Service
 			var horariosOcupados = turnosEseDia!
 				.Select(t => new TimeOnly(t.FechaTurno.Hour, t.FechaTurno.Minute).ToString("HH:mm")).ToList();
 
-			return franja.Except(horariosOcupados);
+			return new ResponseDto<IEnumerable<string>>{
+				Success=true,
+				Message= "Franja horaria consultada con éxito",
+				Data= franja.Except(horariosOcupados)
+			};
 		
 		}
 
@@ -158,7 +162,7 @@ namespace Turnero.Service
 			while (hoy < hasta) { 
 				if(diasSemanales.Contains((sbyte)hoy.DayOfWeek))
 				{
-					diasDisponibles.Add(hoy.ToString());
+					diasDisponibles.Add(hoy.ToString("yyyy-MM-dd"));
 				}
 				hoy = hoy.AddDays(1);
 			}

@@ -30,5 +30,17 @@ namespace Turnero.Mappers
 				Fecha= turno.FechaTurno.ToString(),
 			};
 		}
+
+		public static TurnoRequestDto DeRapidoRequestARequestDto(TurnoRapidoRequestDto dto, int idPaciente)
+		{
+			return new TurnoRequestDto
+			{
+				IdPaciente = idPaciente,
+				IdEspecialidad = dto.IdEspecialidad,
+				IdProfesional = dto.IdProfesional,
+				Dia = dto.Dia,
+				Hora = dto.Hora,
+			};
+		}
 	}
 }

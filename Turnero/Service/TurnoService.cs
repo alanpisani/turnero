@@ -53,6 +53,52 @@ namespace Turnero.Service
 
 		}
 
+		public async Task<ResponseDto<TurnoResponseDto>> SolicitarTurnoRapido(TurnoRapidoRequestDto dto)
+		{
+			var result = await new CreateTurnoDomain(_unitOfWork).ValidarLogicaNegocio(dto); //Validador de logica de negocio
+
+			if (!result.EsValido) throw new BussinessErrorContentException(result.Errores);
+
+			var pacienteInDb = await _unitOfWork.Pacientes.GetPacienteWithDni(dto.DniPaciente);
+
+			if (pacienteInDb == null) throw new NotFoundException($"No se encontró el paciente con dni: {dto.DniPaciente}");
+
+			var requestDto = TurnoMapper.DeRapidoRequestARequestDto(dto, pacienteInDb.IdUsuario);
+
+			await _unitOfWork.BeginTransactionAsync();
+
+			try
+			{
+				Turno turnoSolicitado = TurnoMapper.DeTurnoDtoATurno(requestDto); //Mapeo de dto a Turno model
+
+				await _unitOfWork.Turnos.AddTurno(turnoSolicitado); //Lo añado a la bd
+
+				await _unitOfWork.CompleteAsync();
+				await _unitOfWork.CommitAsync();
+
+
+				//Para que traiga los datos de la especialidad y del profesional
+
+				var turnoRenovado = await _unitOfWork.Turnos.FindOrDefaultTurno(turnoSolicitado.IdTurno);
+
+				return new ResponseDto<TurnoResponseDto>
+				{
+					Success = true,
+					Message = "Turno solicitado correctamente",
+					Data = TurnoMapper.DeTurnoADto(turnoRenovado!),
+				};
+			}
+			catch (Exception e)
+			{
+				await _unitOfWork.RollbackAsync(); //Volvamos para atrás, muchachos. Algo salio mal y cancelamos los cambios a la bd
+
+				throw new Exception($"Error al solicitar turno. Inténtelo más tarde. Error: {e}");
+			}
+
+
+
+		}
+
 		public async Task<ResponseDto<TurnoResponseDto>> CancelarTurno(int idTurno) //TODO: DESARROLLAR
 		{
 			Turno? turno = await _unitOfWork.Turnos.FindOrDefaultTurno(idTurno);

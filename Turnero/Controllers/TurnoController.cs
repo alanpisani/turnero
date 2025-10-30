@@ -34,6 +34,14 @@ namespace Turnero.Controllers
 			return CreatedAtAction(nameof(PostTurno), response);
 		}
 
+        [HttpPost("rapido")]
+        public async Task<IActionResult> PostTurnoRapido(TurnoRapidoRequestDto turnoRapido)
+        {
+            var response = await _service.SolicitarTurnoRapido(turnoRapido);
+
+            return Ok(response);
+        } 
+
         [HttpPatch("{id}/cancelar")]
         public async Task<IActionResult> PatchCancelarTurno(int id)
         {

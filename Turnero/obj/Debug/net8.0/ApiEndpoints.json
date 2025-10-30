@@ -181,7 +181,7 @@
     "Parameters": [
       {
         "Name": "profesionalDto",
-        "Type": "Turnero.Dto.ProfesionalDto",
+        "Type": "Turnero.Dto.Profesional.ProfesionalRequestDto",
         "IsRequired": true
       }
     ],
@@ -201,17 +201,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "Turnero.Models.Profesional",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Turnero.Controllers.ProfesionalController",
@@ -230,6 +220,22 @@
         "Name": "fecha",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Turnero.Controllers.ProfesionalController",
+    "Method": "GetDiasDisponibles",
+    "RelativePath": "api/Profesional/{idProfesional}/disponibilidad",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idProfesional",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -293,6 +299,22 @@
       {
         "Name": "idPaciente",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Turnero.Controllers.TurnoController",
+    "Method": "PostTurnoRapido",
+    "RelativePath": "api/Turno/rapido",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "turnoRapido",
+        "Type": "Turnero.Dto.TurnoDto.TurnoRapidoRequestDto",
         "IsRequired": true
       }
     ],

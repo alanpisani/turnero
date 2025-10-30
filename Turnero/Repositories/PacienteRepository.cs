@@ -27,6 +27,13 @@ namespace Turnero.Repositories
 			return await _context.Pacientes.AnyAsync(p => p.IdUsuario == idPaciente); //Existe algun paciente con ese id o no
 		}
 
+		public async Task<Paciente?> GetPacienteWithDni(int dni)
+		{
+			return await _context.Pacientes
+				.Where(p=> p.IdUsuarioNavigation.Dni == dni)
+				.FirstOrDefaultAsync();
+		}
+
 		public async Task<List<int>> ToListAsyncIdsObrasSociales()
 		{
 			return await _context.CoberturaMedicas
