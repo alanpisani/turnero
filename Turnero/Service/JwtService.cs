@@ -15,7 +15,8 @@ public class JwtService(IConfiguration configuration) //EL GENERADOR DE TOKENS P
 			new("id", usuario.IdUsuario.ToString()),
 			new("email", usuario.Email),
 			new(ClaimTypes.Role, ((RolesUsuario) usuario.IdRol).ToString()),
-			new("nombre", usuario.Nombre)
+			new("nombre", usuario.Nombre),
+			new("dni", usuario.Dni.ToString())
 		};
 
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

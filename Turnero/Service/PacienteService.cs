@@ -56,7 +56,7 @@ namespace Turnero.Service
 
 			var usuarioInDb = await _unitOfWork.Usuarios.AnyUsuarioByDni(dto.Dni);
 
-			if (usuarioInDb) throw new Exception("El dni ingresado ya se encuentra registrado en el sistema");
+			if (usuarioInDb) throw new Exception("El dni ingresado ya se encuentra registrado en el sistema"); //TODO cambiar!!
 
 			var usuario = _usuarioService.CrearUsuarioRapido(dto, 1); //Se crea un Usuario model en base al UsuarioRapidoDto, para la bd
 
