@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Turnero.Dto;
+using Turnero.Dto.Paciente;
+using Turnero.Dto.Usuario;
 using Turnero.Service;
 
 namespace Turnero.Controllers
@@ -33,7 +34,7 @@ namespace Turnero.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> PostPaciente(PacienteDto pacienteDto)
+        public async Task<IActionResult> PostPaciente(PacienteRequestDto pacienteDto)
         {
 
 			var response = await _service.RegistrarPaciente(pacienteDto);

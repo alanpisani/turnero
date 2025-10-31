@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using Humanizer;
-using Turnero.Dto;
+using Turnero.Dto.Usuario;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Validators.UsuarioValidators
 {
-	/// <summary>
-	/// Validador de registro de usuario. Soporta usuarios completos e incompletos.
-	/// </summary>
-	public class UsuarioCreateValidation : AbstractValidator<UsuarioDto>
+    /// <summary>
+    /// Validador de registro de usuario. Soporta usuarios completos e incompletos.
+    /// </summary>
+    public class UsuarioCreateValidation : AbstractValidator<UsuarioDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 

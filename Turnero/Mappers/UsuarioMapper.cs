@@ -1,9 +1,9 @@
-﻿using Turnero.Dto;
+﻿using Turnero.Dto.Usuario;
 using Turnero.Models;
 
 namespace Turnero.Mappers
 {
-	public class UsuarioMapper
+    public class UsuarioMapper
 	{
 		public static UsuarioDto DtoHijosAUsuarioDto(UsuarioDto dto)
 		{

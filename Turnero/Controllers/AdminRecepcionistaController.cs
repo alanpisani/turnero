@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Turnero.Dto;
+using Turnero.Dto.Usuario;
 using Turnero.Service;
 
 namespace Turnero.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class Admin_RecepcionistaController(UsuarioService service) : ControllerBase
 	{

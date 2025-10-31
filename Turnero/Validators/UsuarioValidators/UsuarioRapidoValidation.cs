@@ -1,9 +1,9 @@
-﻿ using FluentValidation;
-using Turnero.Dto;
+﻿using FluentValidation;
+using Turnero.Dto.Usuario;
 
 namespace Turnero.Validators.UsuarioValidators
 {
-	public class UsuarioRapidoValidation : AbstractValidator<UsuarioRapidoDto>
+    public class UsuarioRapidoValidation : AbstractValidator<UsuarioRapidoDto>
 	{
 		public UsuarioRapidoValidation()
 		{

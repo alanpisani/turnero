@@ -1,14 +1,15 @@
 ﻿using Turnero.Common.Helpers;
 using Turnero.Dto;
+using Turnero.Dto.Paciente;
 using Turnero.Repositories.Interfaces;
 using Turnero.Validators.UsuarioValidators;
 
 namespace Turnero.Domain.PacienteDomain
 {
-	public class CreatePacienteDomain(IUnitOfWork unit)
+    public class CreatePacienteDomain(IUnitOfWork unit)
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
-		public async Task<DomainValidationResult> Validar(PacienteDto dto)
+		public async Task<DomainValidationResult> Validar(PacienteRequestDto dto)
 		{
 			var result = new DomainValidationResult();
 

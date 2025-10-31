@@ -2,6 +2,7 @@
 using Turnero.Domain.PacienteDomain;
 using Turnero.Dto;
 using Turnero.Dto.Paciente;
+using Turnero.Dto.Usuario;
 using Turnero.Exceptions;
 using Turnero.Mappers;
 using Turnero.Models;
@@ -9,12 +10,12 @@ using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Service
 {
-	public class PacienteService(UsuarioService usuarioService, IUnitOfWork unit)
+    public class PacienteService(UsuarioService usuarioService, IUnitOfWork unit)
 	{
 		private readonly UsuarioService _usuarioService = usuarioService;
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<Paciente> RegistrarPaciente(PacienteDto dto)
+		public async Task<Paciente> RegistrarPaciente(PacienteRequestDto dto)
 		{
 			UsuarioDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
 			var usuario = _usuarioService.CrearUsuario(usuarioDto, 1); //Se crea un Usuario model en base al UsuarioDto, para la bd
@@ -49,7 +50,7 @@ namespace Turnero.Service
 
 		}
 
-		public async Task<Usuario> RegistrarPacienteRapido(UsuarioRapidoDto dto)
+		public async Task<ResponseDto<UsuarioRapidoDto>> RegistrarPacienteRapido(UsuarioRapidoDto dto)
 		{
 			//validacion simple:
 
@@ -72,7 +73,10 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();
 
-				return usuario;
+				return new ResponseDto<UsuarioRapidoDto> { 
+					Success= true,
+					Message= $"Usuario creado con éxito. Dni: {dto.Dni}"
+				};
 			}
 			catch (Exception e)
 			{
@@ -81,7 +85,7 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<List<PacienteDtoGet>> MostrarTodosLosPacientes()
+		public async Task<List<PacienteResponseGet>> MostrarTodosLosPacientes()
 		{
 			var pacientes = await _unitOfWork.Pacientes.ToListAsyncAllPacientes();
 
@@ -92,7 +96,7 @@ namespace Turnero.Service
 			return pacientesDto;
 		}
 
-		public async Task<PacienteDtoGet> MostrarPacientePorId(int idPaciente)
+		public async Task<PacienteResponseGet> MostrarPacientePorId(int idPaciente)
 		{
 			var paciente = await _unitOfWork.Pacientes.GetPacienteById(idPaciente);
 

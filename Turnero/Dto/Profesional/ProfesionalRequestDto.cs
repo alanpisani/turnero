@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Turnero.Dto.Usuario;
 
 namespace Turnero.Dto.Profesional
 {

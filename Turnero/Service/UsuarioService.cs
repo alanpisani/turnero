@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Turnero.Dto;
+using Turnero.Dto.Usuario;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -7,7 +7,7 @@ using Turnero.Validators.UsuarioValidators;
 
 namespace Turnero.Service
 {
-	public class UsuarioService(IUnitOfWork unit)
+    public class UsuarioService(IUnitOfWork unit)
 	{
 		private readonly PasswordHasher<Usuario> _passwordHasher = new();
 		private readonly IUnitOfWork _unitOfWork = unit;

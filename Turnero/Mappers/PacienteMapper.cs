@@ -1,12 +1,11 @@
-﻿using Turnero.Dto;
-using Turnero.Dto.Paciente;
+﻿using Turnero.Dto.Paciente;
 using Turnero.Models;
 
 namespace Turnero.Mappers
 {
-	public class PacienteMapper
+    public class PacienteMapper
 	{
-		public static Paciente DePacienteDtoAPaciente(PacienteDto dto, int idUsuario)
+		public static Paciente DePacienteDtoAPaciente(PacienteRequestDto dto, int idUsuario)
 		{
 			return new Paciente //Se retorna un Paciente model con el id del usuario recien creado
 			{
@@ -15,9 +14,9 @@ namespace Turnero.Mappers
 			};
 		}
 
-		public static PacienteDtoGet DePacienteAPacienteDtoGet(Paciente paciente)
+		public static PacienteResponseGet DePacienteAPacienteDtoGet(Paciente paciente)
 		{
-			return new PacienteDtoGet
+			return new PacienteResponseGet
 			{
 				Id = paciente.IdUsuario,
 				Nombre = paciente.IdUsuarioNavigation.Nombre,
@@ -28,7 +27,7 @@ namespace Turnero.Mappers
 				Telefono = paciente.Telefono
 			};
 		}
-		public static IEnumerable<CoberturaPaciente> CrearCoberturasPaciente(PacienteDto dto, int idPaciente)
+		public static IEnumerable<CoberturaPaciente> CrearCoberturasPaciente(PacienteRequestDto dto, int idPaciente)
 		{
 			if (dto.CoberturasMedicas == null) yield break; //Un break, por si el paciente registrado NO tiene coberturas mèdicas
 
