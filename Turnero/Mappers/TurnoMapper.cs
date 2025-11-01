@@ -28,6 +28,7 @@ namespace Turnero.Mappers
 				IdTurno = turno.IdTurno,
 				Especialidad= turno.IdEspecialidadNavigation.NombreEspecialidad,
 				Fecha= turno.FechaTurno.ToString(),
+				EstadoTurno = turno.EstadoTurno
 			};
 		}
 

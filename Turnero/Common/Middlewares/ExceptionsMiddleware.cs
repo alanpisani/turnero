@@ -30,6 +30,10 @@ namespace Turnero.Common.Middlewares
 			{
 				await HandleExceptionAsync(context, HttpStatusCode.OK, ex.Response);
 			}
+			catch (ForbiddenException ex)
+			{
+				await HandleExceptionAsync(context, HttpStatusCode.OK, ex.Response);
+			}
 			catch (BussinessErrorContentException ex)
 			{
 				

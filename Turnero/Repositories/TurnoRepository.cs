@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using Microsoft.EntityFrameworkCore;
+using Turnero.Common.Enums;
 using Turnero.Controllers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -18,6 +19,7 @@ namespace Turnero.Repositories
 		public async Task<Turno?> FindOrDefaultTurno(int idTurno)
 		{
 			return await _context.Turnos
+				.Include(p => p.IdPacienteNavigation)
 				.Include(t => t.IdEspecialidadNavigation)
 				.Include(p => p.IdProfesionalNavigation)
 					.ThenInclude(p => p.ProfesionalEspecialidads)
@@ -36,6 +38,7 @@ namespace Turnero.Repositories
 		{
 			return _context.Turnos
 				.Where(t => t.IdPaciente == idPaciente)
+				.Where(t => t.EstadoTurno == EnumEstadoTurno.Solicitado.ToString())
 				.Include(t => t.IdEspecialidadNavigation)
 				.Include(p=> p.IdProfesionalNavigation)
 					.ThenInclude(p=> p.ProfesionalEspecialidads)

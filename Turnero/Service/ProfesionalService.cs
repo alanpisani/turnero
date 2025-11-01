@@ -1,4 +1,5 @@
-﻿using Turnero.Common.Helpers;
+﻿using Turnero.Common.Enums;
+using Turnero.Common.Helpers;
 using Turnero.Domain.PacienteDomain;
 using Turnero.Domain.ProfesionalDomain;
 using Turnero.Dto;
@@ -132,7 +133,9 @@ namespace Turnero.Service
 				.GetTurnosByProfesionalAndFecha(idProfesional, DateOnly.Parse(fecha));
 
 			var horariosOcupados = turnosEseDia!
-				.Select(t => new TimeOnly(t.FechaTurno.Hour, t.FechaTurno.Minute).ToString("HH:mm")).ToList();
+				.Where(t => t.EstadoTurno == EnumEstadoTurno.Solicitado.ToString())
+				.Select(t => new TimeOnly(t.FechaTurno.Hour, t.FechaTurno.Minute).ToString("HH:mm"))
+				.ToList();
 
 			return new ResponseDto<IEnumerable<string>>{
 				Success=true,

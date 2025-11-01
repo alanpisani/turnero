@@ -43,9 +43,9 @@ namespace Turnero.Controllers
         } 
 
         [HttpPatch("{id}/cancelar")]
-        public async Task<IActionResult> PatchCancelarTurno(int id)
+        public async Task<IActionResult> PatchCancelarTurno(int id, [FromBody] CancelarTurnoDto dto)
         {
-            var response = await _service.CancelarTurno(id);
+            var response = await _service.CancelarTurno(id, dto);
 
             return Ok(response);
         }

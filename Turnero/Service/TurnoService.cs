@@ -99,11 +99,13 @@ namespace Turnero.Service
 
 		}
 
-		public async Task<ResponseDto<TurnoResponseDto>> CancelarTurno(int idTurno) //TODO: DESARROLLAR
+		public async Task<ResponseDto<TurnoResponseDto>> CancelarTurno(int idTurno, CancelarTurnoDto dto) //TODO: DESARROLLAR
 		{
 			Turno? turno = await _unitOfWork.Turnos.FindOrDefaultTurno(idTurno);
 
 			if (turno == null) throw new NotFoundException($"No se encontró el turno con el ID: {idTurno}");
+
+			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador) throw new ForbiddenException("No puede cancelar turnos de otro paciente.");
 
 			turno!.EstadoTurno = EnumEstadoTurno.Cancelado.ToString();
 
@@ -119,6 +121,7 @@ namespace Turnero.Service
 				Data = TurnoMapper.DeTurnoADto(turno)
 			};
 		}
+
 
 		public async Task<ResponseDto<List<TurnoResponseDto>>> TraerTurnosDelPaciente(int idPaciente)
 		{
