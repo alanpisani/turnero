@@ -105,14 +105,16 @@ namespace Turnero.Service
 
 			if (turno == null) throw new NotFoundException($"No se encontró el turno con el ID: {idTurno}");
 
-			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador) throw new ForbiddenException("No puede cancelar turnos de otro paciente.");
+			var isRecepcionista = await _unitOfWork.Usuarios.AnyRecepcionistaByDni(dto.DniDelCancelador);
+
+			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador && !isRecepcionista) 
+				throw new ForbiddenException("No puede cancelar turnos de otro paciente.");
 
 			turno!.EstadoTurno = EnumEstadoTurno.Cancelado.ToString();
 
 			_unitOfWork.Turnos.Actualizar(turno);
 
 			await _unitOfWork.CompleteAsync();
-
 
 			return new ResponseDto<TurnoResponseDto>
 			{

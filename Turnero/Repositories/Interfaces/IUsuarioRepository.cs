@@ -9,7 +9,7 @@ namespace Turnero.Repositories.Interfaces
 		Task AddAsyncUsuario(Usuario usuario);
 		Task<bool> AnyUsuarioByEmailAndPassword(string email, string password);
 		Task<Usuario?> FirstOrDefaultUsuario(string email);
-		
 		Task<List<Usuario>> GetAllRecepcionistas();
+		Task<bool> AnyRecepcionistaByDni(int dni);
 	}
 }

@@ -44,5 +44,12 @@ namespace Turnero.Repositories
 				.Where(u => u.IdRol == (int) RolesUsuario.Recepcionista)
 				.ToListAsync();
 		}
+
+		public async Task<bool> AnyRecepcionistaByDni(int dni)
+		{
+			return await _context.Usuarios
+				.Where(u=> u.IdRol == 3)
+				.AnyAsync(u=> u.Dni == dni);
+		}
 	}
 }
