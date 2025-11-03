@@ -36,8 +36,6 @@ public partial class TurneroContext : DbContext
 
     public virtual DbSet<ProfesionalEspecialidad> ProfesionalEspecialidads { get; set; }
 
-    public virtual DbSet<Rol> Rols { get; set; }
-
     public virtual DbSet<TipoAccion> TipoAccions { get; set; }
 
     public virtual DbSet<Turno> Turnos { get; set; }
@@ -305,18 +303,6 @@ public partial class TurneroContext : DbContext
                 .HasConstraintName("profesional_especialidad_ibfk_1");
         });
 
-        modelBuilder.Entity<Rol>(entity =>
-        {
-            entity.HasKey(e => e.IdRol).HasName("PRIMARY");
-
-            entity.ToTable("rol");
-
-            entity.Property(e => e.IdRol).HasColumnName("id_rol");
-            entity.Property(e => e.NombreRol)
-                .HasMaxLength(25)
-                .HasColumnName("nombre_rol");
-        });
-
         modelBuilder.Entity<TipoAccion>(entity =>
         {
             entity.HasKey(e => e.IdAccion).HasName("PRIMARY");
@@ -382,8 +368,6 @@ public partial class TurneroContext : DbContext
 
             entity.HasIndex(e => e.Email, "email").IsUnique();
 
-            entity.HasIndex(e => e.IdRol, "id_rol");
-
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.Apellido)
                 .HasMaxLength(20)
@@ -394,16 +378,14 @@ public partial class TurneroContext : DbContext
                 .HasMaxLength(30)
                 .HasColumnName("email");
             entity.Property(e => e.FechaNacimiento).HasColumnName("fecha_nacimiento");
-            entity.Property(e => e.IdRol).HasColumnName("id_rol");
             entity.Property(e => e.IsComplete).HasColumnName("is_complete");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(20)
                 .HasColumnName("nombre");
-
-            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Usuarios)
-                .HasForeignKey(d => d.IdRol)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("usuario_ibfk_1");
+            entity.Property(e => e.Rol)
+                .HasDefaultValueSql("'Paciente'")
+                .HasColumnType("enum('Paciente','Profesional','Recepcionista','Administrador')")
+                .HasColumnName("rol");
         });
 
         OnModelCreatingPartial(modelBuilder);

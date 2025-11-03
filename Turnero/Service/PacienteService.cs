@@ -1,4 +1,5 @@
 ﻿using Humanizer;
+using Turnero.Common.Enums;
 using Turnero.Domain.PacienteDomain;
 using Turnero.Dto;
 using Turnero.Dto.Paciente;
@@ -18,7 +19,8 @@ namespace Turnero.Service
 		public async Task<Paciente> RegistrarPaciente(PacienteRequestDto dto)
 		{
 			UsuarioDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
-			var usuario = _usuarioService.CrearUsuario(usuarioDto, 1); //Se crea un Usuario model en base al UsuarioDto, para la bd
+			var usuario = _usuarioService
+				.CrearUsuario(usuarioDto, RolesUsuario.Paciente.ToString()); //Se crea un Usuario model en base al UsuarioDto, para la bd
 
 			var result = await new CreatePacienteDomain(_unitOfWork).Validar(dto);
 
@@ -58,7 +60,7 @@ namespace Turnero.Service
 
 			if (usuarioInDb) throw new Exception("El dni ingresado ya se encuentra registrado en el sistema"); //TODO cambiar!!
 
-			var usuario = _usuarioService.CrearUsuarioRapido(dto, 1); //Se crea un Usuario model en base al UsuarioRapidoDto, para la bd
+			var usuario = _usuarioService.CrearUsuarioRapido(dto, RolesUsuario.Paciente.ToString()); //Se crea un Usuario model en base al UsuarioRapidoDto, para la bd
 
 			await _unitOfWork.BeginTransactionAsync();
 

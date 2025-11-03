@@ -19,7 +19,7 @@ public partial class Usuario
 
     public DateOnly? FechaNacimiento { get; set; }
 
-    public int IdRol { get; set; }
+    public string Rol { get; set; } = null!;
 
     public bool IsComplete { get; set; }
 
@@ -28,8 +28,6 @@ public partial class Usuario
     public virtual ICollection<CoberturaPaciente> CoberturaPacientes { get; set; } = new List<CoberturaPaciente>();
 
     public virtual ICollection<HistorialTurno> HistorialTurnos { get; set; } = new List<HistorialTurno>();
-
-    public virtual Rol IdRolNavigation { get; set; } = null!;
 
     public virtual Paciente? Paciente { get; set; }
 

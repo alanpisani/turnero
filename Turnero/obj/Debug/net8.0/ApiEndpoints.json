@@ -107,7 +107,7 @@
     "Parameters": [
       {
         "Name": "pacienteDto",
-        "Type": "Turnero.Dto.PacienteDto",
+        "Type": "Turnero.Dto.Paciente.PacienteRequestDto",
         "IsRequired": true
       }
     ],
@@ -155,7 +155,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Turnero.Dto.UsuarioRapidoDto",
+        "Type": "Turnero.Dto.Usuario.UsuarioRapidoDto",
         "IsRequired": true
       }
     ],
@@ -284,6 +284,11 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Turnero.Dto.TurnoDto.CancelarTurnoDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -346,7 +351,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Turnero.Dto.UsuarioDto",
+        "Type": "Turnero.Dto.Usuario.UsuarioDto",
         "IsRequired": true
       }
     ],

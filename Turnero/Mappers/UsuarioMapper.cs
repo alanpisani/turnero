@@ -29,7 +29,7 @@ namespace Turnero.Mappers
 			};
 		}
 
-		public static Usuario DeDtoAUsuario(UsuarioDto dto, int idRol) {
+		public static Usuario DeDtoAUsuario(UsuarioDto dto, string rol) {
 			return new Usuario {
 				Nombre= dto.Nombre,
 				Apellido= dto.Apellido,
@@ -37,17 +37,17 @@ namespace Turnero.Mappers
 				Email= dto.Email,
 				Contrasenia= "",
 				FechaNacimiento= DateOnly.Parse(dto.FechaNacimiento),
-				IdRol= idRol
+				Rol= rol
 			};
 		}
 
-		public static Usuario DtoRapidoAUsuario(UsuarioRapidoDto dto, int idRol)
+		public static Usuario DtoRapidoAUsuario(UsuarioRapidoDto dto, string rol)
 		{
 			return new Usuario
 			{
 				Nombre = dto.Nombre,
 				Dni = dto.Dni,
-				IdRol = idRol
+				Rol = rol
 			};
 		}
 	}

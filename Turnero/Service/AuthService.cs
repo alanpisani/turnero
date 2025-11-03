@@ -35,7 +35,7 @@ namespace Turnero.Service
 				IdUsuario = usuario.IdUsuario,
 				Token = jwt,
 				Activo = true,
-				Expiracion = DateTime.UtcNow.AddMinutes(1)
+				Expiracion = DateTime.UtcNow.AddMinutes(60)
 			};
 
 			await _unitOfWork.AuthTokens.AddAuthToken(authToken);

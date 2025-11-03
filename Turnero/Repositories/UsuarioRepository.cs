@@ -41,14 +41,14 @@ namespace Turnero.Repositories
 		public async Task<List<Usuario>> GetAllRecepcionistas()
 		{
 			return await _context.Usuarios
-				.Where(u => u.IdRol == (int) RolesUsuario.Recepcionista)
+				.Where(u => u.Rol == RolesUsuario.Recepcionista.ToString())
 				.ToListAsync();
 		}
 
 		public async Task<bool> AnyRecepcionistaByDni(int dni)
 		{
 			return await _context.Usuarios
-				.Where(u=> u.IdRol == 3)
+				.Where(u=> u.Rol == RolesUsuario.Recepcionista.ToString())
 				.AnyAsync(u=> u.Dni == dni);
 		}
 	}
