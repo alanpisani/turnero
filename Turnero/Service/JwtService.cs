@@ -14,7 +14,7 @@ public class JwtService(IConfiguration configuration) //EL GENERADOR DE TOKENS P
 		{
 			new("id", usuario.IdUsuario.ToString()),
 			new("email", usuario.Email),
-			new(ClaimTypes.Role, ((RolesUsuario) usuario.IdRol).ToString()),
+			new("rol", ((RolesUsuario)usuario.IdRol).ToString()),
 			new("nombre", usuario.Nombre),
 			new("dni", usuario.Dni.ToString())
 		};

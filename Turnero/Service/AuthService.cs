@@ -12,7 +12,7 @@ namespace Turnero.Service
 		private readonly JwtService _jwtService = jwt;
 		private readonly PasswordHasher<Usuario> _passwordHasher = new();
 
-		public async Task<Dictionary<string, string>> Conectarse(LoginDto dto)
+		public async Task<ResponseDto<string?>> Conectarse(LoginDto dto)
 		{
 			var usuario = await _unitOfWork.Usuarios.FirstOrDefaultUsuario(dto.Email);
 
@@ -41,8 +41,11 @@ namespace Turnero.Service
 			await _unitOfWork.AuthTokens.AddAuthToken(authToken);
 			await _unitOfWork.CompleteAsync();
 
-			return new Dictionary<string, string>{
-				{ "token", jwt }
+			return new ResponseDto<string?>
+			{
+				Success = true,
+				Message = "Token generado con éxito",
+				Data = jwt
 			};
 		}
 	}
