@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Turnero.Dto.Usuario
 {
-    public class UsuarioDto
+    public class UsuarioRequestDto
     {
         public string Nombre { get; set; } = string.Empty;
 
@@ -12,26 +12,22 @@ namespace Turnero.Dto.Usuario
 
         public int Dni { get; set; }
         public string Email { get; set; } = string.Empty;
-
-        public string FechaNacimiento { get; set; } = string.Empty;
-
         public string Contrasenia { get; set; } = string.Empty;
         public string ContraseniaRepetida { get; set; } = string.Empty;
-        public int IsComplete { get; set; } = 0;
+        public bool IsComplete { get; set; } = false;
 
-        public UsuarioDto() { }
+        public UsuarioRequestDto() { }
 
-        public UsuarioDto(string Nombre, string Apellido, int Dni, string Email, string FechaNacimiento, string Contrasenia, string ContraseniaRepetida, int isComplete)
+        public UsuarioRequestDto(string Nombre, string Apellido, int Dni, string Email, string Contrasenia, string ContraseniaRepetida, bool isComplete)
         {
 
             this.Nombre = Nombre;
             this.Apellido = Apellido;
             this.Dni = Dni;
             this.Email = Email;
-            this.FechaNacimiento = FechaNacimiento;
             this.Contrasenia = Contrasenia;
             this.ContraseniaRepetida = ContraseniaRepetida;
-            IsComplete = isComplete;
+            this.IsComplete = isComplete;
         }
 
     }

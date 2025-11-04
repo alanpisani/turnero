@@ -8,7 +8,6 @@
 		ITurnoRepository Turnos { get; }
 		IEspecialidadRepository Especialidades { get; }
 		IHorarioLaboralRepository HorariosLaborales { get; }
-		ICoberturaMedicaRepository CoberturasMedicas { get; }
 		IAuthTokenRepository AuthTokens { get; }
 
 		// Persistencia

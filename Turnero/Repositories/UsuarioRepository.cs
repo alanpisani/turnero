@@ -9,6 +9,11 @@ namespace Turnero.Repositories
 	{
 		private readonly TurneroContext _context = context;
 
+		public async Task<List<Usuario>> GetAll()
+		{
+			return await _context.Usuarios.ToListAsync();
+		}
+
 		public async Task<bool> AnyUsuarioByEmail(string email)
 		{
 			return await _context.Usuarios
@@ -27,7 +32,7 @@ namespace Turnero.Repositories
 		public async Task<bool> AnyUsuarioByEmailAndPassword(string email, string password)
 		{
 			return await _context.Usuarios
-				.AnyAsync(u => u.Email == email && u.Contrasenia == password);
+				.AnyAsync(u => u.Email == email && u.Password == password);
 		}
 
 		public async Task<Usuario?> FirstOrDefaultUsuario(string email)

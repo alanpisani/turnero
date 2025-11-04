@@ -18,11 +18,7 @@ public partial class TurneroContext : DbContext
 
     public virtual DbSet<AuthToken> AuthTokens { get; set; }
 
-    public virtual DbSet<CoberturaMedica> CoberturaMedicas { get; set; }
-
-    public virtual DbSet<CoberturaPaciente> CoberturaPacientes { get; set; }
-
-    public virtual DbSet<Consultum> Consulta { get; set; }
+    public virtual DbSet<Consulta> Consulta { get; set; }
 
     public virtual DbSet<Especialidad> Especialidads { get; set; }
 
@@ -35,8 +31,6 @@ public partial class TurneroContext : DbContext
     public virtual DbSet<Profesional> Profesionals { get; set; }
 
     public virtual DbSet<ProfesionalEspecialidad> ProfesionalEspecialidads { get; set; }
-
-    public virtual DbSet<TipoAccion> TipoAccions { get; set; }
 
     public virtual DbSet<Turno> Turnos { get; set; }
 
@@ -79,55 +73,7 @@ public partial class TurneroContext : DbContext
                 .HasConstraintName("auth_token_ibfk_1");
         });
 
-        modelBuilder.Entity<CoberturaMedica>(entity =>
-        {
-            entity.HasKey(e => e.IdCoberturaMedica).HasName("PRIMARY");
-
-            entity.ToTable("cobertura_medica");
-
-            entity.Property(e => e.IdCoberturaMedica).HasColumnName("id_cobertura_medica");
-            entity.Property(e => e.Direccion)
-                .HasMaxLength(100)
-                .HasColumnName("direccion");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(50)
-                .HasColumnName("nombre");
-            entity.Property(e => e.Telefono)
-                .HasMaxLength(20)
-                .HasColumnName("telefono");
-            entity.Property(e => e.TipoCobertura)
-                .HasMaxLength(20)
-                .HasColumnName("tipo_cobertura");
-        });
-
-        modelBuilder.Entity<CoberturaPaciente>(entity =>
-        {
-            entity.HasKey(e => e.IdCoberturaPaciente).HasName("PRIMARY");
-
-            entity.ToTable("cobertura_paciente");
-
-            entity.HasIndex(e => e.IdPaciente, "cobertura_paciente_ibfk_1");
-
-            entity.HasIndex(e => e.IdCoberturaMedica, "id_cobertura_medica");
-
-            entity.Property(e => e.IdCoberturaPaciente).HasColumnName("id_cobertura_paciente");
-            entity.Property(e => e.IdCoberturaMedica).HasColumnName("id_cobertura_medica");
-            entity.Property(e => e.IdPaciente).HasColumnName("id_paciente");
-            entity.Property(e => e.NumeroAfiliado)
-                .HasMaxLength(50)
-                .HasColumnName("numero_afiliado");
-
-            entity.HasOne(d => d.IdCoberturaMedicaNavigation).WithMany(p => p.CoberturaPacientes)
-                .HasForeignKey(d => d.IdCoberturaMedica)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("cobertura_paciente_ibfk_2");
-
-            entity.HasOne(d => d.IdPacienteNavigation).WithMany(p => p.CoberturaPacientes)
-                .HasForeignKey(d => d.IdPaciente)
-                .HasConstraintName("cobertura_paciente_ibfk_1");
-        });
-
-        modelBuilder.Entity<Consultum>(entity =>
+        modelBuilder.Entity<Consulta>(entity =>
         {
             entity.HasKey(e => e.IdConsulta).HasName("PRIMARY");
 
@@ -169,6 +115,10 @@ public partial class TurneroContext : DbContext
             entity.ToTable("especialidad");
 
             entity.Property(e => e.IdEspecialidad).HasColumnName("id_especialidad");
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("is_active");
             entity.Property(e => e.NombreEspecialidad)
                 .HasMaxLength(25)
                 .HasColumnName("nombre_especialidad");
@@ -180,8 +130,6 @@ public partial class TurneroContext : DbContext
 
             entity.ToTable("historial_turno");
 
-            entity.HasIndex(e => e.IdTipoAccion, "id_tipo_accion");
-
             entity.HasIndex(e => e.IdTurno, "id_turno");
 
             entity.HasIndex(e => e.IdUsuario, "id_usuario");
@@ -190,22 +138,19 @@ public partial class TurneroContext : DbContext
             entity.Property(e => e.FechaCambio)
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_cambio");
-            entity.Property(e => e.IdTipoAccion).HasColumnName("id_tipo_accion");
             entity.Property(e => e.IdTurno).HasColumnName("id_turno");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.Motivo)
                 .HasMaxLength(100)
                 .HasColumnName("motivo");
-
-            entity.HasOne(d => d.IdTipoAccionNavigation).WithMany(p => p.HistorialTurnos)
-                .HasForeignKey(d => d.IdTipoAccion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("historial_turno_ibfk_2");
+            entity.Property(e => e.TipoAccion)
+                .HasDefaultValueSql("'Creación'")
+                .HasColumnType("enum('Creación','Modificación','Cancelación','Ausencia')")
+                .HasColumnName("tipo_accion");
 
             entity.HasOne(d => d.IdTurnoNavigation).WithMany(p => p.HistorialTurnos)
                 .HasForeignKey(d => d.IdTurno)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("historial_turno_ibfk_1");
+                .HasConstraintName("historial_turno_ibfk_4");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.HistorialTurnos)
                 .HasForeignKey(d => d.IdUsuario)
@@ -303,18 +248,6 @@ public partial class TurneroContext : DbContext
                 .HasConstraintName("profesional_especialidad_ibfk_1");
         });
 
-        modelBuilder.Entity<TipoAccion>(entity =>
-        {
-            entity.HasKey(e => e.IdAccion).HasName("PRIMARY");
-
-            entity.ToTable("tipo_accion");
-
-            entity.Property(e => e.IdAccion).HasColumnName("id_accion");
-            entity.Property(e => e.Accion)
-                .HasMaxLength(20)
-                .HasColumnName("accion");
-        });
-
         modelBuilder.Entity<Turno>(entity =>
         {
             entity.HasKey(e => e.IdTurno).HasName("PRIMARY");
@@ -372,19 +305,24 @@ public partial class TurneroContext : DbContext
             entity.Property(e => e.Apellido)
                 .HasMaxLength(20)
                 .HasColumnName("apellido");
-            entity.Property(e => e.Contrasenia).HasMaxLength(100);
             entity.Property(e => e.Dni).HasColumnName("dni");
             entity.Property(e => e.Email)
                 .HasMaxLength(30)
                 .HasColumnName("email");
-            entity.Property(e => e.FechaNacimiento).HasColumnName("fecha_nacimiento");
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("is_active");
             entity.Property(e => e.IsComplete).HasColumnName("is_complete");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(20)
                 .HasColumnName("nombre");
+            entity.Property(e => e.Password)
+                .HasMaxLength(100)
+                .HasColumnName("password");
             entity.Property(e => e.Rol)
                 .HasDefaultValueSql("'Paciente'")
-                .HasColumnType("enum('Paciente','Profesional','Recepcionista','Administrador')")
+                .HasColumnType("enum('Paciente','Profesional','Recepcionista','Admin')")
                 .HasColumnName("rol");
         });
 

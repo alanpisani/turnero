@@ -9,7 +9,7 @@ public partial class Profesional
 
     public int Matricula { get; set; }
 
-    public virtual ICollection<Consultum> Consulta { get; set; } = new List<Consultum>();
+    public virtual ICollection<Consulta> Consulta { get; set; } = new List<Consulta>();
 
     public virtual ICollection<HorarioLaboral> HorarioLaborals { get; set; } = new List<HorarioLaboral>();
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Turnero.Common.Enums;
+using Turnero.Dto;
 using Turnero.Dto.Usuario;
 using Turnero.Mappers;
 using Turnero.Models;
@@ -13,11 +14,24 @@ namespace Turnero.Service
 		private readonly PasswordHasher<Usuario> _passwordHasher = new();
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public Usuario CrearUsuario(UsuarioDto dto, string rol)
+		
+
+		public async Task<ResponseDto<List<UsuarioResponseDto>>> ConsultarUsuarios()
+		{
+			var usuarios = await _unitOfWork.Usuarios.GetAll();
+
+			return new ResponseDto<List<UsuarioResponseDto>> { 
+				Success = true,
+				Message = "Usuarios consultados con éxito",
+				Data = usuarios.Select(u => UsuarioMapper.ToUsuarioDto(u)).ToList()
+			};
+		}
+
+		public Usuario CrearUsuario(UsuarioRequestDto dto, string rol)
 		{
 			var usuario = UsuarioMapper.DeDtoAUsuario(dto, rol); //Mapeamos al usuario registrado a modo Usuario BD
 
-			usuario.Contrasenia = _passwordHasher.HashPassword(usuario, dto.Contrasenia); //HASHING
+			usuario.Password = _passwordHasher.HashPassword(usuario, dto.Contrasenia); //HASHING
 
 			return usuario;
 
@@ -35,7 +49,7 @@ namespace Turnero.Service
 
 		//RECEPCIONISTA
 
-		public async Task<Usuario> RegistrarRecepcionista(UsuarioDto dto) {
+		public async Task<Usuario> RegistrarRecepcionista(UsuarioRequestDto dto) {
 
 			var recepcionista = CrearUsuario(dto, RolesUsuario.Recepcionista.ToString());
 

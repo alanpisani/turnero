@@ -13,19 +13,17 @@ public partial class Usuario
 
     public string? Email { get; set; }
 
-    public string? Contrasenia { get; set; }
+    public string? Password { get; set; }
 
     public int Dni { get; set; }
-
-    public DateOnly? FechaNacimiento { get; set; }
 
     public string Rol { get; set; } = null!;
 
     public bool IsComplete { get; set; }
 
-    public virtual ICollection<AuthToken> AuthTokens { get; set; } = new List<AuthToken>();
+    public bool? IsActive { get; set; }
 
-    public virtual ICollection<CoberturaPaciente> CoberturaPacientes { get; set; } = new List<CoberturaPaciente>();
+    public virtual ICollection<AuthToken> AuthTokens { get; set; } = new List<AuthToken>();
 
     public virtual ICollection<HistorialTurno> HistorialTurnos { get; set; } = new List<HistorialTurno>();
 

@@ -10,7 +10,6 @@ using Turnero.Validators.UsuarioValidators;
 using FluentValidation;
 using Turnero.Validators.ProfesionalValidators;
 using Turnero.Validators.TurnoValidators;
-using Turnero.Validators.CoberturaMedicaValidators;
 using Turnero.Validators.AuthValidators;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,7 +54,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<UsuarioCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<UsuarioRapidoValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<ProfesionalCreateValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<TurnoCreateValidation>();
-builder.Services.AddValidatorsFromAssemblyContaining<CoberturaAnyValidation>();
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidation>();
 
 
@@ -73,7 +71,6 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<PacienteService>();
 builder.Services.AddScoped<ProfesionalService>();
 builder.Services.AddScoped<TurnoService>();
-builder.Services.AddScoped<CoberturaMedicaService>();
 builder.Services.AddScoped<EspecialidadService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<AuthService>();
@@ -84,7 +81,6 @@ builder.Services.AddScoped<IHorarioLaboralRepository, HorarioLaboralRepository>(
 builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
 builder.Services.AddScoped<IProfesionalRepository, ProfesionalRepository>();
 builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
-builder.Services.AddScoped<ICoberturaMedicaRepository, CoberturaMedicaRepository>();
 builder.Services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

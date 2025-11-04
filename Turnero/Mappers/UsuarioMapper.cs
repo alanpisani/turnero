@@ -5,14 +5,13 @@ namespace Turnero.Mappers
 {
     public class UsuarioMapper
 	{
-		public static UsuarioDto DtoHijosAUsuarioDto(UsuarioDto dto)
+		public static UsuarioRequestDto DtoHijosAUsuarioDto(UsuarioRequestDto dto)
 		{
-			var usuarioDto = new UsuarioDto(
+			var usuarioDto = new UsuarioRequestDto(
 				Nombre: dto.Nombre,
 				Apellido: dto.Apellido,
 				Dni: dto.Dni,
 				Email: dto.Email,
-				FechaNacimiento: dto.FechaNacimiento,
 				Contrasenia: dto.Contrasenia,
 				ContraseniaRepetida: dto.ContraseniaRepetida,
 				isComplete: dto.IsComplete
@@ -29,14 +28,13 @@ namespace Turnero.Mappers
 			};
 		}
 
-		public static Usuario DeDtoAUsuario(UsuarioDto dto, string rol) {
+		public static Usuario DeDtoAUsuario(UsuarioRequestDto dto, string rol) {
 			return new Usuario {
 				Nombre= dto.Nombre,
 				Apellido= dto.Apellido,
 				Dni= dto.Dni,
 				Email= dto.Email,
-				Contrasenia= "",
-				FechaNacimiento= DateOnly.Parse(dto.FechaNacimiento),
+				Password= "",
 				Rol= rol
 			};
 		}
@@ -48,6 +46,19 @@ namespace Turnero.Mappers
 				Nombre = dto.Nombre,
 				Dni = dto.Dni,
 				Rol = rol
+			};
+		}
+
+		public static UsuarioResponseDto ToUsuarioDto(Usuario usuario)
+		{
+			return new UsuarioResponseDto {
+				Nombre = usuario.Nombre,
+				Apellido = usuario.Apellido,
+				Dni= usuario.Dni,
+				Email = usuario.Email,
+				Rol= usuario.Rol,
+				IsComplete = usuario.IsComplete
+
 			};
 		}
 	}

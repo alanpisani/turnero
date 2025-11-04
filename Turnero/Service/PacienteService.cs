@@ -1,6 +1,4 @@
-﻿using Humanizer;
-using Turnero.Common.Enums;
-using Turnero.Domain.PacienteDomain;
+﻿using Turnero.Common.Enums;
 using Turnero.Dto;
 using Turnero.Dto.Paciente;
 using Turnero.Dto.Usuario;
@@ -18,14 +16,10 @@ namespace Turnero.Service
 
 		public async Task<Paciente> RegistrarPaciente(PacienteRequestDto dto)
 		{
-			UsuarioDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
+			UsuarioRequestDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
 			var usuario = _usuarioService
 				.CrearUsuario(usuarioDto, RolesUsuario.Paciente.ToString()); //Se crea un Usuario model en base al UsuarioDto, para la bd
 
-			var result = await new CreatePacienteDomain(_unitOfWork).Validar(dto);
-
-			if (!result.EsValido) throw new BussinessErrorContentException(result.Errores);
-	
 			await _unitOfWork.BeginTransactionAsync();
 
 			try
@@ -34,10 +28,8 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 
 				Paciente paciente = PacienteMapper.DePacienteDtoAPaciente(dto, usuario.IdUsuario); //Se crea un Paciente model con el id del usuario recien creado (MAGIA DE EF. El modelo tiene el id)
-				var coberturas = PacienteMapper.CrearCoberturasPaciente(dto, paciente.IdUsuario); //Se crean las coberturas model del paciente
 
 				await _unitOfWork.Pacientes.AddPaciente(paciente); //Se sube al paciente a la bd
-				await _unitOfWork.Pacientes.AddCoberturas(coberturas); //Se sube el registro de la/s tabla/s intermedia/s a la BD
 
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();

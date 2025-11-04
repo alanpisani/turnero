@@ -8,7 +8,7 @@ namespace Turnero.Validators.UsuarioValidators
     /// <summary>
     /// Validador de registro de usuario. Soporta usuarios completos e incompletos.
     /// </summary>
-    public class UsuarioCreateValidation : AbstractValidator<UsuarioDto>
+    public class UsuarioCreateValidation : AbstractValidator<UsuarioRequestDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
@@ -27,7 +27,7 @@ namespace Turnero.Validators.UsuarioValidators
 			RuleFor(x => x.Apellido)
 				.Cascade(CascadeMode.Stop)
 				.NotEmpty().WithMessage("El apellido es requerido")
-					.When(x => x.IsComplete == 1)
+					.When(x => x.IsComplete == true)
 				.MaximumLength(20).WithMessage("El apellido ingresado es demasiado extenso")
 					.When(x => !string.IsNullOrEmpty(x.Apellido));
 
@@ -41,7 +41,7 @@ namespace Turnero.Validators.UsuarioValidators
 			RuleFor(x => x.Email)
 				.Cascade(CascadeMode.Stop)
 				.NotEmpty().WithMessage("El correo electrónico es requerido")
-					.When(x => x.IsComplete == 1)
+					.When(x => x.IsComplete == true)
 				.Matches(@"^[^@\s]+@[^@\s]+\.(com|net|org)$").WithMessage("Debe ingresar un correo electrónico válido")
 					.When(x => !string.IsNullOrEmpty(x.Email))
 				.Length(7, 30).WithMessage("El mail debe contener entre 7 a 30 caracteres")
@@ -51,27 +51,16 @@ namespace Turnero.Validators.UsuarioValidators
 				).WithMessage("El mail ingresado ya se encuentra registrado en el sistema. Ingrese otro")
 					.When(x => !string.IsNullOrEmpty(x.Email));
 
-			// Fecha de nacimiento solo si completò
-			RuleFor(x => x.FechaNacimiento)
-				.Cascade(CascadeMode.Stop)
-				.NotEmpty().WithMessage("La fecha de nacimiento es requerida")
-					.When(x => x.IsComplete == 1)
-				.Must(fecha => DateOnly.TryParse(fecha, out _)).WithMessage("Debe ingresar una fecha de nacimiento válida")
-					.When(x => !string.IsNullOrEmpty(x.FechaNacimiento))
-				.Must(fecha => DateOnly.TryParse(fecha, out var f) && f < DateOnly.FromDateTime(DateTime.Now))
-					.WithMessage("Debe ingresar una fecha de nacimiento que haya pasado")
-					.When(x => !string.IsNullOrEmpty(x.FechaNacimiento));
-
 			// Contraseña solo si completò
 			RuleFor(x => x.Contrasenia)
 				.NotEmpty().WithMessage("La contraseña es requerida")
-					.When(x => x.IsComplete == 1);
+					.When(x => x.IsComplete == true);
 
 			RuleFor(x => x.ContraseniaRepetida)
 				.NotEmpty().WithMessage("Este campo es obligatorio")
-					.When(x => x.IsComplete == 1)
+					.When(x => x.IsComplete == true)
 				.Equal(x => x.Contrasenia).WithMessage("Las contraseñas no coinciden")
-					.When(x => x.IsComplete == 1);
+					.When(x => x.IsComplete == true);
 		}
 	}
 }

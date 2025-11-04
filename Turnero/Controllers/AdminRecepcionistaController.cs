@@ -11,9 +11,18 @@ namespace Turnero.Controllers
 	{
 		private readonly UsuarioService _service = service;
 
-		[HttpPost("/registrar_recepcionista")]
+		[HttpGet()]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> PostRecepcionista(UsuarioDto dto)
+		public async Task<IActionResult> GetAll()
+		{
+			var response = await _service.ConsultarUsuarios();
+
+			return Ok(response);
+		}
+
+		[HttpPost("registrar_recepcionista")]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> PostRecepcionista(UsuarioRequestDto dto)
 		{
 			var response = await _service.RegistrarRecepcionista(dto);
 
@@ -22,7 +31,7 @@ namespace Turnero.Controllers
 
 
 
-		[HttpGet]
+		[HttpGet("recepcionista")]
 		[Authorize(Roles ="Admin")]
 		public async Task<IActionResult> GetRecepcionistas()
 		{

@@ -1,6 +1,5 @@
 ﻿using Turnero.Common.Enums;
 using Turnero.Common.Helpers;
-using Turnero.Domain.PacienteDomain;
 using Turnero.Domain.ProfesionalDomain;
 using Turnero.Dto;
 using Turnero.Dto.Profesional;

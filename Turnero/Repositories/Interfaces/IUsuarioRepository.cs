@@ -4,6 +4,7 @@ namespace Turnero.Repositories.Interfaces
 {
 	public interface IUsuarioRepository
 	{
+		public Task<List<Usuario>> GetAll();	
 		Task<bool> AnyUsuarioByEmail(string email);
 		Task<bool> AnyUsuarioByDni(int dni);
 		Task AddAsyncUsuario(Usuario usuario);

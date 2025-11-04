@@ -16,7 +16,7 @@ namespace Turnero.Service
 		{
 			var usuario = await _unitOfWork.Usuarios.FirstOrDefaultUsuario(dto.Email);
 
-			var result = _passwordHasher.VerifyHashedPassword(usuario!, usuario!.Contrasenia, dto.Password);
+			var result = _passwordHasher.VerifyHashedPassword(usuario!, usuario!.Password, dto.Password);
 
 			if (result == PasswordVerificationResult.Failed) throw new UnauthorizedAccessException("La contraseña es incorrecta");
 
