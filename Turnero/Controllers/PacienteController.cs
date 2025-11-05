@@ -34,10 +34,10 @@ namespace Turnero.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> PostPaciente(PacienteRequestDto pacienteDto)
+        public async Task<IActionResult> PostPaciente([FromBody]PacienteConTurnoRequestDto dto)
         {
 
-			var response = await _service.RegistrarPaciente(pacienteDto);
+			var response = await _service.RegistrarPacienteConTurno(dto);
 
 			return CreatedAtAction(nameof(PostPaciente), response);
 		}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Identity;
 using Turnero.Common.Enums;
 using Turnero.Dto;
 using Turnero.Dto.Usuario;
@@ -35,6 +36,11 @@ namespace Turnero.Service
 
 			return usuario;
 
+		}
+
+		public string Hashear(Usuario usuario, string password)
+		{
+			return _passwordHasher.HashPassword(usuario, password);
 		}
 
 		public Usuario CrearUsuarioRapido(UsuarioRapidoDto dto, string rol)

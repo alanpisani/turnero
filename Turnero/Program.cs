@@ -11,6 +11,7 @@ using FluentValidation;
 using Turnero.Validators.ProfesionalValidators;
 using Turnero.Validators.TurnoValidators;
 using Turnero.Validators.AuthValidators;
+using Turnero.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,7 +67,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-
+builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<PacienteService>();
 builder.Services.AddScoped<ProfesionalService>();

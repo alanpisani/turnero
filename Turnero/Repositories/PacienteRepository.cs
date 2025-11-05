@@ -13,7 +13,7 @@ namespace Turnero.Repositories
 		{
 			await _context.Pacientes.AddAsync(paciente);
 		}
-		public async Task<bool> AnyPaciente(int idPaciente)
+		public async Task<bool> AnyPaciente(int? idPaciente)
 		{
 			return await _context.Pacientes.AnyAsync(p => p.IdUsuario == idPaciente); //Existe algun paciente con ese id o no
 		}

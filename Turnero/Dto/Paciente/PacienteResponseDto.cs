@@ -1,6 +1,6 @@
 ﻿namespace Turnero.Dto.Paciente
 {
-	public class PacienteResponseGet
+	public class PacienteResponseDto
 	{
 		public int Id { get; set; }
 		public string Nombre { get; set; } = null!;

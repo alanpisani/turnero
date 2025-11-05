@@ -2,7 +2,7 @@
 {
     public class TurnoRequestDto: TurnoRequest
     {
-        public int IdPaciente { get; set; }
+        public int? IdPaciente { get; set; }
 
     }
 }

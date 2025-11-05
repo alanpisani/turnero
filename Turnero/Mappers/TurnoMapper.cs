@@ -13,7 +13,7 @@ namespace Turnero.Mappers
 
 			return new Turno
 			{
-				IdPaciente= dto.IdPaciente,
+				IdPaciente= dto.IdPaciente ?? 0,
 				IdProfesional= dto.IdProfesional,
 				IdEspecialidad= dto.IdEspecialidad,
 				EstadoTurno= EnumEstadoTurno.Solicitado.ToString(),

@@ -18,8 +18,8 @@ namespace Turnero.Dto.Paciente
             string Email,
             string Contrasenia,
             string ContraseniaRepetida,
-            bool IsComplete,
-            string Telefono
+            string Telefono,
+            bool IsComplete
         ) : base(Nombre, Apellido, Dni, Email, Contrasenia, ContraseniaRepetida, IsComplete)
         {
             this.Telefono = Telefono;

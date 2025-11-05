@@ -5,17 +5,15 @@ namespace Turnero.Mappers
 {
     public class UsuarioMapper
 	{
-		public static UsuarioRequestDto DtoHijosAUsuarioDto(UsuarioRequestDto dto)
+		public static UsuarioResponseDto DtoHijosAUsuarioDto(UsuarioResponseDto dto)
 		{
-			var usuarioDto = new UsuarioRequestDto(
-				Nombre: dto.Nombre,
-				Apellido: dto.Apellido,
-				Dni: dto.Dni,
-				Email: dto.Email,
-				Contrasenia: dto.Contrasenia,
-				ContraseniaRepetida: dto.ContraseniaRepetida,
-				isComplete: dto.IsComplete
-				);
+			var usuarioDto = new UsuarioResponseDto {
+				Nombre= dto.Nombre,
+				Apellido= dto.Apellido,
+				Dni= dto.Dni,
+				Email= dto.Email,
+				IsComplete= dto.IsComplete
+				};
 			return usuarioDto;
 		}
 

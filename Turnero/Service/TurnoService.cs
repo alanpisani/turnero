@@ -14,44 +14,49 @@ namespace Turnero.Service
 	{
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<ResponseDto<TurnoResponseDto>> SolicitarTurno(TurnoRequestDto dto)
+		public async Task<ResponseDto<TurnoResponseDto>> SolicitarTurno(TurnoRequestDto dto, bool usarTransaccionExistente = false)
 		{
-			var result = await new CreateTurnoDomain(_unitOfWork).ValidarLogicaNegocio(dto); //Validador de logica de negocio
+			// Validar la lógica de negocio
+			var result = await new CreateTurnoDomain(_unitOfWork).ValidarLogicaNegocio(dto);
 
-			if (!result.EsValido) throw new BussinessErrorContentException(result.Errores);
-			
+			if (!result.EsValido)
+				throw new BussinessErrorContentException(result.Errores);
 
-			await _unitOfWork.BeginTransactionAsync();
+			// Solo crear una nueva transacción si no hay una ya activa
+			if (!usarTransaccionExistente)
+				await _unitOfWork.BeginTransactionAsync();
 
 			try
 			{
-				Turno turnoSolicitado = TurnoMapper.DeTurnoDtoATurno(dto); //Mapeo de dto a Turno model
-
-				await _unitOfWork.Turnos.AddTurno(turnoSolicitado); //Lo añado a la bd
-
+				// Crear y guardar el turno
+				var turnoSolicitado = TurnoMapper.DeTurnoDtoATurno(dto);
+				await _unitOfWork.Turnos.AddTurno(turnoSolicitado);
 				await _unitOfWork.CompleteAsync();
-				await _unitOfWork.CommitAsync();
 
+				// Buscar el turno con datos completos (profesional, especialidad, etc.)
+				var turnoRenovado = await _unitOfWork.Turnos.FindOrDefaultTurno(turnoSolicitado.IdTurno);
 
-				//Para que traiga los datos de la especialidad y del profesional
-
-				var turnoRenovado= await _unitOfWork.Turnos.FindOrDefaultTurno(turnoSolicitado.IdTurno);
+				// cerramos acá si no estamos dentro de una transacción externa
+				
+				if (!usarTransaccionExistente)
+					await _unitOfWork.CommitAsync();
 
 				return new ResponseDto<TurnoResponseDto>
 				{
 					Success = true,
 					Message = "Turno solicitado correctamente",
-					Data = TurnoMapper.DeTurnoADto(turnoRenovado!),
+					Data = TurnoMapper.DeTurnoADto(turnoRenovado!)
 				};
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				await _unitOfWork.RollbackAsync(); //Volvamos para atrás, muchachos. Algo salio mal y cancelamos los cambios a la bd
+				if (!usarTransaccionExistente)
+					await _unitOfWork.RollbackAsync();
 
-				throw new Exception($"Error al solicitar turno. Inténtelo más tarde. Error: {e}");
+				throw new Exception($"Error al solicitar turno. Inténtelo más tarde. Error: {e.Message}");
 			}
-
 		}
+
 
 		public async Task<ResponseDto<TurnoResponseDto>> SolicitarTurnoRapido(TurnoRapidoRequestDto dto)
 		{

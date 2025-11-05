@@ -1,17 +1,14 @@
 ﻿using FluentValidation;
-using Turnero.Dto.Usuario;
+using Turnero.Common.Helpers.TurnoValidatorHelper;
+using Turnero.Dto.Paciente;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Validators.UsuarioValidators
 {
-    /// <summary>
-    /// Validador de registro de usuario. Soporta usuarios completos e incompletos.
-    /// </summary>
-    public class UsuarioCreateValidation : AbstractValidator<UsuarioRequestDto>
+	public class UsuarioConTurnoRequestValidation: AbstractValidator<PacienteConTurnoRequestDto>
 	{
 		private readonly IUnitOfWork _unitOfWork;
-
-		public UsuarioCreateValidation(IUnitOfWork unit)
+		public UsuarioConTurnoRequestValidation(IUnitOfWork unit)
 		{
 			_unitOfWork = unit;
 
@@ -34,7 +31,10 @@ namespace Turnero.Validators.UsuarioValidators
 			RuleFor(x => x.Dni)
 				.Cascade(CascadeMode.Stop)
 				.NotEmpty().WithMessage("El DNI es requerido")
-				.InclusiveBetween(10000000, 99999999).WithMessage("Debe escribir un DNI válido");
+				.InclusiveBetween(10000000, 99999999).WithMessage("Debe escribir un DNI válido")
+				.MustAsync(async (dni, CancellationToken) =>
+					!await _unitOfWork.Usuarios.AnyUsuarioByDni(dni)
+				).WithMessage("El DNI ingresado ya se encuentra registrado en el sistema");
 
 			// Email solo si completò
 			RuleFor(x => x.Email)
@@ -60,6 +60,32 @@ namespace Turnero.Validators.UsuarioValidators
 					.When(x => x.IsComplete == true)
 				.Equal(x => x.Contrasenia).WithMessage("Las contraseñas no coinciden")
 					.When(x => x.IsComplete == true);
+
+			RuleFor(x => x.Turno.IdEspecialidad)
+				.Cascade(CascadeMode.Stop)
+				.NotEmpty().WithMessage("Especialidad requerida para solicitar turno")
+				.MustAsync((id, CancellationToken) => TurnoDatosValidationHelper.EspecialidadExiste(id, _unitOfWork))
+				.WithMessage("La especialidad seleccionada no se encuentra registrada en el sistema"); ;
+
+			RuleFor(x => x.Turno.IdProfesional)
+				.Cascade(CascadeMode.Stop)
+				.NotEmpty().WithMessage("Profesional requerido para solicitar turno")
+				.MustAsync((id, CancellationToken) => TurnoDatosValidationHelper.ProfesionalExiste(id, _unitOfWork))
+				.WithMessage("El profesional seleccionado no se encuentra registrado en el sistema");
+
+			RuleFor(x => x.Turno.Dia)
+				.Cascade(CascadeMode.Stop)
+				.NotEmpty().WithMessage("Elija un dia")
+				.Must(TurnoFechaHoraValidationhelper.EsDiaValido).WithMessage("No se ingresó un dia válido para el turno");
+
+			RuleFor(x => x.Turno.Hora)
+				.Cascade(CascadeMode.Stop)
+				.NotEmpty().WithMessage("Elija un horario")
+				.Must(TurnoFechaHoraValidationhelper.EsHoraValida).WithMessage("No se ingresó una hora válida para el turno");
+
+			//Reglas mas complejas. Requieren de dos atributos a validar o más
+			RuleFor(x => x.Turno)
+				.Must(TurnoFechaHoraValidationhelper.EshechaYHoraValida).WithMessage("La fecha y hora ingresadas no son válidas");
 		}
 	}
 }

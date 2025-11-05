@@ -96,8 +96,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "pacienteDto",
-        "Type": "Turnero.Dto.Paciente.PacienteRequestDto",
+        "Name": "dto",
+        "Type": "Turnero.Dto.Paciente.PacienteConTurnoRequestDto",
         "IsRequired": true
       }
     ],

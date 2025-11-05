@@ -18,8 +18,7 @@ namespace Turnero.Service
 
 		public async Task<Profesional> RegistrarProfesional(ProfesionalRequestDto dto)
 		{
-			var usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Pasaje a dto usuario
-			var usuario = _service.CrearUsuario(usuarioDto, RolesUsuario.Profesional.ToString()); //Se crea un usuario base model
+			var usuario = _service.CrearUsuario(dto, RolesUsuario.Profesional.ToString()); //Se crea un usuario base model
 
 			var result = new CreateProfesionalDomain(_unitOfWork).Validar(dto);
 

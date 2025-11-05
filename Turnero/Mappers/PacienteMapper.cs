@@ -14,9 +14,9 @@ namespace Turnero.Mappers
 			};
 		}
 
-		public static PacienteResponseGet DePacienteAPacienteDtoGet(Paciente paciente)
+		public static PacienteResponseDto ToDto(Paciente paciente)
 		{
-			return new PacienteResponseGet
+			return new PacienteResponseDto
 			{
 				Id = paciente.IdUsuario,
 				Nombre = paciente.IdUsuarioNavigation.Nombre,

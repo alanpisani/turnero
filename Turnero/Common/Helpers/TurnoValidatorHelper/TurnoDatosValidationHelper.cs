@@ -5,7 +5,7 @@ namespace Turnero.Common.Helpers.TurnoValidatorHelper
 {
 	public static class TurnoDatosValidationHelper
 	{
-		public static async Task<bool> PacienteExiste(int idPaciente, IUnitOfWork uow)
+		public static async Task<bool> PacienteExiste(int? idPaciente, IUnitOfWork uow)
 		{
 			return await uow.Pacientes.AnyPaciente(idPaciente);
 		}

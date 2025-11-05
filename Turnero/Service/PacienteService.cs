@@ -1,6 +1,7 @@
 ﻿using Turnero.Common.Enums;
 using Turnero.Dto;
 using Turnero.Dto.Paciente;
+using Turnero.Dto.TurnoDto;
 using Turnero.Dto.Usuario;
 using Turnero.Exceptions;
 using Turnero.Mappers;
@@ -14,34 +15,72 @@ namespace Turnero.Service
 		private readonly UsuarioService _usuarioService = usuarioService;
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<Paciente> RegistrarPaciente(PacienteRequestDto dto)
+		public async Task<ResponseDto<PacienteYTurnoResponseDto>> RegistrarPacienteConTurno(PacienteConTurnoRequestDto dto)
 		{
-			UsuarioRequestDto usuarioDto = UsuarioMapper.DtoHijosAUsuarioDto(dto); //Se crea al UsuarioDto necesario
-			var usuario = _usuarioService
-				.CrearUsuario(usuarioDto, RolesUsuario.Paciente.ToString()); //Se crea un Usuario model en base al UsuarioDto, para la bd
+
+			var usuario = new Usuario
+			{
+				Nombre = dto.Nombre,
+				Apellido = dto.Apellido,
+				Dni=dto.Dni,
+				Email=dto.Email,
+				Password= "",
+				Rol= RolesUsuario.Paciente.ToString()
+			};
+
+			usuario.Password = _usuarioService.Hashear(usuario, usuario.Password);
 
 			await _unitOfWork.BeginTransactionAsync();
 
 			try
 			{
-				await _unitOfWork.Usuarios.AddAsyncUsuario(usuario); //Se sube el Usuario model a la bd
+				// Crear Usuario
+				await _unitOfWork.Usuarios.AddAsyncUsuario(usuario);
 				await _unitOfWork.CompleteAsync();
 
-				Paciente paciente = PacienteMapper.DePacienteDtoAPaciente(dto, usuario.IdUsuario); //Se crea un Paciente model con el id del usuario recien creado (MAGIA DE EF. El modelo tiene el id)
-
-				await _unitOfWork.Pacientes.AddPaciente(paciente); //Se sube al paciente a la bd
-
+				//Crear Paciente
+				var paciente = PacienteMapper.DePacienteDtoAPaciente(dto, usuario.IdUsuario);
+				await _unitOfWork.Pacientes.AddPaciente(paciente);
 				await _unitOfWork.CompleteAsync();
+
+				// Crear Turno asociado
+				var turnoDto = new TurnoRequestDto
+				{
+					IdProfesional = dto.Turno.IdProfesional,
+					IdEspecialidad = dto.Turno.IdEspecialidad,
+					Dia = dto.Turno.Dia,
+					Hora = dto.Turno.Hora,
+					IdPaciente = paciente.IdUsuario, // recién creado
+				};
+
+				var turnoService = new TurnoService(_unitOfWork);
+				var turnoResponse = await turnoService.SolicitarTurno(turnoDto, true);
+
+				if (turnoResponse != null) { 
+				
+				}
+
 				await _unitOfWork.CommitAsync();
 
-				return paciente;
+				// Devolver ambos resultados
+				return new ResponseDto<PacienteYTurnoResponseDto>
+				{
+					Success = true,
+					Message = "Paciente registrado y turno creado correctamente",
+					Data = new PacienteYTurnoResponseDto
+					{
+						Paciente = PacienteMapper.ToDto(paciente),
+						Turno = turnoResponse.Data!
+					}
+				};
 			}
-			catch (Exception e) {
-
-				throw new Exception($"Hubo un error al registrar paciente. Inténtelo más tarde. Error: {e}");
+			catch (Exception e)
+			{
+				await _unitOfWork.RollbackAsync();
+				if (e is BussinessErrorContentException)
+					throw;
+				throw new Exception($"Error al registrar paciente y turno. {e.Message}");
 			}
-
-
 		}
 
 		public async Task<ResponseDto<UsuarioRapidoDto>> RegistrarPacienteRapido(UsuarioRapidoDto dto)
@@ -79,24 +118,24 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<List<PacienteResponseGet>> MostrarTodosLosPacientes()
+		public async Task<List<PacienteResponseDto>> MostrarTodosLosPacientes()
 		{
 			var pacientes = await _unitOfWork.Pacientes.ToListAsyncAllPacientes();
 
 			var pacientesDto = pacientes
-				.Select(p => PacienteMapper.DePacienteAPacienteDtoGet(p))
+				.Select(p => PacienteMapper.ToDto(p))
 				.ToList();
 
 			return pacientesDto;
 		}
 
-		public async Task<PacienteResponseGet> MostrarPacientePorId(int idPaciente)
+		public async Task<PacienteResponseDto> MostrarPacientePorId(int idPaciente)
 		{
 			var paciente = await _unitOfWork.Pacientes.GetPacienteById(idPaciente);
 
 			if (paciente == null) throw new NotFoundException($"No se encontró el paciente con ID {idPaciente}");
 
-			var pacienteDtoGet = PacienteMapper.DePacienteAPacienteDtoGet(paciente);
+			var pacienteDtoGet = PacienteMapper.ToDto(paciente);
 
 			return pacienteDtoGet;
 		}
