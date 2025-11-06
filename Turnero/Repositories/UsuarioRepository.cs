@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Turnero.Common.Enums;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -8,6 +9,11 @@ namespace Turnero.Repositories
 	public class UsuarioRepository(TurneroContext context):IUsuarioRepository
 	{
 		private readonly TurneroContext _context = context;
+
+		public IQueryable<Usuario> Query()
+		{
+			return _context.Usuarios.AsQueryable();
+		}
 
 		public async Task<List<Usuario>> GetAll()
 		{
@@ -39,6 +45,12 @@ namespace Turnero.Repositories
 		{
 			return await _context.Usuarios
 				.FirstOrDefaultAsync(u => u.Email == email);
+		}
+
+		public async Task<Usuario?> FirstOrDefaultUsuario(int id) //Sobreescritura del método de arriba
+		{
+			return await _context.Usuarios
+				.FirstOrDefaultAsync(u => u.IdUsuario == id);
 		}
 
 		//RECEPCIONISTA

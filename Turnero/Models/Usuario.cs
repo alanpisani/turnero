@@ -21,7 +21,7 @@ public partial class Usuario
 
     public bool IsComplete { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public virtual ICollection<AuthToken> AuthTokens { get; set; } = new List<AuthToken>();
 

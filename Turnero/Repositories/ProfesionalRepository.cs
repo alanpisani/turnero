@@ -10,6 +10,11 @@ namespace Turnero.Repositories
 	{
 		private readonly TurneroContext _context = context;
 
+		public IQueryable<Profesional> Query()
+		{
+			return _context.Profesionals.AsQueryable();
+		}
+
 		/**  ADD  **/
 		public async Task AddProfesional(Profesional profesional)
 		{

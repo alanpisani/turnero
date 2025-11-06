@@ -19,7 +19,8 @@ namespace Turnero.Mappers
 				IdUsuario= profesional.IdUsuario,
 				NombreProfesional= profesional.IdUsuarioNavigation.Nombre,
 				ApellidoProfesional=profesional.IdUsuarioNavigation.Apellido,
-				Matricula= profesional.Matricula
+				Matricula= profesional.Matricula,
+				IsActive= profesional.IdUsuarioNavigation.IsActive
 			};
 		
 		}

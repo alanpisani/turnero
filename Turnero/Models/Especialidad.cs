@@ -9,7 +9,7 @@ public partial class Especialidad
 
     public string NombreEspecialidad { get; set; } = null!;
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public virtual ICollection<ProfesionalEspecialidad> ProfesionalEspecialidads { get; set; } = new List<ProfesionalEspecialidad>();
 

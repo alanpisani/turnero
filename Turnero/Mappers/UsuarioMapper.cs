@@ -8,11 +8,12 @@ namespace Turnero.Mappers
 		public static UsuarioResponseDto DtoHijosAUsuarioDto(UsuarioResponseDto dto)
 		{
 			var usuarioDto = new UsuarioResponseDto {
+				IdUsuario = dto.IdUsuario,
 				Nombre= dto.Nombre,
 				Apellido= dto.Apellido,
 				Dni= dto.Dni,
 				Email= dto.Email,
-				IsComplete= dto.IsComplete
+				IsActive= dto.IsActive
 				};
 			return usuarioDto;
 		}
@@ -50,12 +51,13 @@ namespace Turnero.Mappers
 		public static UsuarioResponseDto ToUsuarioDto(Usuario usuario)
 		{
 			return new UsuarioResponseDto {
+				IdUsuario = usuario.IdUsuario,
 				Nombre = usuario.Nombre,
 				Apellido = usuario.Apellido,
 				Dni= usuario.Dni,
 				Email = usuario.Email,
 				Rol= usuario.Rol,
-				IsComplete = usuario.IsComplete
+				IsActive = usuario.IsActive
 
 			};
 		}

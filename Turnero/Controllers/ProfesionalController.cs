@@ -15,9 +15,9 @@ namespace Turnero.Controllers
 
 		// GET: api/Profesional
 		[HttpGet]
-        public async Task<IActionResult> GetProfesionals()
+        public async Task<IActionResult> GetProfesionals([FromQuery]int pageNumber )
         {
-            var response = await _service.MostrarProfesionales();
+            var response = await _service.MostrarProfesionales(pageNumber);
 
             return Ok(response);
         }  

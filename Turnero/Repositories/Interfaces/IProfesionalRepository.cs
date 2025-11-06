@@ -4,6 +4,7 @@ namespace Turnero.Repositories.Interfaces
 {
 	public interface IProfesionalRepository
 	{
+		public IQueryable<Profesional> Query();
 		Task AddProfesional(Profesional profesional);
 		Task AddEspecialidades(IEnumerable<ProfesionalEspecialidad> asignaciones);
 		Task AddHorarios(IEnumerable<HorarioLaboral> asignaciones);

@@ -10,6 +10,8 @@ namespace Turnero.Dto
 
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public Dictionary<string, string[]>? Errors { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public PaginationInfo? Pagination { get; set; }
 
 	}
 }

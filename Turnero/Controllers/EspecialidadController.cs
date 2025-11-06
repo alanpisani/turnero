@@ -10,10 +10,18 @@ namespace Turnero.Controllers
 		private readonly EspecialidadService _service = service;
 
 		[HttpGet]
+		public async Task<IActionResult> GetAllEspecialidadesPaginadas([FromQuery] int pageNumber) 
+		{
+			var response = await _service.MostrarTodasLasEspecialidadesPaginadas(pageNumber);
+
+
+			return Ok(response);
+		}
+
+		[HttpGet("all")]
 		public async Task<IActionResult> GetAllEspecialidades()
 		{
 			var response = await _service.MostrarTodasLasEspecialidades();
-
 
 			return Ok(response);
 		}

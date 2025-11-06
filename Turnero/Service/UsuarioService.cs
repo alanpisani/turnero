@@ -1,8 +1,11 @@
-﻿using Humanizer;
+﻿using System.Drawing.Printing;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Turnero.Common.Enums;
+using Turnero.Common.Extensions;
 using Turnero.Dto;
 using Turnero.Dto.Usuario;
+using Turnero.Exceptions;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
@@ -17,14 +20,23 @@ namespace Turnero.Service
 
 		
 
-		public async Task<ResponseDto<List<UsuarioResponseDto>>> ConsultarUsuarios()
+		public async Task<ResponseDto<PagedResult<UsuarioResponseDto>>>  ConsultarUsuarios(int pageNumber)
 		{
-			var usuarios = await _unitOfWork.Usuarios.GetAll();
+			const int pageSize = 6;
 
-			return new ResponseDto<List<UsuarioResponseDto>> { 
+			var query = _unitOfWork.Usuarios.Query(); // método que devuelva IQueryable<Usuario>
+			var pagedResult = await query.ToPagedResultAsync(pageNumber, pageSize);
+
+			return new ResponseDto<PagedResult<UsuarioResponseDto>>
+			{
 				Success = true,
 				Message = "Usuarios consultados con éxito",
-				Data = usuarios.Select(u => UsuarioMapper.ToUsuarioDto(u)).ToList()
+				Data = new PagedResult<UsuarioResponseDto>(
+					pagedResult.Data.Select(u => UsuarioMapper.ToUsuarioDto(u)).ToList(),
+					pagedResult.TotalRecords,
+					pagedResult.PageNumber,
+					pagedResult.PageSize
+				)
 			};
 		}
 
@@ -48,6 +60,26 @@ namespace Turnero.Service
 			var usuario = UsuarioMapper.DtoRapidoAUsuario(dto, rol); //Mapeamos al usuario registrado a modo Usuario BD
 
 			return usuario;
+
+		}
+
+		public async Task<ResponseDto<UsuarioResponseDto>> CambiarEstadoUsuario(int idUsuario, bool estado)
+		{
+			var usuario = await _unitOfWork.Usuarios.FirstOrDefaultUsuario(idUsuario);
+
+			if (usuario == null) throw new NotFoundException("El usuario no se encuentra registrado en el sistema");
+
+			usuario!.IsActive = estado;
+
+			await _unitOfWork.CompleteAsync();
+			await _unitOfWork.CommitAsync();
+
+			return new ResponseDto<UsuarioResponseDto> { 
+			
+				Success = true,
+				Message = $"Usuario {(usuario.IsActive ? "Activado" : "desactivado")} con éxito",
+				Data = UsuarioMapper.ToUsuarioDto(usuario)
+			};
 
 		}
 

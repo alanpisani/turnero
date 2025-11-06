@@ -6,6 +6,7 @@
 		public string NombreProfesional { get; set; }
 		public string ApellidoProfesional { get; set; }
 		public int Matricula {  get; set; }
+		public bool IsActive { get; set; } = true;
 
 	}
 }

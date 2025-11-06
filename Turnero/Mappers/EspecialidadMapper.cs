@@ -10,7 +10,8 @@ namespace Turnero.Mappers
 			return new EspecialidadResponseDto
 			{
 				IdEspecialidad = especialidad.IdEspecialidad,
-				NombreEspecialidad = especialidad.NombreEspecialidad
+				NombreEspecialidad = especialidad.NombreEspecialidad,
+				IsActive = especialidad.IsActive
 			};
 		}
 	}

@@ -13,11 +13,20 @@ namespace Turnero.Controllers
 
 		[HttpGet()]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> GetAll()
+		public async Task<IActionResult> GetAll([FromQuery] int pageNumber = 1)
 		{
-			var response = await _service.ConsultarUsuarios();
+			var response = await _service.ConsultarUsuarios(pageNumber);
 
 			return Ok(response);
+		}
+
+		[HttpPatch("usuario/{id}")]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> PatchUserState(int id, [FromQuery]bool state)
+		{
+			var result = await _service.CambiarEstadoUsuario(id, state);
+
+			return Ok(result);
 		}
 
 		[HttpPost("registrar_recepcionista")]

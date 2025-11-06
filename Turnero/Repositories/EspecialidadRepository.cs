@@ -8,6 +8,10 @@ namespace Turnero.Repositories
 	{
 		private readonly TurneroContext _context = context;
 
+		public IQueryable<Especialidad> Query()
+		{
+			return _context.Especialidads.AsQueryable();
+		}
 		public async Task<bool> AnyEspecialidad(int idEspecialidad)
 		{
 			return await _context.Especialidads

@@ -1,8 +1,11 @@
-﻿using Turnero.Common.Enums;
+﻿using System.Drawing.Printing;
+using Turnero.Common.Enums;
+using Turnero.Common.Extensions;
 using Turnero.Common.Helpers;
 using Turnero.Domain.ProfesionalDomain;
 using Turnero.Dto;
 using Turnero.Dto.Profesional;
+using Turnero.Dto.Usuario;
 using Turnero.Exceptions;
 using Turnero.Mappers;
 using Turnero.Models;
@@ -54,15 +57,25 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<ResponseDto<List<ProfesionalResponseDto>>> MostrarProfesionales()
+		public async Task<ResponseDto<PagedResult<ProfesionalResponseDto>>> MostrarProfesionales(int pageNumber)
 		{
+			const int pageSize = 6;
+
 			var profesionales = await _unitOfWork.Profesionales.GetAllProfesionals();
 
-			return new ResponseDto<List<ProfesionalResponseDto>> { 
+			var query = _unitOfWork.Profesionales.Query(); // método que devuelva IQueryable<Profesional>
+			var pagedResult = await query.ToPagedResultAsync(pageNumber, pageSize);
+
+			return new ResponseDto<PagedResult<ProfesionalResponseDto>>
+			{
 				Success = true,
 				Message = "Profesionales consultados con éxito",
-				Data = profesionales.Select(p => ProfesionalMapper.ToResponseDto(p)).ToList()
-
+				Data = new PagedResult<ProfesionalResponseDto>(
+					pagedResult.Data.Select(p => ProfesionalMapper.ToResponseDto(p)).ToList(),
+					pagedResult.TotalRecords,
+					pagedResult.PageNumber,
+					pagedResult.PageSize
+				)
 			};
 		}
 
