@@ -5,9 +5,11 @@ namespace Turnero.Repositories.Interfaces
 {
 	public interface IEspecialidadRepository
 	{
-		public IQueryable<Especialidad> Query();
+		IQueryable<Especialidad> Query();
 		Task<bool> AnyEspecialidad(int idEspecialidad);
+		Task<bool> AnyEspecialidad(string nombre);
 		Task<List<Especialidad>> ToListAsyncEspecialidades();
 		Task<Especialidad?> FirstOrDefaultEspecialidadById(int id);
+		Task AddEspecialidad(Especialidad especialidad);
 	}
 }

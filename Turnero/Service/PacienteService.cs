@@ -24,7 +24,7 @@ namespace Turnero.Service
 				Apellido = dto.Apellido,
 				Dni=dto.Dni,
 				Email=dto.Email,
-				Password= "",
+				Password= dto.Contrasenia,
 				Rol= RolesUsuario.Paciente.ToString()
 			};
 

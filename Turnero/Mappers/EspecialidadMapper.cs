@@ -1,4 +1,5 @@
-﻿using Turnero.Dto.Especialidad;
+﻿using Humanizer;
+using Turnero.Dto.Especialidad;
 using Turnero.Models;
 
 namespace Turnero.Mappers
@@ -12,6 +13,14 @@ namespace Turnero.Mappers
 				IdEspecialidad = especialidad.IdEspecialidad,
 				NombreEspecialidad = especialidad.NombreEspecialidad,
 				IsActive = especialidad.IsActive
+			};
+		}
+
+		public static Especialidad ToModel(EspecialidadRequestDto dto)
+		{
+			return new Especialidad
+			{
+				NombreEspecialidad = dto.NombreEspecialidad,
 			};
 		}
 	}

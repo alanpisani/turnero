@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Printing;
 using Turnero.Common.Extensions;
+using Turnero.Common.Helpers;
 using Turnero.Dto;
 using Turnero.Dto.Especialidad;
 using Turnero.Exceptions;
@@ -28,7 +29,7 @@ namespace Turnero.Service
 				Data= new PagedResult<EspecialidadResponseDto>
 				(
 					pagedResult.Data.Select(e => EspecialidadMapper.toResponseDto(e)).ToList(),
-					pagedResult.TotalPages,
+					pagedResult.TotalRecords,
 					pagedResult.PageNumber, 
 					pagedResult.PageSize
 				)
@@ -64,5 +65,44 @@ namespace Turnero.Service
 				Data= EspecialidadMapper.toResponseDto(especialidad)
 			};
 		}
+
+		public async Task<ResponseDto<EspecialidadResponseDto>> CrearEspecialidad(EspecialidadRequestDto dto)
+		{
+			if (dto.NombreEspecialidad == null) throw new BussinessException("No se encontró el nombre de la especialidad");
+
+			dto.NombreEspecialidad = TextFormatter.Capitalize(dto.NombreEspecialidad);
+
+			var anyEspecialidad = await _unitOfWork.Especialidades.AnyEspecialidad(dto.NombreEspecialidad);
+
+			if (anyEspecialidad) throw new BussinessException("La especialidad ya existe");
+
+			await _unitOfWork.BeginTransactionAsync();
+
+			try
+			{
+				var especialidad = EspecialidadMapper.ToModel(dto);
+
+				await _unitOfWork.Especialidades.AddEspecialidad(especialidad);
+
+				await _unitOfWork.CompleteAsync();
+				await _unitOfWork.CommitAsync();
+
+				return new ResponseDto<EspecialidadResponseDto>
+				{
+					Success = true,
+					Message = "Especialidad creada con éxito",
+					Data = EspecialidadMapper.toResponseDto(especialidad)
+				};
+			}
+			catch (Exception ex) { 
+				await _unitOfWork.RollbackAsync();
+
+				throw new Exception($"Hubo un error inesperado al crear especialidad: Error: {ex.Message}");
+			}
+
+		}
+		
+
+		
 	}
 }

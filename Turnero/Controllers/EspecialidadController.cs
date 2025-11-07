@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Turnero.Dto.Especialidad;
 using Turnero.Service;
 
 namespace Turnero.Controllers
@@ -32,6 +34,15 @@ namespace Turnero.Controllers
 			var response = await _service.MostrarEspecialidadPorId(id);
 
 			return Ok(response);
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> PostEspecialidad(EspecialidadRequestDto dto)
+		{
+			var response = await _service.CrearEspecialidad(dto);
+
+			return CreatedAtAction(nameof(PostEspecialidad), response);
 		}
 				
 	}

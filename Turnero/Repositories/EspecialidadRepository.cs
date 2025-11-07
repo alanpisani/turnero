@@ -17,6 +17,11 @@ namespace Turnero.Repositories
 			return await _context.Especialidads
 				.AnyAsync(e => e.IdEspecialidad == idEspecialidad);
 		}
+		public async Task<bool> AnyEspecialidad(string nombre) //SObrecarga!!!
+		{
+			return await _context.Especialidads
+				.AnyAsync(e => e.NombreEspecialidad == nombre);
+		}
 		public async Task<List<Especialidad>> ToListAsyncEspecialidades()
 		{
 			return await _context.Especialidads.ToListAsync();
@@ -26,6 +31,10 @@ namespace Turnero.Repositories
 			return await _context.Especialidads.FirstOrDefaultAsync(
 				e => e.IdEspecialidad == id
 				);
-		} 
+		}
+
+		public async Task AddEspecialidad(Especialidad especialidad) {
+			await _context.Especialidads.AddAsync(especialidad);
+		}
 	}
 }
