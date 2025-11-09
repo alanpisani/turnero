@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Turnero.Common.Enums;
+using Turnero.Data;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
 

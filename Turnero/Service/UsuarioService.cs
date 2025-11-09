@@ -18,13 +18,12 @@ namespace Turnero.Service
 		private readonly PasswordHasher<Usuario> _passwordHasher = new();
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		
-
 		public async Task<ResponseDto<PagedResult<UsuarioResponseDto>>>  ConsultarUsuarios(int pageNumber)
 		{
 			const int pageSize = 6;
 
 			var query = _unitOfWork.Usuarios.Query(); // método que devuelva IQueryable<Usuario>
+
 			var pagedResult = await query.ToPagedResultAsync(pageNumber, pageSize);
 
 			return new ResponseDto<PagedResult<UsuarioResponseDto>>
@@ -32,7 +31,10 @@ namespace Turnero.Service
 				Success = true,
 				Message = "Usuarios consultados con éxito",
 				Data = new PagedResult<UsuarioResponseDto>(
-					pagedResult.Data.Select(u => UsuarioMapper.ToUsuarioDto(u)).ToList(),
+					pagedResult.Data
+					.Select(u => UsuarioMapper.ToUsuarioDto(u))
+					.Where(u => u.Rol != RolesUsuario.Admin.ToString())
+					.ToList(),
 					pagedResult.TotalRecords,
 					pagedResult.PageNumber,
 					pagedResult.PageSize
@@ -87,7 +89,7 @@ namespace Turnero.Service
 
 		//RECEPCIONISTA
 
-		public async Task<Usuario> RegistrarRecepcionista(UsuarioRequestDto dto) {
+		public async Task<ResponseDto<UsuarioResponseDto>> RegistrarRecepcionista(UsuarioRequestDto dto) {
 
 			var recepcionista = CrearUsuario(dto, RolesUsuario.Recepcionista.ToString());
 
@@ -100,7 +102,11 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync();
 
-				return recepcionista;
+				return new ResponseDto<UsuarioResponseDto> {
+					Success= true,
+					Message= "Recepcionista creado con éxito",
+					Data= UsuarioMapper.ToUsuarioDto(recepcionista)
+				};
 			}
 			catch
 			{

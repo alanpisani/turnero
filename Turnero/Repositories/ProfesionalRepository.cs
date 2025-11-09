@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Humanizer;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Turnero.Data;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
 
@@ -69,7 +68,7 @@ namespace Turnero.Repositories
 				.Include(p=> p.IdUsuarioNavigation)
 				.ToListAsync();
 		}
-
+		 
 		public async Task<Profesional?> GetProfesionalById(int id)
 		{
 			return await _context.Profesionals
@@ -85,6 +84,7 @@ namespace Turnero.Repositories
 				.Include(p => p.IdUsuarioNavigation)
 				.Where(p => p.ProfesionalEspecialidads
 					.Any(pe => pe.IdEspecialidad == idEspecialidad))
+				.Where(p => p.IdUsuarioNavigation.IsActive)
 			.ToListAsync();
 
 		}

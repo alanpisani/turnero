@@ -9,6 +9,8 @@ namespace Turnero.Repositories.Interfaces
 		Task<bool> AnyTurnoOcupado(int idProfesional, DateTime fechaYHoraIngresada);
 		Task<List<Turno>> GetTurnosByPaciente(int idPaciente);
 		Task<List<Turno>?> GetTurnosByProfesionalAndFecha(int idProfesional, DateOnly fecha);
+		Task<List<Turno>?> GetTurnosByProfesionalAndFechaDeHoy(int idProfesional);
+		Task<List<Usuario>> GetPacientesAtendidosPorProfesional(int profesionalId);
 		void Actualizar(Turno turno);
 	}
 }

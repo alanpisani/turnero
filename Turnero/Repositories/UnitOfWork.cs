@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Turnero.Models;
+using Turnero.Data;
 using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Repositories

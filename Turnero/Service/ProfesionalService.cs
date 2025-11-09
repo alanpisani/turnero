@@ -1,16 +1,15 @@
-﻿using System.Drawing.Printing;
-using Turnero.Common.Enums;
+﻿using Turnero.Common.Enums;
 using Turnero.Common.Extensions;
 using Turnero.Common.Helpers;
 using Turnero.Domain.ProfesionalDomain;
 using Turnero.Dto;
+using Turnero.Dto.Paciente;
 using Turnero.Dto.Profesional;
 using Turnero.Dto.Usuario;
 using Turnero.Exceptions;
 using Turnero.Mappers;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
-using Turnero.Validators.ProfesionalValidators;
 
 namespace Turnero.Service
 {
@@ -186,6 +185,21 @@ namespace Turnero.Service
 				Message = $"Dias disponibles del profesional con id: {idProfesional} consultados con éxito",
 				Data = diasDisponibles
 			}; 
+		}
+
+		public async Task<ResponseDto<List<UsuarioResponseDto>>> TraerMisPacientes(int idProfesional) {
+			var anyProfesional = await _unitOfWork.Profesionales.AnyProfesional(idProfesional);
+
+			if (!anyProfesional) throw new NotFoundException($"No se encontro al profesional con el id: {idProfesional}");
+
+			var misPacientes = await _unitOfWork.Turnos.GetPacientesAtendidosPorProfesional(idProfesional);
+
+			return new ResponseDto<List<UsuarioResponseDto>>
+			{
+				Success = true,
+				Message = "Pacientes traidos con éxito",
+				Data = misPacientes.Select(p => UsuarioMapper.ToUsuarioDto(p)).ToList(),
+			};
 		}
 	}
 }

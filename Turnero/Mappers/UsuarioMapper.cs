@@ -58,7 +58,6 @@ namespace Turnero.Mappers
 				Email = usuario.Email,
 				Rol= usuario.Rol,
 				IsActive = usuario.IsActive
-
 			};
 		}
 	}

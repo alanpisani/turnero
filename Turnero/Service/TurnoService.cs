@@ -99,9 +99,6 @@ namespace Turnero.Service
 
 				throw new Exception($"Error al solicitar turno. Inténtelo más tarde. Error: {e}");
 			}
-
-
-
 		}
 
 		public async Task<ResponseDto<TurnoResponseDto>> CancelarTurno(int idTurno, CancelarTurnoDto dto) //TODO: DESARROLLAR
@@ -128,8 +125,6 @@ namespace Turnero.Service
 				Data = TurnoMapper.DeTurnoADto(turno)
 			};
 		}
-
-
 		public async Task<ResponseDto<List<TurnoResponseDto>>> TraerTurnosDelPaciente(int idPaciente)
 		{
 			bool hayPaciente = await _unitOfWork.Pacientes.AnyPaciente(idPaciente);
@@ -182,7 +177,23 @@ namespace Turnero.Service
 				Message= $"¡Hola {pacienteInDb.IdUsuarioNavigation.Nombre}! Estos son tus próximos turnos, podés modificarlos o cancelarlos haciendo click en los botones",
 				Data = turnosDto
 			};
+		}
 
+		public async Task<ResponseDto<List<TurnsOfTheDayDto>>> TraerTurnosDeHoyPorProfesional(int idProfesional)
+		{
+
+			var existeProfesional = await _unitOfWork.Profesionales.AnyProfesional(idProfesional);
+
+			if (!existeProfesional) throw new NotFoundException($"No se encontró el profesional con el id: {idProfesional}");
+
+
+			var turnosDeHoy = await _unitOfWork.Turnos.GetTurnosByProfesionalAndFechaDeHoy(idProfesional);
+
+			return new ResponseDto<List<TurnsOfTheDayDto>> { 
+				Success = true,
+				Message = turnosDeHoy!.Count() > 0 ? "Turnos del dia consultados con éxito" : "No tiene turnos en el dia de hoy",
+				Data = turnosDeHoy!.Select(turno => TurnoMapper.ToOfTheDayDto(turno)).ToList()
+			};
 		}
 	} 
 }

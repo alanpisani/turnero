@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+using Turnero.Models;
 
-namespace Turnero.Models;
+namespace Turnero.Data;
 
 public partial class TurneroContext : DbContext
 {
@@ -18,7 +19,7 @@ public partial class TurneroContext : DbContext
 
     public virtual DbSet<AuthToken> AuthTokens { get; set; }
 
-    public virtual DbSet<Consulta> Consulta { get; set; }
+    public virtual DbSet<Consultum> Consulta { get; set; }
 
     public virtual DbSet<Especialidad> Especialidads { get; set; }
 
@@ -73,7 +74,7 @@ public partial class TurneroContext : DbContext
                 .HasConstraintName("auth_token_ibfk_1");
         });
 
-        modelBuilder.Entity<Consulta>(entity =>
+        modelBuilder.Entity<Consultum>(entity =>
         {
             entity.HasKey(e => e.IdConsulta).HasName("PRIMARY");
 
@@ -313,7 +314,6 @@ public partial class TurneroContext : DbContext
                 .IsRequired()
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("is_active");
-            entity.Property(e => e.IsComplete).HasColumnName("is_complete");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(20)
                 .HasColumnName("nombre");

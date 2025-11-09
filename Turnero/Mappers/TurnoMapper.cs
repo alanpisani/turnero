@@ -43,5 +43,17 @@ namespace Turnero.Mappers
 				Hora = dto.Hora,
 			};
 		}
+
+		public static TurnsOfTheDayDto ToOfTheDayDto(Turno turno)
+		{
+			return new TurnsOfTheDayDto
+			{
+				IdPaciente = turno.IdPaciente,
+				IdTurno = turno.IdTurno,
+				NombrePaciente = turno.IdPacienteNavigation.Nombre,
+				Especialidad = turno.IdEspecialidadNavigation.NombreEspecialidad,
+				Hora = TimeOnly.FromDateTime(turno.FechaTurno).ToString(),
+			};
+		}
 	}
 }

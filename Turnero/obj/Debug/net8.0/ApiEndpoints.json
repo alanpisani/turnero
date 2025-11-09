@@ -96,6 +96,22 @@
   },
   {
     "ContainingType": "Turnero.Controllers.EspecialidadController",
+    "Method": "PostEspecialidad",
+    "RelativePath": "api/Especialidad",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Turnero.Dto.Especialidad.EspecialidadRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Turnero.Controllers.EspecialidadController",
     "Method": "GetEspecialidadById",
     "RelativePath": "api/Especialidad/{id}",
     "HttpMethod": "GET",
@@ -118,6 +134,27 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Turnero.Controllers.EspecialidadController",
+    "Method": "PatchEspecialidad",
+    "RelativePath": "api/Especialidad/cambiar/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Turnero.Dto.Especialidad.ChangeEspecialidadRequestDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -342,6 +379,22 @@
     "Parameters": [
       {
         "Name": "idPaciente",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Turnero.Controllers.TurnoController",
+    "Method": "GetTurnosDeHoy",
+    "RelativePath": "api/Turno/profesional/{id}/turnos_de_hoy",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
       }

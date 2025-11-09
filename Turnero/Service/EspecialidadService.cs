@@ -37,11 +37,12 @@ namespace Turnero.Service
 			
 		}
 
-		public async Task<ResponseDto<List<EspecialidadResponseDto>>> MostrarTodasLasEspecialidades()
+		public async Task<ResponseDto<List<EspecialidadResponseDto>>> MostrarTodasLasEspecialidadesActivas()
 		{
 
 			var especialidades = await _unitOfWork.Especialidades.ToListAsyncEspecialidades();
 
+			especialidades = especialidades.Where(e => e.IsActive).ToList();
 
 			return new ResponseDto<List<EspecialidadResponseDto>>
 			{
@@ -101,7 +102,23 @@ namespace Turnero.Service
 			}
 
 		}
-		
+		public async Task<ResponseDto<EspecialidadResponseDto>> CambiarEstadoEspecialidad(int idEspecialidad, ChangeEspecialidadRequestDto dto)
+		{
+			var especialidad = await _unitOfWork.Especialidades.FirstOrDefaultEspecialidadById(idEspecialidad);
+
+			if (especialidad == null) throw new NotFoundException($"No se encotró la especialidad con ID: {idEspecialidad}");
+
+			especialidad.IsActive = dto.Activo;
+
+			await _unitOfWork.CompleteAsync();
+			await _unitOfWork.CommitAsync();
+
+			return new ResponseDto<EspecialidadResponseDto> { 
+				Success = true,
+				Message = "Especialidad modificada con éxito",
+				Data = EspecialidadMapper.toResponseDto(especialidad),
+			};
+		}
 
 		
 	}

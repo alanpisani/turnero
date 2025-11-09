@@ -25,6 +25,14 @@ namespace Turnero.Controllers
 
             return Ok(response);
         }
+        [HttpGet("profesional/{id}/turnos_de_hoy")]
+        [Authorize(Roles = "Profesional")]
+        public async Task<IActionResult> GetTurnosDeHoy(int id)
+        {
+            var response = await _service.TraerTurnosDeHoyPorProfesional(id);
+
+            return Ok(response);
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostTurno(TurnoRequestDto turnoDto)

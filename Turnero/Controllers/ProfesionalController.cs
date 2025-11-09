@@ -13,7 +13,6 @@ namespace Turnero.Controllers
     {
         private readonly ProfesionalService _service = service;
 
-		// GET: api/Profesional
 		[HttpGet]
         public async Task<IActionResult> GetProfesionals([FromQuery]int pageNumber )
         {
@@ -22,7 +21,6 @@ namespace Turnero.Controllers
             return Ok(response);
         }  
 
-        // GET: api/Profesional/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProfesional(int id)
         {
@@ -54,6 +52,14 @@ namespace Turnero.Controllers
 
             return Ok(response);
 		}
+        [HttpGet("{idProfesional}/mis_pacientes")]
+        [Authorize(Roles = "Profesional")]
+        public async Task<IActionResult> GetPacientes(int idProfesional)
+        {
+            var response = await _service.TraerMisPacientes(idProfesional);
+
+            return Ok(response);
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]

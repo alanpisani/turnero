@@ -1,7 +1,6 @@
-﻿using Humanizer;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Turnero.Common.Enums;
-using Turnero.Controllers;
+using Turnero.Data;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
 
@@ -52,10 +51,36 @@ namespace Turnero.Repositories
 				.Where(t => t.IdProfesional == idProfesional && t.FechaTurno.Date == fecha.ToDateTime(TimeOnly.MinValue).Date)
 				.ToListAsync();
 		}
+		public async Task<List<Turno>?> GetTurnosByProfesionalAndFechaDeHoy(int idProfesional)
+		{
+			return await _context.Turnos
+				.Where(t => t.IdProfesional == idProfesional 
+							&& t.FechaTurno.Date == DateTime.Today
+							&& t.EstadoTurno !=EnumEstadoTurno.Cancelado.ToString()
+				)
+				.Include(t => t.IdEspecialidadNavigation)
+				.Include(t => t.IdPacienteNavigation)
+				.Include(p => p.IdProfesionalNavigation)
+					.ThenInclude(p => p.ProfesionalEspecialidads)
+						.ThenInclude(pe => pe.IdEspecialidadNavigation)
+				.ToListAsync();
+		}
 
 		public void Actualizar(Turno turno)
 		{
 			_context.Turnos.Update(turno);
+		}
+
+
+		//Devuelve usuarios pero toca la tabla turno, por ende, va en TurnoRepository y se acabó
+		public async Task<List<Usuario>> GetPacientesAtendidosPorProfesional(int profesionalId)
+		{
+			return await _context.Turnos //Tocá la tabla turno
+				.Where(t => t.IdProfesional == profesionalId && t.EstadoTurno == EnumEstadoTurno.Atendido.ToString()) //Traeme los turnos que tengan a ese profesional y que sean turnos atendidos
+				.Include(t => t.IdPacienteNavigation) //Inclui informacion de los pacientes relacionados a estos turnos (la tabla usuario)
+				.Select(t => t.IdPacienteNavigation) //Map. Tranformame lo que tenemos hasta ahora en la tabla usuario traida
+				.Distinct() //Eliminame los repetidos, por favor
+				.ToListAsync(); //Listorti
 		}
 	}
 }

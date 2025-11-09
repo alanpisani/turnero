@@ -25,5 +25,4 @@ namespace Turnero.Common.Extensions
 		}
 
 	}
-
 }

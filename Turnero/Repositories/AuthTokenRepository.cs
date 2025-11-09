@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NuGet.Common;
+using Turnero.Data;
 using Turnero.Models;
 using Turnero.Repositories.Interfaces;
 

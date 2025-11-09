@@ -23,7 +23,7 @@ namespace Turnero.Controllers
 		[HttpGet("all")]
 		public async Task<IActionResult> GetAllEspecialidades()
 		{
-			var response = await _service.MostrarTodasLasEspecialidades();
+			var response = await _service.MostrarTodasLasEspecialidadesActivas();
 
 			return Ok(response);
 		}
@@ -44,6 +44,15 @@ namespace Turnero.Controllers
 
 			return CreatedAtAction(nameof(PostEspecialidad), response);
 		}
-				
+
+		[HttpPatch("cambiar/{id}")]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> PatchEspecialidad(int id, [FromBody]ChangeEspecialidadRequestDto dto)
+		{
+			var response = await _service.CambiarEstadoEspecialidad(id, dto);
+
+			return Ok(response);
+		}
+
 	}
 }

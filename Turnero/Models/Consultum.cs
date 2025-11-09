@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Turnero.Models;
 
-public partial class Consulta
+public partial class Consultum
 {
     public int IdConsulta { get; set; }
 
