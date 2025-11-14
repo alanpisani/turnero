@@ -118,7 +118,7 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<List<PacienteResponseDto>> MostrarTodosLosPacientes()
+		public async Task<ResponseDto<List<PacienteResponseDto>>> MostrarTodosLosPacientes()
 		{
 			var pacientes = await _unitOfWork.Pacientes.ToListAsyncAllPacientes();
 
@@ -126,7 +126,11 @@ namespace Turnero.Service
 				.Select(p => PacienteMapper.ToDto(p))
 				.ToList();
 
-			return pacientesDto;
+			return new ResponseDto<List<PacienteResponseDto>> { 
+				Success = true,
+				Message = "Pacientes consultados con éxito",
+				Data = pacientesDto
+			};
 		}
 
 		public async Task<PacienteResponseDto> MostrarPacientePorId(int idPaciente)

@@ -14,7 +14,7 @@ namespace Turnero.Controllers
         private readonly PacienteService _service = service;
         private readonly TurnoService _turnoService = turnoService;
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Recepcionista")]
         [HttpGet]
         public async Task<IActionResult> GetPacientes()
         {

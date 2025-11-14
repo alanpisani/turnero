@@ -4,6 +4,7 @@ namespace Turnero.Repositories.Interfaces
 {
 	public interface ITurnoRepository
 	{
+		IQueryable<Turno> Query();
 		Task AddTurno(Turno turno);
 		Task<Turno?> FindOrDefaultTurno(int idTurno);
 		Task<bool> AnyTurnoOcupado(int idProfesional, DateTime fechaYHoraIngresada);
@@ -11,6 +12,7 @@ namespace Turnero.Repositories.Interfaces
 		Task<List<Turno>?> GetTurnosByProfesionalAndFecha(int idProfesional, DateOnly fecha);
 		Task<List<Turno>?> GetTurnosByProfesionalAndFechaDeHoy(int idProfesional);
 		Task<List<Usuario>> GetPacientesAtendidosPorProfesional(int profesionalId);
+		Task<List<Turno>> GetAllTurnos();
 		void Actualizar(Turno turno);
 	}
 }

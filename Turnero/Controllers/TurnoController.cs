@@ -11,6 +11,15 @@ namespace Turnero.Controllers
     {
         private readonly TurnoService _service = service;
 
+        [HttpGet]
+        [Authorize(Roles = "Admin, Recepcionista")]
+        public async Task<IActionResult> GetTurnos([FromQuery] int pageNumber = 1)
+        {
+            var response = await _service.ConsultarTurnos(pageNumber);
+
+            return Ok(response);
+        }
+
         [HttpGet("{idPaciente}")]
         public async Task<IActionResult> GetTurnosByPaciente(int idPaciente)
         {
@@ -50,10 +59,10 @@ namespace Turnero.Controllers
             return Ok(response);
         } 
 
-        [HttpPatch("{id}/cancelar")]
-        public async Task<IActionResult> PatchCancelarTurno(int id, [FromBody] CancelarTurnoDto dto)
+        [HttpPatch("{id}/modificar")]
+        public async Task<IActionResult> PatchModificarEstadoTurno(int id, [FromBody] ModificarEstadoTurnoDto dto)
         {
-            var response = await _service.CancelarTurno(id, dto);
+            var response = await _service.ModificarEstadoTurno(id, dto);
 
             return Ok(response);
         }

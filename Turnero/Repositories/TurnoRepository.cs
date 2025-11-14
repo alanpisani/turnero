@@ -10,6 +10,11 @@ namespace Turnero.Repositories
 	{
 		private readonly TurneroContext _context = context;
 
+		public IQueryable<Turno> Query()
+		{
+			return _context.Turnos.AsQueryable();
+		}
+
 		public async Task AddTurno(Turno turno)
 		{
 			await _context.Turnos.AddAsync(turno);
@@ -81,6 +86,11 @@ namespace Turnero.Repositories
 				.Select(t => t.IdPacienteNavigation) //Map. Tranformame lo que tenemos hasta ahora en la tabla usuario traida
 				.Distinct() //Eliminame los repetidos, por favor
 				.ToListAsync(); //Listorti
+		}
+
+		public async Task<List<Turno>> GetAllTurnos()
+		{
+			return await _context.Turnos.ToListAsync();
 		}
 	}
 }

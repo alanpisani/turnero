@@ -1,4 +1,7 @@
-﻿using Turnero.Common.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Turnero.Common.Enums;
+using Turnero.Common.Extensions;
 using Turnero.Domain.TurnoDomain;
 using Turnero.Dto;
 using Turnero.Dto.TurnoDto;
@@ -101,7 +104,7 @@ namespace Turnero.Service
 			}
 		}
 
-		public async Task<ResponseDto<TurnoResponseDto>> CancelarTurno(int idTurno, CancelarTurnoDto dto) //TODO: DESARROLLAR
+		public async Task<ResponseDto<TurnoResponseDto>> ModificarEstadoTurno(int idTurno, ModificarEstadoTurnoDto dto) //TODO: DESARROLLAR
 		{
 			Turno? turno = await _unitOfWork.Turnos.FindOrDefaultTurno(idTurno);
 
@@ -109,10 +112,10 @@ namespace Turnero.Service
 
 			var isRecepcionista = await _unitOfWork.Usuarios.AnyRecepcionistaByDni(dto.DniDelCancelador);
 
-			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador && !isRecepcionista) 
-				throw new ForbiddenException("No puede cancelar turnos de otro paciente.");
+			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador && !isRecepcionista)
+				throw new ForbiddenException("No puede modificar turnos de otro paciente.");
 
-			turno!.EstadoTurno = EnumEstadoTurno.Cancelado.ToString();
+			turno!.EstadoTurno = dto.NuevoEstado;
 
 			_unitOfWork.Turnos.Actualizar(turno);
 
@@ -121,10 +124,11 @@ namespace Turnero.Service
 			return new ResponseDto<TurnoResponseDto>
 			{
 				Success = true,
-				Message = "Turno cancelado correctamente",
+				Message = "Turno modificado correctamente",
 				Data = TurnoMapper.DeTurnoADto(turno)
 			};
 		}
+
 		public async Task<ResponseDto<List<TurnoResponseDto>>> TraerTurnosDelPaciente(int idPaciente)
 		{
 			bool hayPaciente = await _unitOfWork.Pacientes.AnyPaciente(idPaciente);
@@ -193,6 +197,35 @@ namespace Turnero.Service
 				Success = true,
 				Message = turnosDeHoy!.Count() > 0 ? "Turnos del dia consultados con éxito" : "No tiene turnos en el dia de hoy",
 				Data = turnosDeHoy!.Select(turno => TurnoMapper.ToOfTheDayDto(turno)).ToList()
+			};
+		}
+
+		public async Task<ResponseDto<PagedResult<TurnoResponseDto>>> ConsultarTurnos(int pageNumber)
+		{
+
+			const int pageSize = 6;
+
+			var query = _unitOfWork.Turnos.Query()
+				.Include(t => t.IdEspecialidadNavigation)
+				.Include(p => p.IdProfesionalNavigation)
+				.ThenInclude(p => p.ProfesionalEspecialidads)
+					.ThenInclude(pe => pe.IdEspecialidadNavigation);
+
+			var pagedResult = await query.ToPagedResultAsync(pageNumber, pageSize);
+
+			return new ResponseDto<PagedResult<TurnoResponseDto>>
+			{
+				Success = true,
+				Message = "Turnos consultados con éxito",
+				Data = new PagedResult<TurnoResponseDto>
+				(
+					pagedResult.Data
+					.Select(t => TurnoMapper.DeTurnoADto(t)).ToList(),
+					pagedResult.TotalRecords,
+					pagedResult.PageNumber,
+					pagedResult.PageSize
+				)
+
 			};
 		}
 	} 

@@ -1,4 +1,5 @@
-﻿using Turnero.Common.Enums;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Turnero.Common.Enums;
 using Turnero.Common.Extensions;
 using Turnero.Common.Helpers;
 using Turnero.Domain.ProfesionalDomain;
@@ -18,7 +19,7 @@ namespace Turnero.Service
 		private readonly UsuarioService _service = service;
 		private readonly IUnitOfWork _unitOfWork = unit;
 
-		public async Task<Profesional> RegistrarProfesional(ProfesionalRequestDto dto)
+		public async Task<ResponseDto<ProfesionalResponseDto>> RegistrarProfesional(ProfesionalRequestDto dto)
 		{
 			var usuario = _service.CrearUsuario(dto, RolesUsuario.Profesional.ToString()); //Se crea un usuario base model
 
@@ -45,7 +46,11 @@ namespace Turnero.Service
 				await _unitOfWork.CompleteAsync();
 				await _unitOfWork.CommitAsync(); //Todo ok y guardamos cambios
 
-				return profesional;
+				return new ResponseDto<ProfesionalResponseDto> { 
+					Success = true,
+					Message = "Profesional registrado con éxito",
+					Data = ProfesionalMapper.ToResponseDto(profesional)
+				};
 			}
 			catch
 			{
