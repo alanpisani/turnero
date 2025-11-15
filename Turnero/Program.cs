@@ -26,10 +26,21 @@ var connectionString = builder.Configuration.GetConnectionString("connection");
 
 builder.Services.AddDbContext<TurneroContext>(options =>
 	options.UseMySql(
-		connectionString,                               // la variable
-		new MySqlServerVersion(new Version(8, 0, 33)) // versión de MySQL
+		connectionString,
+		MySqlServerVersion.Parse("8.0.33"),
+		mySqlOptions =>
+		{
+			mySqlOptions.EnableRetryOnFailure(
+				maxRetryCount: 5,
+				maxRetryDelay: TimeSpan.FromSeconds(10),
+				errorNumbersToAdd: null
+			);
+
+			mySqlOptions.CommandTimeout(30);
+		}
 	)
 );
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	.AddJwtBearer(options =>
