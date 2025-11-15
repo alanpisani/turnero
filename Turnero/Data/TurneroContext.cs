@@ -39,13 +39,7 @@ public partial class TurneroContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		if (!optionsBuilder.IsConfigured)
-		{
-			
-			optionsBuilder.UseMySql(
-				"server=localhost;database=turnero;user=Alancio;password=callefalsa123",
-				Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.40-mysql"));
-		}
+
 	}
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
