@@ -17,13 +17,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
 	   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 	   .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-	   .AddJsonFile("secrets.json", optional: true, reloadOnChange: true)
 	   .AddEnvironmentVariables();
+
+if (builder.Environment.IsDevelopment())
+{
+	builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+}
 
 var connectionString = builder.Configuration.GetConnectionString("connection");
 
 Console.WriteLine("VAR DE ENTORNO:");
 Console.WriteLine(Environment.GetEnvironmentVariable("ConnectionStrings__connection"));
+
+Console.WriteLine("=== CONNECTION STRING ACTUAL ===");
+Console.WriteLine(connectionString);
 // Add services to the container.
 
 builder.Services.AddDbContext<TurneroContext>(options =>
