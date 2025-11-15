@@ -22,6 +22,9 @@ builder.Configuration
 
 var connectionString = builder.Configuration.GetConnectionString("connection");
 
+Console.WriteLine("=== CONNECTION STRING ACTUAL ===");
+Console.WriteLine(connectionString);
+
 // Add services to the container.
 
 builder.Services.AddDbContext<TurneroContext>(options =>
