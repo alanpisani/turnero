@@ -15,14 +15,16 @@ using Turnero.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-	   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-	   .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-	   .AddEnvironmentVariables();
+	.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 if (builder.Environment.IsDevelopment())
 {
 	builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 }
+
+builder.Configuration.AddEnvironmentVariables();
+
 
 var connectionString = builder.Configuration.GetConnectionString("connection");
 
