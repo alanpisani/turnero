@@ -28,11 +28,6 @@ builder.Configuration.AddEnvironmentVariables();
 
 var connectionString = builder.Configuration.GetConnectionString("connection");
 
-Console.WriteLine("VAR DE ENTORNO:");
-Console.WriteLine(Environment.GetEnvironmentVariable("ConnectionStrings__connection"));
-
-Console.WriteLine("=== CONNECTION STRING ACTUAL ===");
-Console.WriteLine(connectionString);
 // Add services to the container.
 
 builder.Services.AddDbContext<TurneroContext>(options =>
