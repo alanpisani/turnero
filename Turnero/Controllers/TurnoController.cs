@@ -46,7 +46,7 @@ namespace Turnero.Controllers
         [HttpPost]
         public async Task<IActionResult> PostTurno(TurnoRequestDto turnoDto)
         {
-			var response = await _service.SolicitarTurno(turnoDto);
+			var response = await _service.SolicitarTurno(turnoDto, true);
 
 			return CreatedAtAction(nameof(PostTurno), response);
 		}

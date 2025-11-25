@@ -44,9 +44,9 @@ namespace Turnero.Service
 
 		public Usuario CrearUsuario(UsuarioRequestDto dto, string rol)
 		{
-			var usuario = UsuarioMapper.DeDtoAUsuario(dto, rol); //Mapeamos al usuario registrado a modo Usuario BD
+			var usuario = UsuarioMapper.DeDtoAUsuario(dto, rol);
 
-			usuario.Password = _passwordHasher.HashPassword(usuario, dto.Contrasenia); //HASHING
+			usuario.Password = _passwordHasher.HashPassword(usuario, dto.Contrasenia); 
 
 			return usuario;
 

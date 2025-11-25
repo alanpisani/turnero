@@ -34,7 +34,7 @@ namespace Turnero.Repositories
 		public async Task<bool> AnyTurnoOcupado(int idProfesional, DateTime fechaYHoraIngresada)
 		{
 			return await _context.Turnos
-				.Where(t => t.IdProfesional == idProfesional)
+				.Where(t => t.IdProfesional == idProfesional && t.EstadoTurno == EnumEstadoTurno.Solicitado.ToString())
 				.AnyAsync(t => t.FechaTurno == fechaYHoraIngresada);
 		}
 

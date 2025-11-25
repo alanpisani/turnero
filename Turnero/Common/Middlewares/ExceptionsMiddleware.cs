@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.AspNetCore.Identity;
 using Turnero.Exceptions;
 using Turnero.Exceptions.Turno;
 
@@ -23,7 +24,7 @@ namespace Turnero.Common.Middlewares
 			{
 				await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, new
 				{
-					Errors = ex.Message
+					Errors = new { Password = ex.Message }
 				});
 			}
 			catch (NotFoundException ex)

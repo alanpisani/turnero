@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\source\\repos\\Turnero\\Turnero\\Turnero.csproj": {}
+    "C:\\Users\\user\\source\\repos\\Turnero\\turnero\\Turnero.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\source\\repos\\Turnero\\Turnero\\Turnero.csproj": {
+    "C:\\Users\\user\\source\\repos\\Turnero\\turnero\\Turnero.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\source\\repos\\Turnero\\Turnero\\Turnero.csproj",
+        "projectUniqueName": "C:\\Users\\user\\source\\repos\\Turnero\\turnero\\Turnero.csproj",
         "projectName": "Turnero",
-        "projectPath": "C:\\Users\\user\\source\\repos\\Turnero\\Turnero\\Turnero.csproj",
+        "projectPath": "C:\\Users\\user\\source\\repos\\Turnero\\turnero\\Turnero.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\source\\repos\\Turnero\\Turnero\\obj\\",
+        "outputPath": "C:\\Users\\user\\source\\repos\\Turnero\\turnero\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
