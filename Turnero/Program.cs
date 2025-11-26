@@ -108,6 +108,8 @@ builder.Services.AddCors(options =>
 		{
 			policy.WithOrigins(
 				"https://turnero-z7wo.onrender.com",
+				"https://alanpisani.com.ar",
+				"https://www.alanpisani.com.ar",
 				"http://127.0.0.1:5500",
 				"http://localhost:3000",
 				"http://localhost:5173"
