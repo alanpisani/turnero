@@ -36,12 +36,6 @@ builder.Services.AddDbContext<TurneroContext>(options =>
 		MySqlServerVersion.Parse("8.0.33"),
 		mySqlOptions =>
 		{
-			mySqlOptions.EnableRetryOnFailure(
-				maxRetryCount: 5,
-				maxRetryDelay: TimeSpan.FromSeconds(10),
-				errorNumbersToAdd: null
-			);
-
 			mySqlOptions.CommandTimeout(30);
 		}
 	)

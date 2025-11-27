@@ -4,40 +4,27 @@ using Turnero.Repositories.Interfaces;
 
 namespace Turnero.Repositories
 {
-	public class UnitOfWork: IUnitOfWork
+	public class UnitOfWork(TurneroContext context,
+		IPacienteRepository pacientes,
+		IProfesionalRepository profesionales,
+		ITurnoRepository turnos,
+		IEspecialidadRepository especialidades,
+		IHorarioLaboralRepository horariosLaborales,
+		IUsuarioRepository usuarioRepository, IAuthTokenRepository authTokenRepository, IHistorialRepository historialesClinicos) : IUnitOfWork
 	{
-		private readonly TurneroContext _context;
+		private readonly TurneroContext _context = context;
 
-		public IUsuarioRepository Usuarios { get; }
-		public IPacienteRepository Pacientes { get; }
-		public IProfesionalRepository Profesionales { get; }
-		public ITurnoRepository Turnos { get; }
-		public IEspecialidadRepository Especialidades { get; }
-		public IHorarioLaboralRepository HorariosLaborales { get; }
+		public IUsuarioRepository Usuarios { get; } = usuarioRepository;
+		public IPacienteRepository Pacientes { get; } = pacientes;
+		public IProfesionalRepository Profesionales { get; } = profesionales;
+		public ITurnoRepository Turnos { get; } = turnos;
+		public IEspecialidadRepository Especialidades { get; } = especialidades;
+		public IHorarioLaboralRepository HorariosLaborales { get; } = horariosLaborales;
 
-		public IAuthTokenRepository AuthTokens { get; }
-		public IHistorialRepository HistorialesClinicos { get; }
+		public IAuthTokenRepository AuthTokens { get; } = authTokenRepository;
+		public IHistorialRepository HistorialesClinicos { get; } = historialesClinicos;
 
 		private IDbContextTransaction? _transaction;
-
-		public UnitOfWork(TurneroContext context, 
-			IPacienteRepository pacientes, 
-			IProfesionalRepository profesionales, 
-			ITurnoRepository turnos, 
-			IEspecialidadRepository especialidades, 
-			IHorarioLaboralRepository horariosLaborales, 
-			IUsuarioRepository usuarioRepository, IAuthTokenRepository authTokenRepository, IHistorialRepository historialesClinicos)
-		{
-			_context = context;
-			Pacientes = pacientes;
-			Profesionales = profesionales;
-			Turnos = turnos;
-			Especialidades = especialidades;
-			HorariosLaborales = horariosLaborales;
-			Usuarios = usuarioRepository;
-			AuthTokens = authTokenRepository;
-			HistorialesClinicos = historialesClinicos;
-		}
 
 		public async Task<int> CompleteAsync()
 		{

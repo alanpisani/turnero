@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Turnero.Dto.Consultum;
 using Turnero.Service;
 
 namespace Turnero.Controllers
@@ -15,6 +16,14 @@ namespace Turnero.Controllers
 			var response = await _service.TraerTodosLosHistoriales();
 
 			return Ok(response);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> PostHistorial([FromBody]HistorialRequestDto dto)
+		{
+			var response = await _service.CrearHistorial(dto);
+
+			return CreatedAtAction(nameof(PostHistorial), response);
 		}
 	}
 }
