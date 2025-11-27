@@ -19,7 +19,7 @@ public partial class Usuario
 
     public string Rol { get; set; } = null!;
 
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; } = true;
 
     public virtual ICollection<AuthToken> AuthTokens { get; set; } = new List<AuthToken>();
 

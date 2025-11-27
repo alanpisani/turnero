@@ -19,9 +19,9 @@ public partial class TurneroContext : DbContext
 
     public virtual DbSet<AuthToken> AuthTokens { get; set; }
 
-    public virtual DbSet<Consultum> Consulta { get; set; }
-
     public virtual DbSet<Especialidad> Especialidads { get; set; }
+
+    public virtual DbSet<HistorialClinico> HistorialClinicos { get; set; }
 
     public virtual DbSet<HistorialTurno> HistorialTurnos { get; set; }
 
@@ -37,12 +37,11 @@ public partial class TurneroContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;database=turnero;user=Alancio;password=callefalsa123", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.40-mysql"));
 
-	}
-
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
@@ -75,41 +74,6 @@ public partial class TurneroContext : DbContext
                 .HasConstraintName("auth_token_ibfk_1");
         });
 
-        modelBuilder.Entity<Consultum>(entity =>
-        {
-            entity.HasKey(e => e.IdConsulta).HasName("PRIMARY");
-
-            entity.ToTable("consulta");
-
-            entity.HasIndex(e => e.IdPaciente, "id_paciente");
-
-            entity.HasIndex(e => e.IdProfesional, "id_profesional");
-
-            entity.Property(e => e.IdConsulta).HasColumnName("id_consulta");
-            entity.Property(e => e.Diagnostico)
-                .HasMaxLength(50)
-                .HasColumnName("diagnostico");
-            entity.Property(e => e.FechaConsulta).HasColumnName("fecha_consulta");
-            entity.Property(e => e.IdPaciente).HasColumnName("id_paciente");
-            entity.Property(e => e.IdProfesional).HasColumnName("id_profesional");
-            entity.Property(e => e.Observaciones)
-                .HasMaxLength(250)
-                .HasColumnName("observaciones");
-            entity.Property(e => e.Tratamiento)
-                .HasMaxLength(100)
-                .HasColumnName("tratamiento");
-
-            entity.HasOne(d => d.IdPacienteNavigation).WithMany(p => p.Consulta)
-                .HasForeignKey(d => d.IdPaciente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("consulta_ibfk_1");
-
-            entity.HasOne(d => d.IdProfesionalNavigation).WithMany(p => p.Consulta)
-                .HasForeignKey(d => d.IdProfesional)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("consulta_ibfk_2");
-        });
-
         modelBuilder.Entity<Especialidad>(entity =>
         {
             entity.HasKey(e => e.IdEspecialidad).HasName("PRIMARY");
@@ -124,6 +88,31 @@ public partial class TurneroContext : DbContext
             entity.Property(e => e.NombreEspecialidad)
                 .HasMaxLength(25)
                 .HasColumnName("nombre_especialidad");
+        });
+
+        modelBuilder.Entity<HistorialClinico>(entity =>
+        {
+            entity.HasKey(e => e.IdHistorial).HasName("PRIMARY");
+
+            entity.ToTable("historial_clinico");
+
+            entity.HasIndex(e => e.IdTurno, "id_turno").IsUnique();
+
+            entity.Property(e => e.IdHistorial).HasColumnName("id_historial");
+            entity.Property(e => e.Diagnostico)
+                .HasMaxLength(255)
+                .HasColumnName("diagnostico");
+            entity.Property(e => e.IdTurno).HasColumnName("id_turno");
+            entity.Property(e => e.Observaciones)
+                .HasColumnType("text")
+                .HasColumnName("observaciones");
+            entity.Property(e => e.Tratamiento)
+                .HasMaxLength(500)
+                .HasColumnName("tratamiento");
+
+            entity.HasOne(d => d.IdTurnoNavigation).WithOne(p => p.HistorialClinico)
+                .HasForeignKey<HistorialClinico>(d => d.IdTurno)
+                .HasConstraintName("historial_clinico_ibfk_1");
         });
 
         modelBuilder.Entity<HistorialTurno>(entity =>

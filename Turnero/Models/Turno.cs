@@ -19,6 +19,8 @@ public partial class Turno
 
     public int IdEspecialidad { get; set; }
 
+    public virtual HistorialClinico? HistorialClinico { get; set; }
+
     public virtual ICollection<HistorialTurno> HistorialTurnos { get; set; } = new List<HistorialTurno>();
 
     public virtual Especialidad IdEspecialidadNavigation { get; set; } = null!;

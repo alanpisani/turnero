@@ -53,9 +53,9 @@ namespace Turnero.Mappers
 			return new UsuarioResponseDto {
 				IdUsuario = usuario.IdUsuario,
 				Nombre = usuario.Nombre,
-				Apellido = usuario.Apellido,
+				Apellido = usuario.Apellido ?? "",
 				Dni= usuario.Dni,
-				Email = usuario.Email,
+				Email = usuario.Email ?? "",
 				Rol= usuario.Rol,
 				IsActive = usuario.IsActive
 			};

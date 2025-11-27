@@ -89,6 +89,7 @@ builder.Services.AddScoped<PacienteService>();
 builder.Services.AddScoped<ProfesionalService>();
 builder.Services.AddScoped<TurnoService>();
 builder.Services.AddScoped<EspecialidadService>();
+builder.Services.AddScoped<HistorialService>();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<AuthService>();
 
@@ -98,6 +99,7 @@ builder.Services.AddScoped<IHorarioLaboralRepository, HorarioLaboralRepository>(
 builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
 builder.Services.AddScoped<IProfesionalRepository, ProfesionalRepository>();
 builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
+builder.Services.AddScoped<IHistorialRepository, HistorialRepository>();
 builder.Services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

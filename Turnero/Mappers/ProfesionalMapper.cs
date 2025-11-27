@@ -18,7 +18,7 @@ namespace Turnero.Mappers
 			return new ProfesionalResponseDto { 
 				IdUsuario= profesional.IdUsuario,
 				NombreProfesional= profesional.IdUsuarioNavigation.Nombre,
-				ApellidoProfesional=profesional.IdUsuarioNavigation.Apellido,
+				ApellidoProfesional=profesional.IdUsuarioNavigation.Apellido ?? "",
 				Matricula= profesional.Matricula,
 				IsActive= profesional.IdUsuarioNavigation.IsActive
 			};

@@ -9,6 +9,7 @@
 		IEspecialidadRepository Especialidades { get; }
 		IHorarioLaboralRepository HorariosLaborales { get; }
 		IAuthTokenRepository AuthTokens { get; }
+		IHistorialRepository HistorialesClinicos { get; }
 
 		// Persistencia
 		Task<int> CompleteAsync();
