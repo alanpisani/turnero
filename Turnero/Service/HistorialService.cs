@@ -26,7 +26,9 @@ namespace Turnero.Service
         {
 			_ = await _unitOfWork.Turnos.FindOrDefaultTurno(dto.IdTurno) ?? throw new NotFoundException("El turno no existe");
 
-			//TODO Agregar validacion en caso de meter historial clinico a turno que ya lo tenga
+			var historialOcupado = await _unitOfWork.HistorialesClinicos.AnyHistorialByTurno(dto.IdTurno);
+
+            if (historialOcupado) throw new BussinessException("El turno ya tiene un historial clínico relacionado.");
 
 			await _unitOfWork.BeginTransactionAsync();
 

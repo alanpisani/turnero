@@ -7,5 +7,6 @@ namespace Turnero.Repositories.Interfaces
 		Task<List<HistorialClinico>> GetAllHistoriales();
 		Task<List<HistorialClinico>> GetHistorialesByPaciente(int idPaciente);
 		Task AddHistorial(HistorialClinico historial);
+		Task<bool> AnyHistorialByTurno(int idTurno);
 	}
 }

@@ -27,5 +27,11 @@ namespace Turnero.Repositories
 		{
 			await _context.HistorialClinicos.AddAsync(historial);
 		}
+
+		public async Task<bool> AnyHistorialByTurno(int idTurno)
+		{
+			return await _context.HistorialClinicos
+				.AnyAsync(h => h.IdTurno == idTurno);
+		}
 	}
 }
