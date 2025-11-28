@@ -53,6 +53,7 @@ namespace Turnero.Mappers
 				NombrePaciente = turno.IdPacienteNavigation.Nombre,
 				Especialidad = turno.IdEspecialidadNavigation.NombreEspecialidad,
 				Hora = TimeOnly.FromDateTime(turno.FechaTurno).ToString(),
+				Estado = turno.EstadoTurno.ToString(),
 			};
 		}
 	}

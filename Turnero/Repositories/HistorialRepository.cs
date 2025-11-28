@@ -12,7 +12,8 @@ namespace Turnero.Repositories
 		public async Task<List<HistorialClinico>> GetAllHistoriales()
 		{
 			return await _context.HistorialClinicos
-				.Include(c => c.IdTurnoNavigation)
+				.Include(h => h.IdTurnoNavigation)
+					.ThenInclude(t => t.IdPacienteNavigation)
 				.ToListAsync();
 		}
 		public async Task<List<HistorialClinico>> GetHistorialesByPaciente(int idPaciente)

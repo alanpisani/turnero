@@ -4,9 +4,10 @@
 	{
 		public int IdTurno { get; set; }
 		public int IdPaciente { get; set; }
-		public string NombrePaciente {  set; get; }
-		public string Especialidad { set; get; }
-		public string Hora {  set; get; }
+		public string NombrePaciente {  set; get; } = string.Empty;
+		public string Especialidad { set; get; } = string.Empty;
+		public string Hora { set; get; } = string.Empty;
+		public string Estado {  set; get; } = string.Empty;
 
 	}
 }

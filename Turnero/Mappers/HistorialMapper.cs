@@ -14,7 +14,9 @@ namespace Turnero.Mappers
 				NombrePaciente = historial.IdTurnoNavigation.IdPacienteNavigation.Nombre + " " +historial.IdTurnoNavigation.IdPacienteNavigation.Apellido,
 				Diagnostico = historial.Diagnostico,
 				Tratamiento = historial.Tratamiento,
-				Observaciones = historial.Observaciones ?? "Sin observaciones"
+				Observaciones = historial.Observaciones == "" || historial.Observaciones == null 
+					? "Sin observaciones" 
+					: historial.Observaciones
 			};
 		}
 

@@ -44,6 +44,11 @@ namespace Turnero.Repositories
 			return await _context.Profesionals.AnyAsync(p => p.IdUsuario == idProfesional);
 		}
 
+		public async Task<bool> AnyProfesionalByDni(int dni)
+		{
+			return await _context.Profesionals.AnyAsync(p => p.IdUsuarioNavigation.Dni == dni);
+		}
+
 		public async Task<bool> AnyProfesionalWithThatSpeciality(int idProfesional, int idEspecialidad)
 		{
 			return await _context.ProfesionalEspecialidads

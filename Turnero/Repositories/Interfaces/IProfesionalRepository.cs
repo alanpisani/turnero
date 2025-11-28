@@ -9,6 +9,7 @@ namespace Turnero.Repositories.Interfaces
 		Task AddEspecialidades(IEnumerable<ProfesionalEspecialidad> asignaciones);
 		Task AddHorarios(IEnumerable<HorarioLaboral> asignaciones);
 		Task<bool> AnyProfesional(int idProfesional);
+		Task<bool> AnyProfesionalByDni(int dni);
 		Task<bool> AnyProfesionalWithThatSpeciality(int idProfesional, int idEspecialidad);
 		Task<bool> AnyProfesionalByMatricula(int matricula);
 

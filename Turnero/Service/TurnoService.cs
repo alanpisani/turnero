@@ -106,13 +106,13 @@ namespace Turnero.Service
 
 		public async Task<ResponseDto<TurnoResponseDto>> ModificarEstadoTurno(int idTurno, ModificarEstadoTurnoDto dto) //TODO: DESARROLLAR
 		{
-			Turno? turno = await _unitOfWork.Turnos.FindOrDefaultTurno(idTurno);
-
-			if (turno == null) throw new NotFoundException($"No se encontró el turno con el ID: {idTurno}");
+			Turno? turno = await _unitOfWork.Turnos.FindOrDefaultTurno(idTurno) 
+				?? throw new NotFoundException($"No se encontró el turno con el ID: {idTurno}");
 
 			var isRecepcionista = await _unitOfWork.Usuarios.AnyRecepcionistaByDni(dto.DniDelCancelador);
+			var isProfesional = await _unitOfWork.Profesionales.AnyProfesionalByDni(dto.DniDelCancelador);
 
-			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador && !isRecepcionista)
+			if (turno.IdPacienteNavigation.Dni != dto.DniDelCancelador && !isRecepcionista && !isProfesional)
 				throw new ForbiddenException("No puede modificar turnos de otro paciente.");
 
 			turno!.EstadoTurno = dto.NuevoEstado;

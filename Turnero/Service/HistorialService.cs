@@ -1,4 +1,5 @@
-﻿using Turnero.Dto;
+﻿using Turnero.Common.Enums;
+using Turnero.Dto;
 using Turnero.Dto.Consultum;
 using Turnero.Exceptions;
 using Turnero.Mappers;
@@ -40,7 +41,15 @@ namespace Turnero.Service
 				await _unitOfWork.HistorialesClinicos.AddHistorial(historial);
 
 				await _unitOfWork.CompleteAsync();
-				await _unitOfWork.CommitAsync();
+				
+
+                var turnoAActualizar = await _unitOfWork.Turnos.FindOrDefaultTurno(dto.IdTurno);
+                turnoAActualizar!.EstadoTurno = EnumEstadoTurno.Atendido.ToString();
+
+				_unitOfWork.Turnos.Actualizar(turnoAActualizar);
+
+                await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CommitAsync();
 
                 return new ResponseDto<HistorialResponseDto>
                 {
