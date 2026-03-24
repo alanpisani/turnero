@@ -83,7 +83,10 @@ Para correr el proyecto en local, crear un archivo `secrets.json` en la raíz co
 Una vez que está todo listo, ingresar esto en terminal:
 
 <br>
-<pre>dotnet run</pre>
+<pre>
+cd Turnero
+dotnet run
+</pre>
 <br>
 
 > <h2>📌 Notas</h2>
