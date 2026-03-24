@@ -57,7 +57,8 @@ Los datos sensibles (como connection strings y claves JWT) no se incluyen en el 
 Para correr el proyecto en local, crear un archivo `secrets.json` en la raíz con la siguiente estructura:
 
 <br>
-<pre>
+
+```json
 {
   "ConnectionStrings": {
     "connection": "TU_CONNECTION_STRING"
@@ -68,7 +69,7 @@ Para correr el proyecto en local, crear un archivo `secrets.json` en la raíz co
     "Audience": "TurneroClientes"
   }
 }
-</pre>
+```
 <br>
 
 Una vez que está todo listo, ingresar esto en terminal:
